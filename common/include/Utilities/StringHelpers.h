@@ -188,6 +188,7 @@ public:
 
 	FastFormatUnicode& Write( const char* fmt, ... );
 	FastFormatUnicode& Write( const wxChar* fmt, ... );
+	FastFormatUnicode& Write( const wxString& fmt, ... );
 	FastFormatUnicode& WriteV( const char* fmt, va_list argptr );
 	FastFormatUnicode& WriteV( const wxChar* fmt, va_list argptr );
 

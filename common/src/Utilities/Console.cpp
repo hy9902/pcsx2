@@ -469,6 +469,53 @@ bool IConsoleWriter::Warning( const wxChar* fmt, ... ) const
 }
 
 // --------------------------------------------------------------------------------------
+//  Write Variants - Unknown style
+// --------------------------------------------------------------------------------------
+bool IConsoleWriter::WriteLn( const wxString& fmt, ... ) const
+{
+	va_list args;
+	va_start(args,fmt);
+	FormatV(fmt.wx_str(),args);
+	va_end(args);
+
+	return false;
+}
+
+bool IConsoleWriter::WriteLn( ConsoleColors color, const wxString& fmt, ... ) const
+{
+	va_list args;
+	va_start(args,fmt);
+	ConsoleColorScope cs( color );
+	FormatV(fmt.wx_str(),args);
+	va_end(args);
+
+	return false;
+}
+
+bool IConsoleWriter::Error( const wxString& fmt, ... ) const
+{
+	va_list args;
+	va_start(args,fmt);
+	ConsoleColorScope cs( Color_StrongRed );
+	FormatV(fmt.wx_str(),args);
+	va_end(args);
+
+	return false;
+}
+
+bool IConsoleWriter::Warning( const wxString& fmt, ... ) const
+{
+	va_list args;
+	va_start(args,fmt);
+	ConsoleColorScope cs( Color_StrongOrange );
+	FormatV(fmt.wx_str(),args);
+	va_end(args);
+
+	return false;
+}
+
+
+// --------------------------------------------------------------------------------------
 //  ConsoleColorScope / ConsoleIndentScope
 // --------------------------------------------------------------------------------------
 

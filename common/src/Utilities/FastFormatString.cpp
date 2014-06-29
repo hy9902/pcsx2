@@ -295,6 +295,15 @@ FastFormatUnicode& FastFormatUnicode::Write( const wxChar* fmt, ... )
 	return *this;
 }
 
+FastFormatUnicode& FastFormatUnicode::Write( const wxString& fmt, ... )
+{
+	va_list list;
+	va_start(list, fmt);
+	WriteV(fmt.wx_str(),list);
+	va_end(list);
+	return *this;
+}
+
 bool FastFormatUnicode::IsEmpty() const
 {
 	return ((wxChar&)(*m_dest)[0]) == 0;

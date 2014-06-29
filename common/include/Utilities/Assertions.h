@@ -184,6 +184,8 @@ extern pxDoAssertFnType* pxDoAssert;
 
 extern void pxOnAssert( const DiagnosticOrigin& origin, const wxChar* msg=NULL );
 extern void pxOnAssert( const DiagnosticOrigin& origin, const char* msg );
+extern void pxOnAssert( const DiagnosticOrigin& origin, const wxString& msg);
+extern void pxOnAssert( const DiagnosticOrigin& origin, const FastFormatUnicode& msg);
 
 // --------------------------------------------------------------------------------------
 // jNO_DEFAULT -- disables the default case in a switch, which improves switch optimization

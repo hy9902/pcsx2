@@ -134,6 +134,15 @@ __fi void pxOnAssert( const DiagnosticOrigin& origin, const char* msg)
 	pxOnAssert( origin, fromUTF8(msg) );
 }
 
+__fi void pxOnAssert( const DiagnosticOrigin& origin, const wxString& msg)
+{
+	pxOnAssert( origin, msg.wx_str() ); // wc_str ???
+}
+
+__fi void pxOnAssert( const DiagnosticOrigin& origin, const FastFormatUnicode& msg)
+{
+	pxOnAssert( origin, msg.c_str());
+}
 
 // --------------------------------------------------------------------------------------
 //  BaseException  (implementations)

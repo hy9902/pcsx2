@@ -193,6 +193,16 @@ public:
 		return false;
 	}
 
+	bool Write( const wxString& fmt, ... ) const
+	{
+		va_list list;
+		va_start( list, fmt );
+		WriteV( fmt.wx_str(), list );
+		va_end( list );
+
+		return false;
+	}
+
 	// Writes to the console using the specified color.  This overrides the default color setting
 	// for this log.
 	bool Write( ConsoleColors color, const char* fmt, ... ) const
@@ -227,6 +237,16 @@ public:
 		return false;
 	}
 
+	bool Warn( const wxString& fmt, ... ) const
+	{
+		va_list list;
+		va_start( list, fmt );
+		WriteV( Color_StrongYellow, fmt.wx_str(), list );
+		va_end( list );
+
+		return false;
+	}
+
 	// Writes to the console using bold red text -- overrides the log source's default
 	// color settings.
 	bool Error( const wxChar* fmt, ... ) const
@@ -234,6 +254,16 @@ public:
 		va_list list;
 		va_start( list, fmt );
 		WriteV( Color_StrongRed, fmt, list );
+		va_end( list );
+
+		return false;
+	}
+
+	bool Error( const wxString& fmt, ... ) const
+	{
+		va_list list;
+		va_start( list, fmt );
+		WriteV( Color_StrongRed, fmt.wx_str(), list );
 		va_end( list );
 
 		return false;
