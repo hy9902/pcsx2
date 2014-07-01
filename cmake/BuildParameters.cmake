@@ -223,3 +223,5 @@ endif (NOT DEFINED XDG_STD)
 if (NOT DEFINED EXTRA_PLUGINS)
     set(EXTRA_PLUGINS FALSE)
 endif()
+
+option(WX28_API "Force wxWidget 2.8 lib (Developper only). Default:OFF")

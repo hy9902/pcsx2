@@ -28,6 +28,7 @@ do
         --gles        ) flags="$flags -DGLES_API=TRUE" ;;
         --sdl2        ) flags="$flags -DSDL2_API=TRUE" ;;
         --extra       ) flags="$flags -DEXTRA_PLUGINS=TRUE" ;;
+        --wx28        ) flags="$flags -DWX28_API=TRUE" ;;
         --clean       ) clean_build=true ;;
 
         *)
@@ -39,6 +40,7 @@ do
             echo "--clean         : Do a clean build."
             echo "--extra         : Build all plugins"
             echo "** Developper option **"
+            echo "--wx28          : Force wxWidget 2.8"
             echo "--glsl          : Replace CG backend of ZZogl by GLSL"
             echo "--egl           : Replace GLX by EGL (ZZogl plugins only)"
             echo "--sdl2          : Build with SDL2 (crash if wx is linked to SDL1)"
