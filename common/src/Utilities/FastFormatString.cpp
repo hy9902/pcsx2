@@ -295,6 +295,7 @@ FastFormatUnicode& FastFormatUnicode::Write( const wxChar* fmt, ... )
 	return *this;
 }
 
+#if wxMAJOR_VERSION >= 3
 FastFormatUnicode& FastFormatUnicode::Write( const wxString& fmt, ... )
 {
 	va_list list;
@@ -303,6 +304,7 @@ FastFormatUnicode& FastFormatUnicode::Write( const wxString& fmt, ... )
 	va_end(list);
 	return *this;
 }
+#endif
 
 bool FastFormatUnicode::IsEmpty() const
 {
