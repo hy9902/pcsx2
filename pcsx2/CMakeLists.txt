@@ -1,31 +1,31 @@
+if (openSUSE)
+    # openSUSE don't install wx in a standard library system
+    # path. Let's bypass the dynamic linker and hardcode the path.
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
+endif()
+
 # Check that people use the good file
 if(NOT TOP_CMAKE_WAS_SOURCED)
     message(FATAL_ERROR "
     You did not 'cmake' the good CMakeLists.txt file. Use the one in the top dir.
     It is advice to delete all wrongly generated cmake stuff => CMakeFiles & CMakeCache.txt")
-endif(NOT TOP_CMAKE_WAS_SOURCED)
+endif()
 
 
 # set common flags
-set(CommonFlags 
+set(CommonFlags
     # GCC-4.6 crash pcsx2 during the binding of plugins at startup...
     # Disable this optimization for the moment
-    -fno-omit-frame-pointer 
+    -fno-omit-frame-pointer
     # END GCC-4.6
-	-pthread
-    -fvisibility=hidden
-	-fno-guess-branch-probability
-	-fno-dse
-	-fno-tree-dse
-	-fno-strict-aliasing
+    -fno-strict-aliasing
+    -Wno-parentheses
     -Wstrict-aliasing # Allow to track strict aliasing issue.
-    -std=c++0x
-	-pipe)
-
-# set warning flags
-set(DebugFlags
-	-W
-	-g)
+    -Wno-char-subscripts # only impact svu which is deprecated
+    -Wno-missing-braces
+    #-Wno-ignored-attributes # don't remember why I put here but it is pure C option, therefore it complains for nothings on cpp files
+    -DWX_PRECOMP
+	)
 
 # set optimization flags
 set(OptimizationFlags
@@ -49,7 +49,7 @@ set(OptimizationFlags
 	-fpeephole2
 	-fregmove
 	-freorder-blocks
-	-freorder-functions 
+	-freorder-functions
 	-frerun-cse-after-loop
 	-fsched-interblock
 	-fsched-spec
@@ -68,35 +68,37 @@ set(OptimizationFlags
 	-ftree-vrp
 	-funit-at-a-time)
 
+#Clang doesn't support a few common flags that GCC does.
+if(NOT USE_CLANG)
+	set(pcsx2FinalFlags ${CommonFlags} -fno-guess-branch-probability -fno-dse -fno-tree-dse)
+endif()
+
 # Debug - Build
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
     set(Output pcsx2-dbg)
+	set(pcsx2FinalFlags ${pcsx2FinalFlags} ${CommonFlags} -DPCSX2_DEVBUILD -DPCSX2_DEBUG)
 
-	add_definitions(${CommonFlags} ${DebugFlags} -DPCSX2_DEVBUILD -DPCSX2_DEBUG -DWX_PRECOMP)
-endif(CMAKE_BUILD_TYPE STREQUAL Debug)
-
-# Devel - Build
-if(CMAKE_BUILD_TYPE STREQUAL Devel)
+elseif(CMAKE_BUILD_TYPE STREQUAL Devel)
 	set(Output pcsx2-dev)
+	set(pcsx2FinalFlags ${pcsx2FinalFlags} ${CommonFlags} ${OptimizationFlags} -DPCSX2_DEVBUILD)
 
-	add_definitions(${CommonFlags} ${OptimizationFlags} -DPCSX2_DEVBUILD -DWX_PRECOMP -DNDEBUG)
-endif(CMAKE_BUILD_TYPE STREQUAL Devel)
-
-# Release - Build
-if(CMAKE_BUILD_TYPE STREQUAL Release)
+elseif(CMAKE_BUILD_TYPE STREQUAL Release)
 	set(Output pcsx2)
+	set(pcsx2FinalFlags ${pcsx2FinalFlags} ${CommonFlags} ${OptimizationFlags})
 
-	add_definitions(${CommonFlags} ${OptimizationFlags} -DWX_PRECOMP -DNDEBUG)
-endif(CMAKE_BUILD_TYPE STREQUAL Release)
+endif()
 
 if(XDG_STD)
-    add_definitions(-DXDG_STD)
-endif(XDG_STD)
+    set(pcsx2FinalFlags
+		${pcsx2FinalFlags}
+		-DXDG_STD
+	)
+endif()
 
 # In package mode always use pcsx2
 if(PACKAGE_MODE)
     set(Output pcsx2)
-endif(PACKAGE_MODE)
+endif()
 
 # Main pcsx2 source
 set(pcsx2Sources
@@ -112,7 +114,6 @@ set(pcsx2Sources
 	Gif.cpp
     Gif_Logger.cpp
 	Gif_Unit.cpp
-    Gte.cpp
 	GS.cpp
 	GSState.cpp
 	Hw.cpp
@@ -153,7 +154,6 @@ set(pcsx2Sources
 	Sio.cpp
 	SourceLog.cpp
 	SPR.cpp
-	Stats.cpp
 	System.cpp
 	Vif0_Dma.cpp
 	Vif1_Dma.cpp
@@ -203,7 +203,6 @@ set(pcsx2Headers
 	MemoryTypes.h
 	NakedAsm.h
 	Patch.h
-	Patch_Obsolete.h
 	PathDefs.h
 	Plugins.h
 	PrecompiledHeader.h
@@ -218,7 +217,6 @@ set(pcsx2Headers
 	Sio.h
 	sio_internal.h
 	SPR.h
-	Stats.h
 	SysForwardDefs.h
 	System.h
 	Vif_Dma.h
@@ -266,13 +264,16 @@ set(pcsx2DebugToolsSources
 	DebugTools/DisassemblyManager.cpp
 	DebugTools/ExpressionParser.cpp
 	DebugTools/MIPSAnalyst.cpp
+	DebugTools/MipsAssembler.cpp
+	DebugTools/MipsAssemblerTables.cpp
+	DebugTools/MipsStackWalk.cpp
 	DebugTools/Breakpoints.cpp
 	DebugTools/SymbolMap.cpp
 	DebugTools/DisR3000A.cpp
 	DebugTools/DisR5900asm.cpp
-	DebugTools/DisR5900.cpp
 	DebugTools/DisVU0Micro.cpp
-	DebugTools/DisVU1Micro.cpp)
+	DebugTools/DisVU1Micro.cpp
+	DebugTools/BiosDebugData.cpp)
 
 # DebugTools headers
 set(pcsx2DebugToolsHeaders
@@ -280,12 +281,16 @@ set(pcsx2DebugToolsHeaders
 	DebugTools/DisassemblyManager.h
 	DebugTools/ExpressionParser.h
 	DebugTools/MIPSAnalyst.h
+	DebugTools/MipsAssembler.h
+	DebugTools/MipsAssemblerTables.h
+	DebugTools/MipsStackWalk.h
 	DebugTools/Breakpoints.h
 	DebugTools/SymbolMap.h
 	DebugTools/Debug.h
 	DebugTools/DisASm.h
 	DebugTools/DisVUmicro.h
-	DebugTools/DisVUops.h)
+	DebugTools/DisVUops.h
+	DebugTools/BiosDebugData.h)
 
 # gui sources
 set(pcsx2GuiSources
@@ -554,11 +559,15 @@ set(pcsx2x86Sources
 	x86/newVif_Dynarec.cpp
 	x86/newVif_Unpack.cpp
 	x86/newVif_UnpackSSE.cpp
+	)
+if (NOT DISABLE_SVU)
+    set(pcsx2x86Sources ${pcsx2x86Sources}
 	x86/sVU_Lower.cpp
 	x86/sVU_Micro.cpp
 	x86/sVU_Upper.cpp
 	x86/sVU_zerorec.cpp
-	)
+    )
+endif()
 
 # x86 headers
 set(pcsx2x86Headers
@@ -597,10 +606,6 @@ set(pcsx2x86Headers
 	x86/newVif.h
 	x86/newVif_HashBucket.h
 	x86/newVif_UnpackSSE.h
-	x86/sVU_Compare.h
-	x86/sVU_Debug.h
-	x86/sVU_Micro.h
-	x86/sVU_zerorec.h
 	)
 
 # colect .asm files
@@ -609,11 +614,14 @@ set(pcsx2AsmFiles
 	x86/ix86-32/aVif_proc-32.asm)
 
 # collect .S files
-set(pcsx2SSources
-	x86/aVUzerorec.S)
+if (NOT DISABLE_SVU)
+    set(pcsx2SSources x86/aVUzerorec.S)
+    # change language of .S-files to c++
+    set_source_files_properties(${pcsx2SSources} PROPERTIES LANGUAGE CXX)
+else()
+    set(pcsx2SSources "")
+endif()
 
-# change language of .S-files to c++
-set_source_files_properties(${pcsx2SSources} PROPERTIES LANGUAGE CXX)
 
 # common Sources
 set(Common
@@ -645,32 +653,41 @@ if(Linux)
 	set(Platform
 		${pcsx2LinuxSources}
 		${pcsx2LinuxHeaders})
-endif(Linux)		
+endif()
 
 # Windows
 if(Windows)
 	set(Platform
 		${pcsx2WindowsSources}
 		${pcsx2WindowsHeaders})
-endif(Windows)
+endif()
 
 # MacOSX
 if(MacOSX)
-	set(PlatformSources
+	set(Platform
 		)
-endif(MacOSX)	
+endif()
+
+set(pcsx2FinalSources
+	${Common}
+	${Platform}
+)
+
+set(pcsx2FinalLibs
+	Utilities
+	x86emitter
+	${wxWidgets_LIBRARIES}
+	${GTK2_LIBRARIES}
+	${ZLIB_LIBRARIES}
+    ${AIO_LIBRARIES}
+)
 
 # additonal include directories
-include_directories(.
+include_directories(
 					gui
 					x86
                     ${CMAKE_BINARY_DIR}/pcsx2/gui
-                    )
-
-# add executable
-add_executable(${Output}
-			   ${Common}
-			   ${Platform})
+)
 
 ### Generate the resources files
 file(MAKE_DIRECTORY ${res_bin})
@@ -689,31 +706,6 @@ endforeach()
 # See issue: 1233
 if(PACKAGE_MODE)
 	SET_SOURCE_FILES_PROPERTIES(gui/AppConfig.cpp PROPERTIES COMPILE_FLAGS "-Wp,-ansi,-U__STRICT_ANSI__")
-endif(PACKAGE_MODE)    
+endif()
 
-# link target with project internal libraries
-target_link_libraries(${Output} Utilities x86emitter)
-					
-# link target with wx
-target_link_libraries(${Output} ${wxWidgets_LIBRARIES})
-
-if(Linux)
-	# link target with gtk2
-	target_link_libraries(${Output} ${GTK2_LIBRARIES})
-endif(Linux)
-
-# link target with zlib
-target_link_libraries(${Output} ${ZLIB_LIBRARIES})
-
-target_link_libraries(${Output} ${AIO_LIBRARIES})
-
-# User flags options
-if(NOT USER_CMAKE_LD_FLAGS STREQUAL "")
-    target_link_libraries(${Output} "${USER_CMAKE_LD_FLAGS}")
-endif(NOT USER_CMAKE_LD_FLAGS STREQUAL "")
-
-if(PACKAGE_MODE)
-    install(TARGETS ${Output} DESTINATION bin)
-else(PACKAGE_MODE)
-    install(TARGETS ${Output} DESTINATION ${CMAKE_SOURCE_DIR}/bin)
-endif(PACKAGE_MODE)
+add_pcsx2_executable(${Output} "${pcsx2FinalSources}" "${pcsx2FinalLibs}" "${pcsx2FinalFlags}")

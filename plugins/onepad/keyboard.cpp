@@ -23,12 +23,12 @@
   * Theoretically, this header is for anything to do with keyboard input.
   * Pragmatically, event handing's going in here too.
   */
-  
+
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "keyboard.h"
 
-#ifndef __LINUX__
+#ifndef __linux__
 char* KeysymToChar(int keysym)
 {
 	LPWORD temp;
@@ -40,7 +40,7 @@ char* KeysymToChar(int keysym)
 
 void SetAutoRepeat(bool autorep)
 {
- #ifdef __LINUX__
+ #ifdef __linux__
     if (toggleAutoRepeat)
     {
         if (autorep)
@@ -51,7 +51,7 @@ void SetAutoRepeat(bool autorep)
 #endif
 }
 
-#ifdef __LINUX__
+#ifdef __linux__
 static bool s_grab_input = false;
 static bool s_Shift = false;
 static unsigned int  s_previous_mouse_x = 0;
@@ -197,7 +197,6 @@ void PollForX11KeyboardInput(int pad)
 {
 	keyEvent evt;
 	XEvent E;
-	XButtonEvent* BE;
 
 	// Keyboard input send by PCSX2
 	while (!ev_fifo.empty()) {
@@ -211,17 +210,22 @@ void PollForX11KeyboardInput(int pad)
 	while (XPending(GSdsp) > 0)
 	{
 		XNextEvent(GSdsp, &E);
-		evt.evt = E.type;
-		evt.key = (int)XLookupKeysym((XKeyEvent *) & E, 0);
+
 		// Change the format of the structure to be compatible with GSOpen2
 		// mode (event come from pcsx2 not X)
-		BE = (XButtonEvent*)&E;
-		switch (evt.evt) {
-			case MotionNotify: evt.key = (BE->x & 0xFFFF) | (BE->y << 16); break;
+		evt.evt = E.type;
+		switch (E.type) {
+			case MotionNotify:
+				evt.key = (E.xbutton.x & 0xFFFF) | (E.xbutton.y << 16);
+				break;
 			case ButtonRelease:
-			case ButtonPress: evt.key = BE->button; break;
-			default: break;
+			case ButtonPress:
+				evt.key = E.xbutton.button;
+				break;
+			default:
+				evt.key = (int)XLookupKeysym(&E.xkey, 0);
 		}
+
 		AnalyzeKeyEvent(pad, evt);
 	}
 }
@@ -233,7 +237,7 @@ bool PollX11KeyboardMouseEvent(u32 &pkey)
 	if (ev != NULL)
 	{
 		if (ev->type == GDK_KEY_PRESS) {
-			pkey = ev->key.keyval != GDK_Escape ? ev->key.keyval : 0;
+			pkey = ev->key.keyval != GDK_KEY_Escape ? ev->key.keyval : 0;
 			return true;
 		} else if(ev->type == GDK_BUTTON_PRESS) {
 			pkey = ev->button.button;

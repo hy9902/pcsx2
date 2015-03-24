@@ -67,7 +67,7 @@ static void SysPageFaultSignalFilter( int signal, siginfo_t *siginfo, void * )
 	// Bad mojo!  Completely invalid address.
 	// Instigate a trap if we're in a debugger, and if not then do a SIGKILL.
 
-	wxTrap();
+	pxTrap();
 	if (!IsDebugBuild) raise( SIGKILL );
 }
 
@@ -118,13 +118,13 @@ static bool _memprotect( void* baseaddr, size_t size, const PageProtectionMode& 
 	{
 		case EINVAL:
 			pxFailDev(pxsFmt(L"mprotect returned EINVAL @ 0x%08X -> 0x%08X  (mode=%s)",
-				baseaddr, (uptr)baseaddr+size, mode.ToString().c_str())
+				baseaddr, (uptr)baseaddr+size, WX_STR(mode.ToString()))
 			);
 		break;
 
 		case EACCES:
 			pxFailDev(pxsFmt(L"mprotect returned EACCES @ 0x%08X -> 0x%08X  (mode=%s)",
-				baseaddr, (uptr)baseaddr+size, mode.ToString().c_str())
+				baseaddr, (uptr)baseaddr+size, WX_STR(mode.ToString()))
 			);
 		break;
 
@@ -218,7 +218,7 @@ void HostSys::MemProtect( void* baseaddr, size_t size, const PageProtectionMode&
 	{
 		throw Exception::OutOfMemory( L"MemProtect" )
 			.SetDiagMsg(pxsFmt( L"mprotect failed @ 0x%08X -> 0x%08X  (mode=%s)",
-				baseaddr, (uptr)baseaddr+size, mode.ToString().c_str()
+				baseaddr, (uptr)baseaddr+size, WX_STR(mode.ToString())
 			)
 		);
 	}

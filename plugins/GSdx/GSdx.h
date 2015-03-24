@@ -27,7 +27,7 @@ class GSdxApp
 {
 	std::string m_ini;
 	std::string m_section;
-#ifdef _LINUX
+#ifdef __linux__
 	std::map< std::string, std::string > m_configuration_map;
 #endif
 
@@ -39,7 +39,8 @@ public:
 #ifdef _WINDOWS
  	HMODULE GetModuleHandle() {return (HMODULE)GetModuleHandlePtr();}
 #endif
-#ifdef _LINUX
+
+#ifdef __linux__
 	void BuildConfigurationMap(const char* lpFileName);
 	void ReloadConfig();
 
@@ -47,6 +48,8 @@ public:
 	bool WritePrivateProfileString(const char* lpAppName, const char* lpKeyName, const char* pString, const char* lpFileName);
 	int GetPrivateProfileInt(const char* lpAppName, const char* lpKeyName, int nDefault, const char* lpFileName);
 #endif
+
+	bool LoadResource(int id, vector<unsigned char>& buff, const char* type = NULL);
 
 	string GetConfig(const char* entry, const char* value);
 	void SetConfig(const char* entry, const char* value);

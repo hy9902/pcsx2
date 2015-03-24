@@ -213,7 +213,7 @@ void AppCoreThread::OnPause()
 // Load Game Settings found in database
 // (game fixes, round modes, clamp modes, etc...)
 // Returns number of gamefixes set
-static int loadGameSettings(Pcsx2Config& dest, const Game_Data& game, bool verbose = true) {
+static int loadGameSettings(Pcsx2Config& dest, const Game_Data& game) {
 	if( !game.IsOk() ) return 0;
 
 	int  gf  = 0;
@@ -223,7 +223,7 @@ static int loadGameSettings(Pcsx2Config& dest, const Game_Data& game, bool verbo
 		SSE_RoundMode eeRM = (SSE_RoundMode)game.getInt("eeRoundMode");
 		if (EnumIsValid(eeRM))
 		{
-			if(verbose) Console.WriteLn("(GameDB) Changing EE/FPU roundmode to %d [%s]", eeRM, EnumToString(eeRM));
+			PatchesCon->WriteLn("(GameDB) Changing EE/FPU roundmode to %d [%s]", eeRM, EnumToString(eeRM));
 			dest.Cpu.sseMXCSR.SetRoundMode(eeRM);
 			++gf;
 		}
@@ -234,7 +234,7 @@ static int loadGameSettings(Pcsx2Config& dest, const Game_Data& game, bool verbo
 		SSE_RoundMode vuRM = (SSE_RoundMode)game.getInt("vuRoundMode");
 		if (EnumIsValid(vuRM))
 		{
-			if(verbose) Console.WriteLn("(GameDB) Changing VU0/VU1 roundmode to %d [%s]", vuRM, EnumToString(vuRM));
+			PatchesCon->WriteLn("(GameDB) Changing VU0/VU1 roundmode to %d [%s]", vuRM, EnumToString(vuRM));
 			dest.Cpu.sseVUMXCSR.SetRoundMode(vuRM);
 			++gf;
 		}
@@ -242,7 +242,7 @@ static int loadGameSettings(Pcsx2Config& dest, const Game_Data& game, bool verbo
 
 	if (game.keyExists("eeClampMode")) {
 		int clampMode = game.getInt("eeClampMode");
-		if(verbose) Console.WriteLn("(GameDB) Changing EE/FPU clamp mode [mode=%d]", clampMode);
+		PatchesCon->WriteLn("(GameDB) Changing EE/FPU clamp mode [mode=%d]", clampMode);
 		dest.Cpu.Recompiler.fpuOverflow			= (clampMode >= 1);
 		dest.Cpu.Recompiler.fpuExtraOverflow	= (clampMode >= 2);
 		dest.Cpu.Recompiler.fpuFullMode			= (clampMode >= 3);
@@ -251,7 +251,7 @@ static int loadGameSettings(Pcsx2Config& dest, const Game_Data& game, bool verbo
 
 	if (game.keyExists("vuClampMode")) {
 		int clampMode = game.getInt("vuClampMode");
-		if(verbose) Console.WriteLn("(GameDB) Changing VU0/VU1 clamp mode [mode=%d]", clampMode);
+		PatchesCon->WriteLn("(GameDB) Changing VU0/VU1 clamp mode [mode=%d]", clampMode);
 		dest.Cpu.Recompiler.vuOverflow			= (clampMode >= 1);
 		dest.Cpu.Recompiler.vuExtraOverflow		= (clampMode >= 2);
 		dest.Cpu.Recompiler.vuSignOverflow		= (clampMode >= 3);
@@ -261,7 +261,7 @@ static int loadGameSettings(Pcsx2Config& dest, const Game_Data& game, bool verbo
 
 	if (game.keyExists("mvuFlagSpeedHack")) {
 		bool vuFlagHack = game.getInt("mvuFlagSpeedHack") ? 1 : 0;
-		if(verbose) Console.WriteLn("(GameDB) Changing mVU flag speed hack [mode=%d]", vuFlagHack);
+		PatchesCon->WriteLn("(GameDB) Changing mVU flag speed hack [mode=%d]", vuFlagHack);
 		dest.Speedhacks.vuFlagHack = vuFlagHack;
 		gf++;
 	}
@@ -275,7 +275,7 @@ static int loadGameSettings(Pcsx2Config& dest, const Game_Data& game, bool verbo
 		{
 			bool enableIt = game.getBool(key);
 			dest.Gamefixes.Set(id, enableIt);
-			if(verbose) Console.WriteLn(L"(GameDB) %s Gamefix: " + key, enableIt ? L"Enabled" : L"Disabled" );
+			PatchesCon->WriteLn(L"(GameDB) %s Gamefix: " + key, enableIt ? L"Enabled" : L"Disabled");
 			gf++;
 
 			// The LUT is only used for 1 game so we allocate it only when the gamefix is enabled (save 4MB)
@@ -287,13 +287,32 @@ static int loadGameSettings(Pcsx2Config& dest, const Game_Data& game, bool verbo
 	return gf;
 }
 
+// Used to track the current game serial/id, and used to disable verbose logging of
+// applied patches if the game info hasn't changed.  (avoids spam when suspending/resuming
+// or using TAB or other things), but gets verbose again when booting (even if the same game).
+// File scope since it gets reset externally when rebooting
+static wxString curGameKey;
+
+// PatchesCon points to either Console or ConsoleWriter_Null, such that if we're in Devel mode
+// or the user enabled the devel/verbose console it prints all patching info whenever it's applied,
+// else it prints the patching info only once - right after boot.
+const IConsoleWriter *PatchesCon = &Console;
+
+static void SetupPatchesCon(bool verbose)
+{
+	bool devel = false;
+#ifdef PCSX2_DEVBUILD
+	devel = true;
+#endif
+
+	if (verbose || DevConWriterEnabled || devel)
+		PatchesCon = &Console;
+	else
+		PatchesCon = &ConsoleWriter_Null;
+}
+
 void AppCoreThread::ApplySettings( const Pcsx2Config& src )
 {
-	// Used to track the current game serial/id, and used to disable verbose logging of
-	// applied patches if the game info hasn't changed.  (avoids spam when suspending/resuming
-	// or using TAB or other things).
-	static wxString curGameKey;
-
 	// 'fixup' is the EmuConfig we're going to upload to the emulator, which very well may
 	// differ from the user-configured EmuConfig settings.  So we make a copy here and then
 	// we apply the commandline overrides and database gamefixes, and then upload 'fixup'
@@ -335,6 +354,8 @@ void AppCoreThread::ApplySettings( const Pcsx2Config& src )
 
 	const wxString newGameKey( SysGetDiscID() );
 	const bool verbose( newGameKey != curGameKey );
+	SetupPatchesCon(verbose);
+
 	curGameKey = newGameKey;
 
 	if (!curGameKey.IsEmpty())
@@ -352,9 +373,9 @@ void AppCoreThread::ApplySettings( const Pcsx2Config& src )
 			if (EmuConfig.EnablePatches) {
 				if (int patches = InitPatches(gameCRC, game)) {
 					gamePatch.Printf(L" [%d Patches]", patches);
-					if (verbose) Console.WriteLn(Color_Green, "(GameDB) Patches Loaded: %d", patches);
+					PatchesCon->WriteLn(Color_Green, "(GameDB) Patches Loaded: %d", patches);
 				}
-				if (int fixes = loadGameSettings(fixup, game, verbose)) {
+				if (int fixes = loadGameSettings(fixup, game)) {
 					gameFixes.Printf(L" [%d Fixes]", fixes);
 				}
 			}
@@ -382,14 +403,14 @@ void AppCoreThread::ApplySettings( const Pcsx2Config& src )
 
 	// regular cheat patches
 	if (EmuConfig.EnableCheats) {
-		if (numberLoadedCheats = LoadCheats(gameCRC, PathDefs::GetCheats(), L"Cheats")) {
+		if (numberLoadedCheats = LoadCheats(gameCRC, GetCheatsFolder(), L"Cheats")) {
 			gameCheats.Printf(L" [%d Cheats]", numberLoadedCheats);
 		}
 	}
 
 	// wide screen patches
 	if (EmuConfig.EnableWideScreenPatches) {
-		if (numberLoadedWideScreenPatches = LoadCheats(gameCRC, PathDefs::GetCheatsWS(), L"Widescreen hacks")) {
+		if (numberLoadedWideScreenPatches = LoadCheats(gameCRC, GetCheatsWsFolder(), L"Widescreen hacks")) {
 			gameWsHacks.Printf(L" [%d widescreen hacks]", numberLoadedWideScreenPatches);
 		}
 		else {
@@ -397,13 +418,19 @@ void AppCoreThread::ApplySettings( const Pcsx2Config& src )
 			wxString cheats_ws_archive = Path::Combine(PathDefs::GetProgramDataDir(), wxFileName(L"cheats_ws.zip"));
 
 			if (numberDbfCheatsLoaded = LoadCheatsFromZip(gameCRC, cheats_ws_archive)) {
-				Console.WriteLn(Color_Green, "(Wide Screen Cheats DB) Patches Loaded: %d", numberDbfCheatsLoaded);
+				PatchesCon->WriteLn(Color_Green, "(Wide Screen Cheats DB) Patches Loaded: %d", numberDbfCheatsLoaded);
 				gameWsHacks.Printf(L" [%d widescreen hacks]", numberDbfCheatsLoaded);
 			}
 		}
 	}
 
-	Console.SetTitle(gameName + gameSerial + gameCompat + gameFixes + gamePatch + gameCheats + gameWsHacks);
+	wxString consoleTitle = gameName + gameSerial;
+	if (!gameSerial.IsEmpty()) {
+		consoleTitle += L" [" + gameCRC.MakeUpper() + L"]";
+	}
+	consoleTitle += gameCompat + gameFixes + gamePatch + gameCheats + gameWsHacks;
+
+	Console.SetTitle(consoleTitle);
 
 	// Re-entry guard protects against cases where code wants to manually set core settings
 	// which are not part of g_Conf.  The subsequent call to apply g_Conf settings (which is
@@ -476,6 +503,10 @@ void AppCoreThread::VsyncInThread()
 
 void AppCoreThread::GameStartingInThread()
 {
+	// Make AppCoreThread::ApplySettings get verbose again even if we're booting
+	// the same game, by making it think that the current CRC is a new one.
+	curGameKey = L"";
+
 	// Simulate a Close/Resume, so that settings get re-applied and the database
 	// lookups and other game-based detections are done.
 

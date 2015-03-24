@@ -194,14 +194,20 @@ void SysLogMachineCaps()
 {
 	if ( !PCSX2_isReleaseVersion )
 	{
-		Console.WriteLn(Color_StrongGreen, "PCSX2 %u.%u.%u-%lld %s - compiled on " __DATE__,
-			PCSX2_VersionHi, PCSX2_VersionMid, PCSX2_VersionLo,
+		Console.WriteLn(Color_StrongGreen, "PCSX2 %u.%u.%u-%lld %s"
+#ifndef openSUSE
+			"- compiled on " __DATE__
+#endif
+			, PCSX2_VersionHi, PCSX2_VersionMid, PCSX2_VersionLo,
 			SVN_REV, SVN_MODS ? "(modded)" : ""
 			);
 	}
 	else { // shorter release version string
-		Console.WriteLn(Color_StrongGreen, "PCSX2 %u.%u.%u-%lld - compiled on " __DATE__,
-			PCSX2_VersionHi, PCSX2_VersionMid, PCSX2_VersionLo,
+		Console.WriteLn(Color_StrongGreen, "PCSX2 %u.%u.%u-%lld"
+#ifndef openSUSE
+			"- compiled on " __DATE__
+#endif
+			, PCSX2_VersionHi, PCSX2_VersionMid, PCSX2_VersionLo,
 			SVN_REV );
 	}
 
@@ -214,7 +220,7 @@ void SysLogMachineCaps()
 		L"Operating System =  %s\n"
 		L"Physical RAM     =  %u MB",
 
-		GetOSVersionString().c_str(),
+		WX_STR(GetOSVersionString()),
 		(u32)(GetPhysicalMemory() / _1mb)
 	);
 
@@ -223,15 +229,15 @@ void SysLogMachineCaps()
 	Console.Indent().WriteLn(
 		L"CPU name         =  %s\n"
 		L"Vendor/Model     =  %s (stepping %02X)\n"
-		L"CPU speed        =  %u.%03u ghz (%u logical thread%s)\n"
+		L"CPU speed        =  %u.%03u ghz (%u logical thread%ls)\n"
 		L"x86PType         =  %s\n"
 		L"x86Flags         =  %08x %08x\n"
 		L"x86EFlags        =  %08x",
-			fromUTF8( x86caps.FamilyName ).Trim().Trim(false).c_str(),
-			fromUTF8( x86caps.VendorName ).c_str(), x86caps.StepID,
+			WX_STR(fromUTF8( x86caps.FamilyName ).Trim().Trim(false)),
+			WX_STR(fromUTF8( x86caps.VendorName )), x86caps.StepID,
 			speed / 1000, speed % 1000,
 			x86caps.LogicalCores, (x86caps.LogicalCores==1) ? L"" : L"s",
-			x86caps.GetTypeName().c_str(),
+			WX_STR(x86caps.GetTypeName()),
 			x86caps.Flags, x86caps.Flags2,
 			x86caps.EFlags
 	);
@@ -240,8 +246,6 @@ void SysLogMachineCaps()
 
 	wxArrayString features[2];	// 2 lines, for readability!
 
-	if( x86caps.hasMultimediaExtensions )			features[0].Add( L"MMX" );
-	if( x86caps.hasStreamingSIMDExtensions )		features[0].Add( L"SSE" );
 	if( x86caps.hasStreamingSIMD2Extensions )		features[0].Add( L"SSE2" );
 	if( x86caps.hasStreamingSIMD3Extensions )		features[0].Add( L"SSE3" );
 	if( x86caps.hasSupplementalStreamingSIMD3Extensions ) features[0].Add( L"SSSE3" );
@@ -327,10 +331,11 @@ CpuInitializer< CpuType >::~CpuInitializer() throw()
 class CpuInitializerSet
 {
 public:
+#ifndef DISABLE_SVU
 	// Note: Allocate sVU first -- it's the most picky.
-
 	CpuInitializer<recSuperVU0>		superVU0;
 	CpuInitializer<recSuperVU1>		superVU1;
+#endif
 
 	CpuInitializer<recMicroVU0>		microVU0;
 	CpuInitializer<recMicroVU1>		microVU1;
@@ -487,10 +492,12 @@ bool SysCpuProviderPack::IsRecAvailable_MicroVU1() const { return CpuProviders->
 BaseException* SysCpuProviderPack::GetException_MicroVU0() const { return CpuProviders->microVU0.ExThrown; }
 BaseException* SysCpuProviderPack::GetException_MicroVU1() const { return CpuProviders->microVU1.ExThrown; }
 
+#ifndef DISABLE_SVU
 bool SysCpuProviderPack::IsRecAvailable_SuperVU0() const { return CpuProviders->superVU0.IsAvailable(); }
 bool SysCpuProviderPack::IsRecAvailable_SuperVU1() const { return CpuProviders->superVU1.IsAvailable(); }
 BaseException* SysCpuProviderPack::GetException_SuperVU0() const { return CpuProviders->superVU0.ExThrown; }
 BaseException* SysCpuProviderPack::GetException_SuperVU1() const { return CpuProviders->superVU1.ExThrown; }
+#endif
 
 
 void SysCpuProviderPack::CleanupMess() throw()
@@ -518,10 +525,16 @@ bool SysCpuProviderPack::HadSomeFailures( const Pcsx2Config::RecompilerOptions& 
 {
 	return	(recOpts.EnableEE && !IsRecAvailable_EE()) ||
 			(recOpts.EnableIOP && !IsRecAvailable_IOP()) ||
+#ifndef DISABLE_SVU
 			(recOpts.EnableVU0 && recOpts.UseMicroVU0 && !IsRecAvailable_MicroVU0()) ||
 			(recOpts.EnableVU1 && recOpts.UseMicroVU0 && !IsRecAvailable_MicroVU1()) ||
 			(recOpts.EnableVU0 && !recOpts.UseMicroVU0 && !IsRecAvailable_SuperVU0()) ||
-			(recOpts.EnableVU1 && !recOpts.UseMicroVU1 && !IsRecAvailable_SuperVU1());
+			(recOpts.EnableVU1 && !recOpts.UseMicroVU1 && !IsRecAvailable_SuperVU1())
+#else
+			(recOpts.EnableVU0 && !IsRecAvailable_MicroVU0()) ||
+			(recOpts.EnableVU1 && !IsRecAvailable_MicroVU1())
+#endif
+			;
 
 }
 
@@ -537,12 +550,21 @@ void SysCpuProviderPack::ApplyConfig() const
 	CpuVU1 = CpuProviders->interpVU1;
 
 	if( EmuConfig.Cpu.Recompiler.EnableVU0 )
+#ifndef DISABLE_SVU
 		CpuVU0 = EmuConfig.Cpu.Recompiler.UseMicroVU0 ? (BaseVUmicroCPU*)CpuProviders->microVU0 : (BaseVUmicroCPU*)CpuProviders->superVU0;
+#else
+		CpuVU0 = (BaseVUmicroCPU*)CpuProviders->microVU0;
+#endif
 
 	if( EmuConfig.Cpu.Recompiler.EnableVU1 )
+#ifndef DISABLE_SVU
 		CpuVU1 = EmuConfig.Cpu.Recompiler.UseMicroVU1 ? (BaseVUmicroCPU*)CpuProviders->microVU1 : (BaseVUmicroCPU*)CpuProviders->superVU1;
+#else
+		CpuVU1 = (BaseVUmicroCPU*)CpuProviders->microVU1;
+#endif
 }
 
+#ifndef DISABLE_SVU
 // This is a semi-hacky function for convenience
 BaseVUmicroCPU* SysCpuProviderPack::getVUprovider(int whichProvider, int vuIndex) const {
 	switch (whichProvider) {
@@ -552,6 +574,7 @@ BaseVUmicroCPU* SysCpuProviderPack::getVUprovider(int whichProvider, int vuIndex
 	}
 	return NULL;
 }
+#endif
 
 // Resets all PS2 cpu execution caches, which does not affect that actual PS2 state/condition.
 // This can be called at any time outside the context of a Cpu->Execute() block without

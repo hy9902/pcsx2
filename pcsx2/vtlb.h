@@ -105,7 +105,7 @@ public:
 		m_reserve.Release();
 	}
 
-	virtual void Reserve( sptr hostptr );
+	void Reserve( sptr hostptr );
 	virtual void Release();
 
 	virtual void Commit();
@@ -172,8 +172,8 @@ public:
 		Release();
 	}
 
-	virtual void Reserve();
-	virtual void Release();
+	void Reserve();
+	void Release();
 
 	void Reset();
 };
@@ -190,6 +190,8 @@ namespace vtlb_private
 
 	static const uint VTLB_HANDLER_ITEMS = 128;
 
+	static const uptr POINTER_SIGN_BIT = 1ULL << (sizeof(uptr) * 8 - 1);
+
 	struct MapData
 	{
 		// first indexer -- 8/16/32/64/128 bit tables [values 0-4]
@@ -197,11 +199,11 @@ namespace vtlb_private
 		// third indexer -- 128 possible handlers!
 		void* RWFT[5][2][VTLB_HANDLER_ITEMS];
 
-		s32 pmap[VTLB_PMAP_ITEMS];	//512KB // PS2 physical to x86 physical
+		sptr pmap[VTLB_PMAP_ITEMS]; //512KB // PS2 physical to x86 physical
 
-		s32* vmap;				//4MB (allocated by vtlb_init) // PS2 virtual to x86 physical
+		sptr* vmap;                //4MB (allocated by vtlb_init) // PS2 virtual to x86 physical
 
-		u32* ppmap;				//4MB (allocated by vtlb_init) // PS2 virtual to PS2 physical
+		u32* ppmap;               //4MB (allocated by vtlb_init) // PS2 virtual to PS2 physical
 
 		MapData()
 		{
@@ -223,6 +225,6 @@ struct GoemonTlb {
 	u32 physical_add;
 	u32 unk3; // likely the size
 	u32 high_add;
-	u32 unk4;
+	u32 key; // uniq number attached to an allocation
 	u32 unk5;
 };

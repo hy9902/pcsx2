@@ -67,28 +67,23 @@ write_svnrev_h()
 # make the translation
 if(EXISTS "${CMAKE_SOURCE_DIR}/locales")
     add_subdirectory(locales)
-endif(EXISTS "${CMAKE_SOURCE_DIR}/locales")
-
-# make 3rdParty
-if(EXISTS "${CMAKE_SOURCE_DIR}/3rdparty")
-    add_subdirectory(3rdparty)
-endif(EXISTS "${CMAKE_SOURCE_DIR}/3rdparty")
+endif()
 
 # make common
 if(common_libs)
     add_subdirectory(common/src/Utilities)
     add_subdirectory(common/src/x86emitter)
-endif(common_libs)
+endif()
 
 # make pcsx2
 if(EXISTS "${CMAKE_SOURCE_DIR}/pcsx2" AND pcsx2_core)
     add_subdirectory(pcsx2)
-endif(EXISTS "${CMAKE_SOURCE_DIR}/pcsx2" AND pcsx2_core)
+endif()
 
 # make plugins
 if(EXISTS "${CMAKE_SOURCE_DIR}/plugins")
     add_subdirectory(plugins)
-endif(EXISTS "${CMAKE_SOURCE_DIR}/plugins")
+endif()
 
 #-------------------------------------------------------------------------------
 # Install some files to ease package creation
@@ -96,9 +91,17 @@ if(PACKAGE_MODE)
     INSTALL(FILES     "${CMAKE_SOURCE_DIR}/bin/cheats_ws.zip" DESTINATION "${GAMEINDEX_DIR}")
     INSTALL(FILES     "${CMAKE_SOURCE_DIR}/bin/GameIndex.dbf" DESTINATION "${GAMEINDEX_DIR}")
 
-    INSTALL(FILES "${CMAKE_SOURCE_DIR}/linux_various/pcsx2.desktop" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/applications")
+    # set categories depending on system/distribution in pcsx2.desktop
+    if(openSUSE)
+        set(PCSX2_MENU_CATEGORIES "System;Emulator;")
+    else()
+        set(PCSX2_MENU_CATEGORIES "Game;Emulator;")
+    endif()
+    configure_file("${CMAKE_SOURCE_DIR}/linux_various/pcsx2.desktop.in" "${CMAKE_BINARY_DIR}/linux_various/pcsx2.desktop" @ONLY)
+
+    INSTALL(FILES "${CMAKE_BINARY_DIR}/linux_various/pcsx2.desktop" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/applications")
     INSTALL(FILES "${CMAKE_SOURCE_DIR}/linux_various/pcsx2.xpm" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pixmaps")
-    INSTALL(FILES "${CMAKE_SOURCE_DIR}/bin/docs/PCSX2_FAQ.pdf" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/doc/pcsx2")
-    INSTALL(FILES "${CMAKE_SOURCE_DIR}/bin/docs/PCSX2_Readme.pdf" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/doc/pcsx2")
+    INSTALL(FILES "${CMAKE_SOURCE_DIR}/bin/docs/PCSX2_FAQ.pdf" DESTINATION "${DOC_DIR}")
+    INSTALL(FILES "${CMAKE_SOURCE_DIR}/bin/docs/PCSX2_Readme.pdf" DESTINATION "${DOC_DIR}")
     INSTALL(FILES "${CMAKE_SOURCE_DIR}/bin/docs/pcsx2.1" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/man/man1/")
-endif(PACKAGE_MODE)
+endif()

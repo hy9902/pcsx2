@@ -184,7 +184,7 @@ void _eeMoveGPRtoR(x86IntRegType to, int fromgpr)
 			SetMMXstate();
 		}
 		else {
-			MOV32MtoR(to, (int)&cpuRegs.GPR.r[ fromgpr ].UL[ 0 ] );
+			MOV32MtoR(to, (uptr)&cpuRegs.GPR.r[ fromgpr ].UL[ 0 ] );
 		}
 	}
 }
@@ -204,7 +204,7 @@ void _eeMoveGPRtoM(u32 to, int fromgpr)
 			SetMMXstate();
 		}
 		else {
-			MOV32MtoR(EAX, (int)&cpuRegs.GPR.r[ fromgpr ].UL[ 0 ] );
+			MOV32MtoR(EAX, (uptr)&cpuRegs.GPR.r[ fromgpr ].UL[ 0 ] );
 			MOV32RtoM(to, EAX );
 		}
 	}
@@ -225,7 +225,7 @@ void _eeMoveGPRtoRm(x86IntRegType to, int fromgpr)
 			SetMMXstate();
 		}
 		else {
-			MOV32MtoR(EAX, (int)&cpuRegs.GPR.r[ fromgpr ].UL[ 0 ] );
+			MOV32MtoR(EAX, (uptr)&cpuRegs.GPR.r[ fromgpr ].UL[ 0 ] );
 			MOV32RtoRm( to, EAX );
 		}
 	}
@@ -577,7 +577,7 @@ static void recThrowHardwareDeficiency( const wxChar* extFail )
 {
 	throw Exception::HardwareDeficiency()
 		.SetDiagMsg(pxsFmt( L"R5900-32 recompiler init failed: %s is not available.", extFail))
-		.SetUserMsg(pxsFmt(_("%s Extensions not found.  The R5900-32 recompiler requires a host CPU with MMX, SSE, and SSE2 extensions."), extFail ));
+		.SetUserMsg(pxsFmt(_("%s Extensions not found.  The R5900-32 recompiler requires a host CPU with SSE2 extensions."), extFail ));
 }
 
 static void recReserveCache()
@@ -600,12 +600,6 @@ static void recReserveCache()
 static void recReserve()
 {
 	// Hardware Requirements Check...
-
-	if ( !x86caps.hasMultimediaExtensions )
-		recThrowHardwareDeficiency( L"MMX" );
-
-	if ( !x86caps.hasStreamingSIMDExtensions )
-		recThrowHardwareDeficiency( L"SSE" );
 
 	if ( !x86caps.hasStreamingSIMD2Extensions )
 		recThrowHardwareDeficiency( L"SSE2" );
@@ -716,7 +710,7 @@ static void recResetRaw()
 
 	maxrecmem = 0;
 
-	memzero_ptr<RECCONSTBUF_SIZE * sizeof(recConstBuf)>(recConstBuf);
+	memset(recConstBuf, 0, RECCONSTBUF_SIZE * sizeof(recConstBuf));
 
 	if( s_pInstCache )
 		memset( s_pInstCache, 0, sizeof(EEINST)*s_nInstCacheSize );
@@ -759,7 +753,7 @@ static void recResetEE()
 	recResetRaw();
 }
 
-void recStep( void )
+void recStep()
 {
 }
 
@@ -842,7 +836,7 @@ static void recExecute()
 }
 
 ////////////////////////////////////////////////////
-void R5900::Dynarec::OpcodeImpl::recSYSCALL( void )
+void R5900::Dynarec::OpcodeImpl::recSYSCALL()
 {
 	recCall(R5900::Interpreter::OpcodeImpl::SYSCALL);
 
@@ -855,7 +849,7 @@ void R5900::Dynarec::OpcodeImpl::recSYSCALL( void )
 }
 
 ////////////////////////////////////////////////////
-void R5900::Dynarec::OpcodeImpl::recBREAK( void )
+void R5900::Dynarec::OpcodeImpl::recBREAK()
 {
 	recCall(R5900::Interpreter::OpcodeImpl::BREAK);
 
@@ -907,12 +901,12 @@ void recClear(u32 addr, u32 size)
 		}
 
 		if (blockend <= addr) {
-			lowerextent = max(lowerextent, blockend);
+			lowerextent = std::max(lowerextent, blockend);
 			break;
 		}
 
-		lowerextent = min(lowerextent, blockstart);
-		upperextent = max(upperextent, blockend);
+		lowerextent = std::min(lowerextent, blockstart);
+		upperextent = std::max(upperextent, blockend);
 		// This might end up inside a block that doesn't contain the clearing range,
 		// so set it to recompile now.  This will become JITCompile if we clear it.
 		pblock->SetFnptr((uptr)JITCompileInBlock);
@@ -924,7 +918,7 @@ void recClear(u32 addr, u32 size)
 		recBlocks.Remove((blockidx + 1), toRemoveLast);
 	}
 
-	upperextent = min(upperextent, ceiling);
+	upperextent = std::min(upperextent, ceiling);
 
 	for (int i = 0; pexblock = recBlocks[i]; i++) {
 		if (s_pCurBlock == PC_GETBLOCK(pexblock->startpc))
@@ -981,12 +975,12 @@ void SetBranchReg( u32 reg )
 
 		if( x86regs[ESI].inuse ) {
 			pxAssert( x86regs[ESI].type == X86TYPE_PCWRITEBACK );
-			MOV32RtoM((int)&cpuRegs.pc, ESI);
+			MOV32RtoM((uptr)&cpuRegs.pc, ESI);
 			x86regs[ESI].inuse = 0;
 		}
 		else {
-			MOV32MtoR(EAX, (u32)&g_recWriteback);
-			MOV32RtoM((int)&cpuRegs.pc, EAX);
+			MOV32MtoR(EAX, (uptr)&g_recWriteback);
+			MOV32RtoM((uptr)&cpuRegs.pc, EAX);
 		}
 	}
 
@@ -1022,8 +1016,8 @@ void SaveBranchState()
 	s_psaveInstInfo = g_pCurInstInfo;
 
 	// save all mmx regs
-	memcpy_const(s_saveMMXregs, mmxregs, sizeof(mmxregs));
-	memcpy_const(s_saveXMMregs, xmmregs, sizeof(xmmregs));
+	memcpy(s_saveMMXregs, mmxregs, sizeof(mmxregs));
+	memcpy(s_saveXMMregs, xmmregs, sizeof(xmmregs));
 }
 
 void LoadBranchState()
@@ -1037,8 +1031,8 @@ void LoadBranchState()
 	g_pCurInstInfo = s_psaveInstInfo;
 
 	// restore all mmx regs
-	memcpy_const(mmxregs, s_saveMMXregs, sizeof(mmxregs));
-	memcpy_const(xmmregs, s_saveXMMregs, sizeof(xmmregs));
+	memcpy(mmxregs, s_saveMMXregs, sizeof(mmxregs));
+	memcpy(xmmregs, s_saveXMMregs, sizeof(xmmregs));
 }
 
 void iFlushCall(int flushtype)
@@ -1078,8 +1072,7 @@ void iFlushCall(int flushtype)
 		_flushConstRegs();
 
 	if (x86FpuState==MMX_STATE) {
-		if (x86caps.has3DNOWInstructionExtensions) FEMMS();
-		else EMMS();
+		EMMS();
 		x86FpuState=FPU_STATE;
 	}
 }
@@ -1295,7 +1288,6 @@ void dynarecMemcheck()
  	if (CBreakPoints::CheckSkipFirst(pc) != 0)
 		return;
 
-	iFlushCall(FLUSH_INTERPRETER);
 	CBreakPoints::SetBreakpointTriggered(true);
 	GetCoreThread().PauseSelf();
 	recExitExecution();
@@ -1311,7 +1303,7 @@ void __fastcall dynarecMemLogcheck(u32 start, bool store)
 
 void recMemcheck(u32 op, u32 bits, bool store)
 {
-	iFlushCall(FLUSH_INTERPRETER);
+	iFlushCall(FLUSH_EVERYTHING|FLUSH_PC);
 
 	// compute accessed address
 	_eeMoveGPRtoR(ECX, (op >> 21) & 0x1F);
@@ -1362,109 +1354,11 @@ void recMemcheck(u32 op, u32 bits, bool store)
 	}
 }
 
-inline bool isBranchOrJump(u32 addr)
-{
-	u32 op = memRead32(addr);
-
-	switch (op >> 26)
-	{
-	case 0x02:	// j
-	case 0x03:	// jal
-	case 0x04:	// beq
-	case 0x05:	// bne
-	case 0x06:	// blez
-	case 0x07:	// bgtz
-	case 0x14:	// beql
-	case 0x15:	// bnel
-	case 0x16:	// blezl
-	case 0x17:	// bgtzl
-		return true;
-	case 0x00:	// special
-		switch (op & 0x3F)
-		{
-		case 0x08:	// jr
-		case 0x09:	// jalr
-			return true;
-		}
-		break;
-	case 0x01:	// regimm
-		switch ((op >> 16) & 0x1F)
-		{
-		case 0x00:	// bltz
-		case 0x01:	// bgez
-		case 0x02:	// bltzl
-		case 0x03:	// bgezl
-		case 0x10:	// bltzal
-		case 0x11:	// bgezal
-		case 0x12:	// bltzall
-		case 0x13:	// bgezall
-			return true;
-		}
-		break;
-	}
-
-	return false;
-}
-
-// The next two functions return 0 if no breakpoint is needed,
-// 1 if it's needed on the current pc, 2 if it's needed in the delay slot
-
-int isBreakpointNeeded(u32 addr)
-{
-	if (CBreakPoints::IsAddressBreakPoint(addr))
-		return 1;
-
-	// there may be a breakpoint in the delay slot
-	if (isBranchOrJump(addr) && CBreakPoints::IsAddressBreakPoint(addr+4))
-		return 2;
-
-	return 0;
-}
-
-int isMemcheckNeeded(u32 pc)
-{
-	if (CBreakPoints::GetMemChecks().size() == 0)
-		return 0;
-
-	u32 addr = pc;
-	if (isBranchOrJump(addr))
-		addr += 4;
-
-	u32 op = memRead32(addr);
-
-	switch (op >> 26)
-	{
-	case 0x20:		// lb
-	case 0x21:		// lh
-	case 0x22:		// lwl
-	case 0x23:		// lw
-	case 0x24:		// lbu
-	case 0x25:		// lhu
-	case 0x26:		// lwr
-	case 0x28:		// sb
-	case 0x29:		// sh
-	case 0x2A:		// swl
-	case 0x2B:		// sw
-	case 0x2E:		// swr
-	case 0x37:		// ld
-	case 0x1B:		// ldr
-	case 0x3F:		// sd
-	case 0x3D:		// sdr
-	case 0x1A:		// ldl
-	case 0x2C:		// sdl
-	case 0x1E:		// lq
-	case 0x1F:		// sq
-		return addr == pc ? 1 : 2;
-	default:
-		return 0;
-	}
-}
-
 void encodeBreakpoint()
 {
 	if (isBreakpointNeeded(pc) != 0)
 	{
-		iFlushCall(FLUSH_EVERYTHING);
+		iFlushCall(FLUSH_EVERYTHING|FLUSH_PC);
 		xCALL(&dynarecCheckBreakpoint);
 	}
 }
@@ -1476,50 +1370,27 @@ void encodeMemcheck()
 		return;
 
 	u32 op = memRead32(needed == 2 ? pc+4 : pc);
-	switch (cpuRegs.code >> 26)
+	const OPCODE& opcode = GetInstruction(op);
+
+	bool store = (opcode.flags & IS_STORE) != 0;
+	switch (opcode.flags & MEMTYPE_MASK)
 	{
-	case 0x20:		// lb
-	case 0x24:		// lbu
-		recMemcheck(op,8,false);
+	case MEMTYPE_BYTE:
+		recMemcheck(op,8,store);
 		break;
-	case 0x28:		// sb
-		recMemcheck(op,8,true);
+	case MEMTYPE_HALF:
+		recMemcheck(op,16,store);
 		break;
-	case 0x21:		// lh
-	case 0x25:		// lhu
-		recMemcheck(op,16,false);
+	case MEMTYPE_WORD:
+		recMemcheck(op,32,store);
 		break;
-	case 0x22:		// lwl
-	case 0x23:		// lw
-	case 0x26:		// lwr
-		recMemcheck(op,32,false);
+	case MEMTYPE_DWORD:
+		recMemcheck(op,64,store);
 		break;
-	case 0x29:		// sh
-		recMemcheck(op,16,true);
-		break;
-	case 0x2A:		// swl
-	case 0x2B:		// sw
-	case 0x2E:		// swr
-		recMemcheck(op,32,true);
-		break;
-	case 0x37:		// ld
-	case 0x1B:		// ldr
-	case 0x1A:		// ldl
-		recMemcheck(op,64,false);
-		break;
-	case 0x3F:		// sd
-	case 0x3D:		// sdr
-	case 0x2C:		// sdl
-		recMemcheck(op,64,true);
-		break;
-	case 0x1E:		// lq
-		recMemcheck(op,128,false);
-		break;
-	case 0x1F:		// sq
-		recMemcheck(op,128,true);
+	case MEMTYPE_QWORD:
+		recMemcheck(op,128,store);
 		break;
 	}
-
 }
 
 void recompileNextInstruction(int delayslot)
@@ -1684,7 +1555,7 @@ void recompileNextInstruction(int delayslot)
 						DevCon.Warning("Possible old value used in COP2 code");
 						for (u32 i = s_pCurBlockEx->startpc; i < s_nEndBlock; i += 4)
 						{
-							disR5900Fasm(disasm, memRead32(i), i);
+							disR5900Fasm(disasm, memRead32(i), i,false);
 							DevCon.Warning("%s%08X %s", i == pc - 4 ? "*" : i == p ? "=" : " ", memRead32(i), disasm.c_str());
 						}
 						break;
@@ -1867,9 +1738,17 @@ static void __fastcall recRecompile( const u32 startpc )
 		xCALL(PreBlockCheck);
 	}
 
-	// 0x33ad48 is the return address of the function that populate the TLB cache
-	if (pc == 0x33ad48 && EmuConfig.Gamefixes.GoemonTlbHack) {
-		xCALL(GoemonPreloadTlb);
+	if (EmuConfig.Gamefixes.GoemonTlbHack) {
+		if (pc == 0x33ad48 || pc == 0x35060c) {
+			// 0x33ad48 and 0x35060c are the return address of the function (0x356250) that populate the TLB cache
+			xCALL(GoemonPreloadTlb);
+		} else if (pc == 0x3563b8) {
+			// Game will unmap some virtual addresses. If a constant address were hardcoded in the block, we would be in a bad situation.
+			AtomicExchange( eeRecNeedsReset, true );
+			// 0x3563b8 is the start address of the function that invalidate entry in TLB cache
+			MOV32MtoR(ECX, (uptr)&cpuRegs.GPR.n.a0.UL[ 0 ] );
+			xCALL(GoemonUnloadTlb);
+		}
 	}
 
 	// go until the next branch
@@ -2092,8 +1971,10 @@ StartRecomp:
 
 		for(i = startpc; i < s_nEndBlock; i += 4) {
 
+#ifndef DISABLE_SVU
 			// superVU hack: it needs vucycles, for some reason. >_<
 			extern int vucycle;
+#endif
 
 			g_pCurInstInfo++;
 			cpuRegs.code = *(u32*)PSM(i);
@@ -2103,7 +1984,9 @@ StartRecomp:
 
 				if( !usecop2 ) {
 					// init
+#ifndef DISABLE_SVU
 					vucycle = 0;
+#endif
 					usecop2 = 1;
 				}
 
@@ -2112,9 +1995,11 @@ StartRecomp:
 				continue;
 			}
 
+#ifndef DISABLE_SVU
 			// fixme - This should be based on the cycle count of the current EE
 			// instruction being analyzed.
 			if( usecop2 ) vucycle++;
+#endif
 
 		}
 		// This *is* important because g_pCurInstInfo is checked a bit later on and
@@ -2266,7 +2151,7 @@ StartRecomp:
 			}
 		}
 
-		memcpy_fast(&(*recRAMCopy)[HWADDR(startpc) / 4], PSM(startpc), pc - startpc);
+		memcpy(&(*recRAMCopy)[HWADDR(startpc) / 4], PSM(startpc), pc - startpc);
 	}
 
 	s_pCurBlock->SetFnptr((uptr)recPtr);

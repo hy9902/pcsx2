@@ -392,7 +392,7 @@ __forceinline void GSMem_to_ClutBuffer__T32_I4_CSM1_c(u32* vm, u32 csa)
 					dst += 2;
 
 					// check for wrapping
-					if (((u32)dst & 0x3ff) == 0) dst = GetClutBufferAddress<u16>(16);
+					if (((uptr)dst & 0x3ff) == 0) dst = GetClutBufferAddress<u16>(16);
 				}
 				break;
 			}
@@ -408,7 +408,7 @@ __forceinline void GSMem_to_ClutBuffer__T32_I4_CSM1_c(u32* vm, u32 csa)
 					dst += 2;
 
 					// check for wrapping
-					if (((u32)dst & 0x3ff) == 0) dst = GetClutBufferAddress<u16>(16);
+					if (((uptr)dst & 0x3ff) == 0) dst = GetClutBufferAddress<u16>(16);
 				}
 				break;
 			}
@@ -489,7 +489,7 @@ template <>
 /*__forceinline*/ void ClutBuffer_to_Array<u32>(u32* dst, u32 csa, u32 clutsize)
 {
     u8* clut = (u8*)GetClutBufferAddress<u32>(csa);
-    memcpy_amd((u8*)dst, clut, clutsize);
+    memcpy((u8*)dst, clut, clutsize);
 }
 
 template <>

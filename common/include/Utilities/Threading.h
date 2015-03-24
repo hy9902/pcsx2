@@ -42,13 +42,13 @@ public:
 	ConsoleLogSource_Threading();
 
 	bool Write( const wxString& thrname, const wxChar* msg ) {
-		return _parent::Write( wxsFormat(L"(thread:%s) ", thrname.c_str()) + msg );
+		return _parent::Write( wxsFormat(L"(thread:%s) ", WX_STR(thrname)) + msg );
 	}
 	bool Warn( const wxString& thrname, const wxChar* msg )	{
-		return _parent::Warn( wxsFormat(L"(thread:%s) ", thrname.c_str()) + msg );
+		return _parent::Warn( wxsFormat(L"(thread:%s) ", WX_STR(thrname)) + msg );
 	}
 	bool Error( const wxString& thrname, const wxChar* msg ) {
-		return _parent::Error( wxsFormat(L"(thread:%s) ", thrname.c_str()) + msg );
+		return _parent::Error( wxsFormat(L"(thread:%s) ", WX_STR(thrname)) + msg );
 	}
 };
 
@@ -63,7 +63,7 @@ extern ConsoleLogSource_Threading pxConLog_Thread;
 // For complimentary support for TLS, include Utilities/TlsVariable.inl, and use the
 // DeclareTls macro in the place of __threadlocal.
 //
-//#define PCSX2_THREAD_LOCAL 0		// uncomment this line to force-disable native TLS (useful for testing TlsVariabel on windows/linux)
+//#define PCSX2_THREAD_LOCAL 0		// uncomment this line to force-disable native TLS (useful for testing TlsVariable on windows/linux)
 
 #ifndef PCSX2_THREAD_LOCAL
 #	ifdef __WXMAC__
@@ -408,7 +408,7 @@ namespace Threading
 		ScopedLock m_lock;
 		volatile __aligned(4) bool& m_bool;
 
-#ifdef __LINUX__
+#ifdef __linux__
 		ScopedLockBool(Mutex& mutexToLock, volatile bool& isLockedBool)
 #else
 		ScopedLockBool(Mutex& mutexToLock, volatile __aligned(4) bool& isLockedBool)

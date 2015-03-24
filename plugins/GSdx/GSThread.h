@@ -142,15 +142,27 @@ public:
 };
 
 #else
-
+// let us use std::thread for now, comment out the definition to go back to pthread
+// There are currently some bugs/limitations to std::thread (see various comment)
+// For the moment let's keep pthread but uses new std object (mutex, cond_var)
+//#define _STD_THREAD_
+#ifdef _STD_THREAD_
+#include <thread>
+#else
 #include <pthread.h>
-#include <semaphore.h>
+#endif
+
+#include <mutex>
+#include <condition_variable>
 
 class GSThread : public IGSThread
 {
+    #ifdef _STD_THREAD_
+    std::thread *t;
+    #else
     pthread_attr_t m_thread_attr;
     pthread_t m_thread;
-
+    #endif
     static void* StaticThreadProc(void* param);
 
 protected:
@@ -164,41 +176,37 @@ public:
 
 class GSCritSec : public IGSLock
 {
-    pthread_mutexattr_t m_mutex_attr;
-    pthread_mutex_t m_mutex;
+	// XXX Do we really need a recursive mutex
+	// It would allow to use condition_variable instead of condition_variable_any
+    recursive_mutex *mutex_critsec;
 
 public:
     GSCritSec(bool recursive = true)
     {
-        pthread_mutexattr_init(&m_mutex_attr);
-        pthread_mutexattr_settype(&m_mutex_attr, recursive ? PTHREAD_MUTEX_RECURSIVE : PTHREAD_MUTEX_NORMAL);
-        pthread_mutex_init(&m_mutex, &m_mutex_attr);
+        mutex_critsec = new recursive_mutex();    
     }
 
     ~GSCritSec()
     {
-        pthread_mutex_destroy(&m_mutex);
-        pthread_mutexattr_destroy(&m_mutex_attr);
+        delete(mutex_critsec);
+    }
+    
+    void Lock()
+    {
+        mutex_critsec->lock();
+    }
+    
+    bool TryLock()
+    {
+        return mutex_critsec->try_lock();
     }
 
-    void Lock() {pthread_mutex_lock(&m_mutex);}
-    bool TryLock() {return pthread_mutex_trylock(&m_mutex) == 0;}
-    void Unlock() {pthread_mutex_unlock(&m_mutex);}
-
-	operator pthread_mutex_t* () {return &m_mutex;}
-};
-
-class GSEvent : public IGSEvent
-{
-protected:
-    sem_t m_sem;
-
-public:
-    GSEvent() {sem_init(&m_sem, 0, 0);}
-    ~GSEvent() {sem_destroy(&m_sem);}
-
-    void Set() {sem_post(&m_sem);}
-	bool Wait(IGSLock* l) {if(l) l->Unlock(); bool b = sem_wait(&m_sem) == 0; if(l) l->Lock(); return b;}
+    void Unlock()
+    {
+        mutex_critsec->unlock();
+    }
+    
+    recursive_mutex& GetMutex() {return ref(*mutex_critsec);}
 };
 
 class GSCondVarLock : public GSCritSec
@@ -211,26 +219,31 @@ public:
 
 class GSCondVar : public IGSEvent
 {
-	pthread_cond_t m_cv;
-	pthread_condattr_t m_cv_attr;
+    condition_variable_any *cond_var;
 
 public:
 	GSCondVar() 
 	{
-		pthread_condattr_init(&m_cv_attr);
-		pthread_cond_init(&m_cv, &m_cv_attr);
+        cond_var = new condition_variable_any();
 	}
 
 	virtual ~GSCondVar() 
 	{
-		pthread_condattr_destroy(&m_cv_attr);
-		pthread_cond_destroy(&m_cv);
-	}
+        delete(cond_var);
+    }
+    
+	void Set() 
+    {
+        cond_var->notify_one();
+    }
+    
+    bool Wait(IGSLock* l) 
+    {
+        cond_var->wait(((GSCondVarLock*)l)->GetMutex()); // Predicate is not useful, it is implicit in the loop
+        return 1; // Anyway this value is not used(and no way to get it from std::thread)
+    }
 
-	void Set() {pthread_cond_signal(&m_cv);}
-	bool Wait(IGSLock* l) {return pthread_cond_wait(&m_cv, *(GSCondVarLock*)l) == 0;}
-
-	operator pthread_cond_t* () {return &m_cv;}
+    operator condition_variable_any* () {return cond_var;}
 };
 
 #endif
@@ -289,7 +302,7 @@ public:
 		: m_count(0)
 		, m_exit(false)
 	{
-		bool condvar = !!theApp.GetConfig("condvar", 1);
+		bool condvar = true;
 
 		#ifdef _WINDOWS
 
@@ -308,9 +321,11 @@ public:
 		}
 		else
 		{
+			#ifdef _WINDOWS
 			m_notempty = new GSEvent();
 			m_empty = new GSEvent();
 			m_lock = new GSCritSec();
+			#endif
 		}
 
 		CreateThread();
@@ -371,7 +386,7 @@ public:
 };
 
 // http://software.intel.com/en-us/blogs/2012/11/06/exploring-intel-transactional-synchronization-extensions-with-intel-software
-
+#if 0
 class TransactionScope
 {
 public:
@@ -413,7 +428,12 @@ public:
 	TransactionScope(Lock& fallBackLock_, int max_retries = 3) 
 		: fallBackLock(fallBackLock_)
 	{
-		#if _M_SSE >= 0x501
+		// The TSX (RTM/HLE) instructions on Intel AVX2 CPUs may either be
+		// absent or disabled (see errata HSD136 and specification change at
+		// http://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/4th-gen-core-family-desktop-specification-update.pdf)
+		// This can cause builds for AVX2 CPUs to fail with GCC/Clang on Linux,
+		// so check that the RTM instructions are actually available.
+		#if (_M_SSE >= 0x501 && !defined(__GNUC__)) || defined(__RTM__)
 
 		int nretries = 0;
 		
@@ -456,7 +476,7 @@ public:
 		{
 			fallBackLock.unlock();
 		}
-		#if _M_SSE >= 0x501
+		#if (_M_SSE >= 0x501 && !defined(__GNUC__)) || defined(__RTM__)
 		else
 		{
 			_xend();
@@ -464,4 +484,4 @@ public:
 		#endif
 	}
 };
-
+#endif

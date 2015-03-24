@@ -21,6 +21,7 @@
 #include "Patch.h"
 #include "GameDatabase.h"
 
+#include <memory>
 #include <wx/textfile.h>
 #include <wx/dir.h>
 #include <wx/txtstrm.h>
@@ -180,10 +181,12 @@ void ResetCheatsCount()
   cheatnumber = 0;
 }
 
-static int LoadCheatsFiles(const wxDirName& folderName, wxString& fileSpec, const wxString& friendlyName)
+static int LoadCheatsFiles(const wxDirName& folderName, wxString& fileSpec, const wxString& friendlyName, int& numberFoundCheatsFiles)
 {
+	numberFoundCheatsFiles = 0;
+
 	if (!folderName.Exists()) {
-		Console.WriteLn(Color_Red, L"The %s folder ('%s') is inaccessible. Skipping...", friendlyName.c_str(), folderName.ToString().c_str());
+		Console.WriteLn(Color_Red, L"The %s folder ('%s') is inaccessible. Skipping...", WX_STR(friendlyName), WX_STR(folderName.ToString()));
 		return 0;
 	}
 	wxDir dir(folderName.ToString());
@@ -194,13 +197,15 @@ static int LoadCheatsFiles(const wxDirName& folderName, wxString& fileSpec, cons
 	bool found = dir.GetFirst(&buffer, L"*", wxDIR_FILES);
 	while (found) {
 		if (buffer.Upper().Matches(fileSpec.Upper())) {
-			Console.WriteLn(Color_Gray, L"Found %s file: '%s'", friendlyName.c_str(), buffer.c_str());
+			PatchesCon->WriteLn(Color_Green, L"Found %s file: '%s'", WX_STR(friendlyName), WX_STR(buffer));
 			int before = cheatnumber;
 			f.Open(Path::Combine(dir.GetName(), buffer));
 			inifile_process(f);
 			f.Close();
 			int loaded = cheatnumber - before;
-			Console.WriteLn((loaded ? Color_Green : Color_Gray), L"Loaded %d %s from '%s'", loaded, friendlyName.c_str(), buffer.c_str());
+			PatchesCon->WriteLn((loaded ? Color_Green : Color_Gray), L"Loaded %d %s from '%s' at '%s'",
+			               loaded, WX_STR(friendlyName), WX_STR(buffer), WX_STR(folderName.ToString()));
+			numberFoundCheatsFiles ++;
 		}
 		found = dir.GetNext(&buffer);
 	}
@@ -225,15 +230,14 @@ int LoadCheatsFromZip(wxString gameCRC, const wxString& cheatsArchiveFilename) {
     wxString name = entry->GetName();
     name.MakeUpper();
     if (name.Find(gameCRC) == 0 && name.Find(L".PNACH")+6u == name.Length()) {
-      Console.WriteLn(Color_Gray, L"Loading patch '%s' from archive '%s'",
-                      entry->GetName().c_str(), cheatsArchiveFilename.c_str());
+		PatchesCon->WriteLn(Color_Green, L"Loading patch '%s' from archive '%s'",
+                         WX_STR(entry->GetName()), WX_STR(cheatsArchiveFilename));
       wxTextInputStream pnach(zip);
       while (!zip.Eof()) {
         inifile_processString(pnach.ReadLine());
       }
     }
   }
-
   return cheatnumber - before;
 }
 
@@ -244,11 +248,20 @@ int LoadCheatsFromZip(wxString gameCRC, const wxString& cheatsArchiveFilename) {
 int LoadCheats(wxString name, const wxDirName& folderName, const wxString& friendlyName)
 {
 	int loaded = 0;
+	int numberFoundCheatsFiles;
 
 	wxString filespec = name + L"*.pnach";
-	loaded += LoadCheatsFiles(folderName, filespec, friendlyName);
+	loaded += LoadCheatsFiles(folderName, filespec, friendlyName, numberFoundCheatsFiles);
 
-	Console.WriteLn((loaded ? Color_Green : Color_Gray), L"Overall %d %s loaded", loaded, friendlyName.c_str());
+	// This message _might_ be buggy. This function (LoadCheats) loads from an explicit folder.
+	// This folder can be cheats or cheats_ws at either the default location or a custom one.
+	// This check only tests the default cheats folder, so the message it produces is possibly misleading.
+	if (folderName.ToString().IsSameAs(PathDefs::GetCheats().ToString()) && numberFoundCheatsFiles == 0) {
+		wxString pathName = Path::Combine(folderName, name.MakeUpper() + L".pnach");
+		PatchesCon->WriteLn(Color_Gray, L"Not found %s file: %s", WX_STR(friendlyName), WX_STR(pathName));
+	}
+
+	PatchesCon->WriteLn((loaded ? Color_Green : Color_Gray), L"Overall %d %s loaded", loaded, WX_STR(friendlyName));
 	return loaded;
 }
 
@@ -271,7 +284,7 @@ namespace PatchFunc
 {
     void comment( const wxString& text1, const wxString& text2 )
     {
-        Console.WriteLn( L"comment: " + text2 );
+		PatchesCon->WriteLn(L"comment: " + text2);
     }
 
     struct PatchPieces
@@ -299,7 +312,9 @@ namespace PatchFunc
 		// (translated) messages for display in a popup window then we'll have to upgrade the
 		// exception a little bit.
 
-        DevCon.WriteLn(cmd + L" " + param);
+		// print the actual patch lines only in verbose mode (even in devel)
+		if (DevConWriterEnabled)
+			DevCon.WriteLn(cmd + L" " + param);
 
 		try
 		{
@@ -320,10 +335,10 @@ namespace PatchFunc
 			iPatch.data			= StrToU64(pieces.WriteValue(), 16);
 
 			if (iPatch.cpu  == 0)
-				throw wxsFormat(L"Unrecognized CPU Target: '%s'", pieces.CpuType().c_str());
+				throw wxsFormat(L"Unrecognized CPU Target: '%s'", WX_STR(pieces.CpuType()));
 
 			if (iPatch.type == 0)
-				throw wxsFormat(L"Unrecognized Operand Size: '%s'", pieces.OperandSize().c_str());
+				throw wxsFormat(L"Unrecognized Operand Size: '%s'", WX_STR(pieces.OperandSize()));
 
 			iPatch.enabled = 1; // omg success!!
 
@@ -332,7 +347,7 @@ namespace PatchFunc
 		}
 		catch( wxString& exmsg )
 		{
-			Console.Error(L"(Patch) Error Parsing: %s=%s", cmd.c_str(), param.c_str());
+			Console.Error(L"(Patch) Error Parsing: %s=%s", WX_STR(cmd), WX_STR(param));
 			Console.Indent().Error( exmsg );
 		}
 	}

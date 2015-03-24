@@ -33,51 +33,36 @@ namespace PboPool {
 	
 	GLuint m_pool[PBO_POOL_SIZE];
 	uint32 m_offset[PBO_POOL_SIZE];
-	uint32 m_initial_offset[PBO_POOL_SIZE]; // work around silly driver
 	char*  m_map[PBO_POOL_SIZE];
 	uint32 m_current_pbo = 0;
 	uint32 m_size;
-	const uint32 m_pbo_size = (640*480*16) << 2;
-	bool m_buffer_storage = false;
+	const uint32 m_pbo_size = 4*1024*1024;
 
 #ifndef ENABLE_GLES
 	// Option for buffer storage
 	// Note there is a barrier (but maybe coherent is faster)
-	const GLbitfield map_flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT;
+	// XXX: actually does I really need coherent and barrier???
+	// As far as I understand glTexSubImage2D is a client-server transfer so no need to make
+	// the value visible to the server
+	const GLbitfield map_flags = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT /*| GL_MAP_COHERENT_BIT*/;
 	// FIXME do I need GL_DYNAMIC_STORAGE_BIT to allow write?
-	const GLbitfield create_flags = map_flags | GL_DYNAMIC_STORAGE_BIT;
+	const GLbitfield create_flags = map_flags /*| GL_DYNAMIC_STORAGE_BIT*/ | GL_CLIENT_STORAGE_BIT;
 #endif
-
-	// Normally driver must aligned the map....
-	void* align_map(void* ptr) {
-		void* aligned_map = (char*)(((uptr)ptr + 63) & ~0x3F);
-
-		m_initial_offset[m_current_pbo] = (uptr)aligned_map-(uptr)ptr;
-		if (m_initial_offset[m_current_pbo])
-			fprintf(stderr, "Buggy driver detected!!! Buffer alignment is not 64B as the spec request it\n");
-
-		return aligned_map;
-	}
 
 	void Init() {
 		gl_GenBuffers(countof(m_pool), m_pool);
-		m_buffer_storage = (theApp.GetConfig("ogl_texture_storage", 0) == 1) && GLLoader::found_GL_ARB_buffer_storage;
 
 		for (size_t i = 0; i < countof(m_pool); i++) {
 			BindPbo();
 
-			// Note the +64 gives additional room to realign the buffer (buggy driver....)
-			if (m_buffer_storage) {
+			if (GLLoader::found_GL_ARB_buffer_storage) {
 #ifndef ENABLE_GLES
-				gl_BufferStorage(GL_PIXEL_UNPACK_BUFFER, m_pbo_size+64, NULL, create_flags);
-				m_map[m_current_pbo] = (char*)align_map(gl_MapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, m_pbo_size+64, map_flags));
-				// Workaround silly driver. (would be 0 otherwise)
-				m_offset[m_current_pbo] = m_initial_offset[m_current_pbo];
+				gl_BufferStorage(GL_PIXEL_UNPACK_BUFFER, m_pbo_size, NULL, create_flags);
+				m_map[m_current_pbo] = (char*)gl_MapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, m_pbo_size, map_flags);
 #endif
 			} else {
-				gl_BufferData(GL_PIXEL_UNPACK_BUFFER, m_pbo_size+64, NULL, GL_STREAM_COPY);
+				gl_BufferData(GL_PIXEL_UNPACK_BUFFER, m_pbo_size, NULL, GL_STREAM_COPY);
 				m_map[m_current_pbo] = NULL;
-				m_offset[m_current_pbo] = 0;
 			}
 
 			NextPbo();
@@ -89,18 +74,26 @@ namespace PboPool {
 		char* map;
 		m_size = size;
 
-		if (m_size >= m_pbo_size) {
+		if (m_size > m_pbo_size) {
 			fprintf(stderr, "BUG: PBO too small %d but need %d\n", m_pbo_size, m_size);
 		}
 
-		if (!m_buffer_storage) {
+		if (GLLoader::found_GL_ARB_buffer_storage) {
+			if (m_offset[m_current_pbo] + m_size >= m_pbo_size) {
+				NextPbo();
+			}
+
+			// Note: texsubimage will access currently bound buffer
+			// Pbo ready let's get a pointer
+			BindPbo();
+
+			map = m_map[m_current_pbo] + m_offset[m_current_pbo];
+
+		} else {
 			GLbitfield flags = GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_INVALIDATE_RANGE_BIT;
 
 			if (m_offset[m_current_pbo] + m_size >= m_pbo_size) {
 				NextPbo();
-
-				// Mark current pbo free
-				m_offset[m_current_pbo] = 0;
 
 				flags &= ~GL_MAP_INVALIDATE_RANGE_BIT;
 				flags |= GL_MAP_INVALIDATE_BUFFER_BIT;
@@ -111,20 +104,6 @@ namespace PboPool {
 
 			// Be sure the map is aligned
 			map = (char*)gl_MapBufferRange(GL_PIXEL_UNPACK_BUFFER, m_offset[m_current_pbo], m_size, flags);
-
-		} else {
-			if (m_offset[m_current_pbo] + m_size >= m_pbo_size) {
-				NextPbo();
-
-				// Mark current pbo free. Will be 0 if driver aligned properly the buffer
-				m_offset[m_current_pbo] = m_initial_offset[m_current_pbo];
-			}
-
-			// Note: texsubimage will access currently bound buffer
-			// Pbo ready let's get a pointer
-			BindPbo();
-
-			map = m_map[m_current_pbo] + m_offset[m_current_pbo];
 		}
 
 		return map;
@@ -132,19 +111,16 @@ namespace PboPool {
 
 	// Used to unmap the buffer when context was detached.
 	void UnmapAll() {
-		if (m_map[m_current_pbo] == NULL) return;
-
 		for (size_t i = 0; i < countof(m_pool); i++) {
-			BindPbo();
-			gl_UnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-			m_map[m_current_pbo] = NULL;
-			NextPbo();
+			m_map[i] = NULL;
+			m_offset[m_current_pbo] = 0;
 		}
-		UnbindPbo();
 	}
 
 	void Unmap() {
-		if (m_buffer_storage) {
+		if (GLLoader::found_GL_ARB_buffer_storage) {
+			// As far as I understand glTexSubImage2D is a client-server transfer so no need to make
+			// the value visible to the server
 			//gl_MemoryBarrier(GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT);
 		} else {
 			gl_UnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
@@ -156,7 +132,7 @@ namespace PboPool {
 	}
 
 	void Destroy() {
-		if (m_buffer_storage)
+		if (GLLoader::found_GL_ARB_buffer_storage)
 			UnmapAll();
 		gl_DeleteBuffers(countof(m_pool), m_pool);
 	}
@@ -167,6 +143,8 @@ namespace PboPool {
 
 	void NextPbo() {
 		m_current_pbo = (m_current_pbo + 1) & (countof(m_pool)-1);
+		// Mark new PBO as free
+		m_offset[m_current_pbo] = 0;
 	}
 
 	void UnbindPbo() {
@@ -187,25 +165,6 @@ GSTextureOGL::GSTextureOGL(int type, int w, int h, int format, GLuint fbo_read)
 	: m_pbo_id(0),
 	m_pbo_size(0)
 {
-	// *************************************************************
-	// Opengl world
-
-	// Render work in parallal with framebuffer object (FBO) http://www.opengl.org/wiki/Framebuffer_Objects
-	// render are attached to FBO through : gl_FramebufferRenderbuffer. You can query the number of colorattachement with GL_MAX_COLOR_ATTACHMENTS
-	// FBO   :  constructor -> gl_GenFramebuffers, gl_DeleteFramebuffers
-	//			binding     -> gl_BindFramebuffer (target can be read/write/both)
-	//			blit		-> gl_BlitFramebuffer (read FB to draw FB)
-	//			info		-> gl_IsFramebuffer, glGetFramebufferAttachmentParameter, gl_CheckFramebufferStatus
-	//
-	// There are two types of framebuffer-attachable images; texture images and renderbuffer images.
-	// If an image of a texture object is attached to a framebuffer, OpenGL performs "render to texture".
-	// And if an image of a renderbuffer object is attached to a framebuffer, then OpenGL performs "offscreen rendering".
-	// Blitting:
-	// gl_DrawBuffers
-	// glReadBuffer
-	// gl_BlitFramebuffer
-
-	// *************************************************************
 	// m_size.x = w;
 	// m_size.y = h;
 	// FIXME
@@ -261,11 +220,6 @@ GSTextureOGL::GSTextureOGL(int type, int w, int h, int format, GLuint fbo_read)
 			//FIXME I not sure we need a pixel buffer object. It seems more a texture
 			// gl_GenBuffers(1, &m_texture_id);
 			// ASSERT(0);
-			// Note there is also a buffer texture!!!
-			// http://www.opengl.org/wiki/Buffer_Texture
-			// Note: in this case it must use in GLSL
-			// gvec texelFetch(gsampler sampler, ivec texCoord, int lod[, int sample]);
-			// corollary we can maybe use it for multisample stuff
 		case GSTexture::Texture:
 		case GSTexture::RenderTarget:
 		case GSTexture::DepthStencil:
@@ -322,7 +276,6 @@ GSTextureOGL::~GSTextureOGL()
 void GSTextureOGL::Clear(const void *data)
 {
 #ifndef ENABLE_GLES
-	EnableUnit();
 	gl_ClearTexImage(m_texture_id, 0,  m_int_format, m_int_type, data);
 #endif
 }
@@ -333,33 +286,45 @@ bool GSTextureOGL::Update(const GSVector4i& r, const void* data, int pitch)
 
 	EnableUnit();
 
-	// Note: FGLRX crashes with the default path. It is happy with PBO. However not sure PBO are big enough for
-	// big upscale
-	// Note: with latest improvement, Pbo could be faster
-#if 1
-	glPixelStorei(GL_UNPACK_ALIGNMENT, m_int_alignment);
-
-	uint32 line_size = r.width() << m_int_shift;
-	char* src = (char*)data;
-	char* map = PboPool::Map(r.height() * line_size);
-
-	for (uint32 h = r.height(); h > 0; h--) {
-		if ((uptr)map & 0x3F) {
-			memcpy(map, src, line_size);
-		} else {
-			GSVector4i::storent(map, src, line_size);
+	// Note: reduce noise for gl retracers
+	// It might introduce bug after an emulator pause so always set it in standard mode
+	if (GLLoader::in_replayer) {
+		static uint32 unpack_alignment = 0;
+		if (unpack_alignment != m_int_alignment) {
+			unpack_alignment = m_int_alignment;
+			glPixelStorei(GL_UNPACK_ALIGNMENT, m_int_alignment);
 		}
-		src += pitch;
-		map += line_size;
+	} else {
+		glPixelStorei(GL_UNPACK_ALIGNMENT, m_int_alignment);
+	}
+
+	char* src = (char*)data;
+	char* map = PboPool::Map(r.height() * pitch);
 
 #ifdef ENABLE_OGL_DEBUG_MEM_BW
-		g_texture_upload_byte += line_size;
+	// Note: pitch is the line size that will be copied into the PBO
+	// pitch >> m_int_shift is the line size that will be actually dma-ed into the GPU
+	g_texture_upload_byte += pitch * r.height();
 #endif
-	}
+
+	memcpy(map, src, pitch*r.height());
 
 	PboPool::Unmap();
 
+	// Note: reduce noise for gl retracers
+	// It might introduce bug after an emulator pause so always set it in standard mode
+	if (GLLoader::in_replayer) {
+		static int unpack_row_length = 0;
+		if (unpack_row_length != (pitch >> m_int_shift)) {
+			unpack_row_length = pitch >> m_int_shift;
+			glPixelStorei(GL_UNPACK_ROW_LENGTH, unpack_row_length);
+		}
+	} else {
+		glPixelStorei(GL_UNPACK_ROW_LENGTH, pitch >> m_int_shift);
+	}
 	glTexSubImage2D(GL_TEXTURE_2D, 0, r.x, r.y, r.width(), r.height(), m_int_format, m_int_type, (const void*)PboPool::Offset());
+	// Normally only affect TexSubImage call. (i.e. only the previous line)
+	//glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 
 	// FIXME OGL4: investigate, only 1 unpack buffer always bound
 	PboPool::UnbindPbo();
@@ -368,8 +333,8 @@ bool GSTextureOGL::Update(const GSVector4i& r, const void* data, int pitch)
 
 	return true;
 
-#else
-
+	// For reference, standard upload without pbo (Used to crash on FGLRX)
+#if 0
 	// pitch is in byte wherease GL_UNPACK_ROW_LENGTH is in pixel
 	glPixelStorei(GL_UNPACK_ALIGNMENT, m_int_alignment);
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, pitch >> m_int_shift);
@@ -508,6 +473,8 @@ void GSTextureOGL::Save(const string& fn, const void* image, uint32 pitch)
 {
 	// Build a BMP file
 	FILE* fp = fopen(fn.c_str(), "wb");
+	if (fp == NULL)
+		return;
 
 	BITMAPINFOHEADER bih;
 
@@ -577,6 +544,8 @@ void GSTextureOGL::SaveRaw(const string& fn, const void* image, uint32 pitch)
 {
 	// Build a raw CSV file
 	FILE* fp = fopen(fn.c_str(), "w");
+	if (fp == NULL)
+		return;
 
 	uint32* data = (uint32*)image;
 

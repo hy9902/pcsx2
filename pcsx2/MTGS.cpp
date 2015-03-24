@@ -34,7 +34,7 @@ using namespace Threading;
 #if 0 //PCSX2_DEBUG
 #	define MTGS_LOG Console.WriteLn
 #else
-#	define MTGS_LOG 0&&
+#	define MTGS_LOG(...) do {} while (0)
 #endif
 
 // forces the compiler to treat a non-volatile value as volatile.
@@ -181,7 +181,7 @@ void SysMtgsThread::OpenPlugin()
 {
 	if( m_PluginOpened ) return;
 
-	memcpy_aligned( RingBuffer.Regs, PS2MEM_GS, sizeof(PS2MEM_GS) );
+	memcpy( RingBuffer.Regs, PS2MEM_GS, sizeof(PS2MEM_GS) );
 	GSsetBaseMem( RingBuffer.Regs );
 	GSirqCallback( dummyIrqCallback );
 
@@ -196,7 +196,7 @@ void SysMtgsThread::OpenPlugin()
 	if( renderswitch )
 	{
 		Console.Indent(2).WriteLn( "Forced software switch enabled." );
-		if (EmuConfig.GS.VsyncEnable && !EmuConfig.GS.ManagedVsync)
+		if ( EmuConfig.GS.VsyncEnable )
 		{
 			// Better turn Vsync off now, as in most cases sw rendering is not fast enough to support a steady 60fps.
 			// Having Vsync still enabled then means a big cut in speed and sloppy rendering.
@@ -626,7 +626,7 @@ void SysMtgsThread::WaitGS(bool syncRegs, bool weakWait, bool isMTVU)
 	if (syncRegs) {
 		ScopedLock lock(m_mtx_WaitGS);
 		// Completely synchronize GS and MTGS register states.
-		memcpy_fast(RingBuffer.Regs, PS2MEM_GS, sizeof(RingBuffer.Regs));
+		memcpy(RingBuffer.Regs, PS2MEM_GS, sizeof(RingBuffer.Regs));
 	}
 }
 

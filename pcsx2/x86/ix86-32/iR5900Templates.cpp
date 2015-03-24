@@ -22,11 +22,13 @@
 #include "iMMI.h"
 #include "iFPU.h"
 #include "iCOP0.h"
-#include "sVU_Micro.h"
 #include "VU.h"
 #include "VUmicro.h"
 
+#ifndef DISABLE_SVU
+#include "sVU_Micro.h"
 #include "sVU_zerorec.h"
+#endif
 
 #include "vtlb.h"
 
@@ -523,15 +525,15 @@ int eeRecompileCodeXMM(int xmminfo)
 	// flush consts
 	if( xmminfo & XMMINFO_READT ) {
 		if( GPR_IS_CONST1( _Rt_ ) && !(g_cpuFlushedConstReg&(1<<_Rt_)) ) {
-			MOV32ItoM((int)&cpuRegs.GPR.r[ _Rt_ ].UL[ 0 ], g_cpuConstRegs[_Rt_].UL[0]);
-			MOV32ItoM((int)&cpuRegs.GPR.r[ _Rt_ ].UL[ 1 ], g_cpuConstRegs[_Rt_].UL[1]);
+			MOV32ItoM((uptr)&cpuRegs.GPR.r[ _Rt_ ].UL[ 0 ], g_cpuConstRegs[_Rt_].UL[0]);
+			MOV32ItoM((uptr)&cpuRegs.GPR.r[ _Rt_ ].UL[ 1 ], g_cpuConstRegs[_Rt_].UL[1]);
 			g_cpuFlushedConstReg |= (1<<_Rt_);
 		}
 	}
 	if( xmminfo & XMMINFO_READS) {
 		if( GPR_IS_CONST1( _Rs_ ) && !(g_cpuFlushedConstReg&(1<<_Rs_)) ) {
-			MOV32ItoM((int)&cpuRegs.GPR.r[ _Rs_ ].UL[ 0 ], g_cpuConstRegs[_Rs_].UL[0]);
-			MOV32ItoM((int)&cpuRegs.GPR.r[ _Rs_ ].UL[ 1 ], g_cpuConstRegs[_Rs_].UL[1]);
+			MOV32ItoM((uptr)&cpuRegs.GPR.r[ _Rs_ ].UL[ 0 ], g_cpuConstRegs[_Rs_].UL[0]);
+			MOV32ItoM((uptr)&cpuRegs.GPR.r[ _Rs_ ].UL[ 1 ], g_cpuConstRegs[_Rs_].UL[1]);
 			g_cpuFlushedConstReg |= (1<<_Rs_);
 		}
 	}

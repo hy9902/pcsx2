@@ -92,10 +92,8 @@ SndOutModule* mods[]=
 	WaveOut,
 #endif
 	PortaudioOut,
-#if defined(SPU2X_SDL) || defined(SPU2X_SDL2)
-  SDLOut,
-#endif
-#ifdef __LINUX__
+#ifdef __linux__
+	SDLOut,
 	AlsaOut,
 #endif
 	NULL		// signals the end of our list
@@ -467,7 +465,7 @@ void SndBuffer::Write( const StereoOut32& Sample )
 		ssFreeze--;
 		memset( sndTempBuffer, 0, sizeof(StereoOut32) * SndOutPacketSize ); // Play silence
 	}
-#ifndef __LINUX__
+#ifndef __linux__
 	if( dspPluginEnabled )
 	{
 		// Convert in, send to winamp DSP, and convert out.

@@ -453,9 +453,24 @@ bool AppConfig::FullpathMatchTest( PluginsEnum_t pluginId, const wxString& cmpto
 	return wxFileName(cmpto).SameAs( FullpathTo(pluginId) );
 }
 
+static wxDirName GetResolvedFolder(FoldersEnum_t id)
+{
+	return g_Conf->Folders.IsDefault(id) ? PathDefs::Get(id) : g_Conf->Folders[id];
+}
+
 wxDirName GetLogFolder()
 {
-	return g_Conf->Folders.IsDefault( FolderId_Logs ) ? PathDefs::Get(FolderId_Logs) : g_Conf->Folders[FolderId_Logs];
+	return GetResolvedFolder(FolderId_Logs);
+}
+
+wxDirName GetCheatsFolder()
+{
+	return GetResolvedFolder(FolderId_Cheats);
+}
+
+wxDirName GetCheatsWsFolder()
+{
+	return GetResolvedFolder(FolderId_CheatsWS);
 }
 
 wxDirName GetSettingsFolder()
@@ -518,8 +533,8 @@ AppConfig::AppConfig()
 	EnableSpeedHacks	= true;
 	EnableGameFixes		= false;
 
-	EnablePresets		= false;
-	PresetIndex			= 0;
+	EnablePresets		= true;
+	PresetIndex			= 1;
 
 	CdvdSource			= CDVDsrc_Iso;
 
@@ -529,6 +544,8 @@ AppConfig::AppConfig()
 		Mcd[slot].Enabled	= !FileMcd_IsMultitapSlot(slot);	// enables main 2 slots
 		Mcd[slot].Filename	= FileMcd_GetDefaultName( slot );
 	}
+
+	GzipIsoIndexTemplate = L"$(f).pindex.tmp";
 }
 
 // ------------------------------------------------------------------------
@@ -619,6 +636,7 @@ void AppConfig::LoadSaveRootItems( IniInterface& ini )
 	ini.EnumEntry( L"LanguageId", LanguageId, NULL, LanguageId );
 	IniEntry( LanguageCode );
 	IniEntry( RecentIsoCount );
+	IniEntry( GzipIsoIndexTemplate );
 	IniEntry( DeskTheme );
 	IniEntry( Listbook_ImageSize );
 	IniEntry( Toolbar_ImageSize );
@@ -948,7 +966,7 @@ bool AppConfig::IsOkApplyPreset(int n)
 	//			2. The panels should not apply values which the presets don't control if the value is initiated by a preset.
 	//			Currently controlled by the presets:
 	//			- AppConfig:	Framerate (except turbo/slowmo factors), EnableSpeedHacks, EnableGameFixes.
-	//			- EmuOptions:	Cpu, Gamefixes, SpeedHacks (except mtvu), EnablePatches, GS (except for FrameLimitEnable, VsyncEnable and ManagedVsync).
+	//			- EmuOptions:	Cpu, Gamefixes, SpeedHacks (except mtvu), EnablePatches, GS (except for FrameLimitEnable and VsyncEnable).
 	//
 	//			This essentially currently covers all the options on all the panels except for framelimiter which isn't
 	//			controlled by the presets, and the entire GSWindow panel which also isn't controlled by presets
@@ -970,7 +988,6 @@ bool AppConfig::IsOkApplyPreset(int n)
 	EmuOptions.GS					= default_Pcsx2Config.GS;
 	EmuOptions.GS.FrameLimitEnable	= original_GS.FrameLimitEnable;	//Frame limiter is not modified by presets
 	//EmuOptions.GS.VsyncEnable		= original_GS.VsyncEnable;
-	//EmuOptions.GS.ManagedVsync	= original_GS.ManagedVsync;
 	
 	EmuOptions.Cpu					= default_Pcsx2Config.Cpu;
 	EmuOptions.Gamefixes			= default_Pcsx2Config.Gamefixes;
@@ -1037,7 +1054,7 @@ void RelocateLogfile()
 
 	if( (emuLog != NULL) && (emuLogName != newlogname) )
 	{
-		Console.WriteLn( L"\nRelocating Logfile...\n\tFrom: %s\n\tTo  : %s\n", emuLogName.c_str(), newlogname.c_str() );
+		Console.WriteLn( L"\nRelocating Logfile...\n\tFrom: %s\n\tTo  : %s\n", WX_STR(emuLogName), WX_STR(newlogname) );
 		wxGetApp().DisableDiskLogging();
 
 		fclose( emuLog );
@@ -1138,6 +1155,11 @@ protected:
 
 	virtual bool DoWriteString(const wxString& , const wxString& )  { return false; }
 	virtual bool DoWriteLong(const wxString& , long )  { return false; }
+
+#if wxUSE_BASE64
+	virtual bool DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const { return false; }
+	virtual bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf) { return false; }
+#endif
 };
 
 static pxDudConfig _dud_config;

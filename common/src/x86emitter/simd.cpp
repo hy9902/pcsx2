@@ -30,8 +30,9 @@ const wxChar* EnumToString( SSE_RoundMode sse )
 		case SSEround_NegInf:	return L"NegativeInfinity";
 		case SSEround_PosInf:	return L"PositiveInfinity";
 		case SSEround_Chop:		return L"Chop";
+		default:				return L"Invalid";
 	}
-	
+
 	return L"Invalid";
 }
 
@@ -827,13 +828,6 @@ __emitinline void xEXTRACTPS( const xIndirect32& dest, const xRegisterSSE& from,
 // when ever MMX instructions are run, and if FPU instructions are run without using EMMS,
 // the FPU results will be invalid.
 __fi void xEMMS()	{ xWrite16( 0x770F ); }
-
-// [3DNow] Same as EMMS, but an AMD special version which may (or may not) leave MMX regs
-// in an undefined state (which is fine, since presumably you're done using them anyway).
-// This instruction is thus faster than EMMS on K8s, but all newer AMD cpus use the same
-// logic for either EMMS or FEMMS.
-// Conclusion: Obsolete.  Just use EMMS instead.
-__fi void xFEMMS()	{ xWrite16( 0x0E0F ); }
 
 
 // Store Streaming SIMD Extension Control/Status to Mem32.

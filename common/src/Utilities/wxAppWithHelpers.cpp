@@ -664,6 +664,18 @@ void wxAppWithHelpers::OnDeleteObject( wxCommandEvent& evt )
 	delete (BaseDeletableObject*)evt.GetClientData();
 }
 
+// In theory we create a Pcsx2App object which inherit from wxAppWithHelpers,
+// so Pcsx2App::CreateTraits must be used instead.
+//
+// However it doesn't work this way because wxAppWithHelpers constructor will
+// be called first. This constructor will build some wx objects (here wxTimer)
+// that require a trait. In others word, wxAppWithHelpers::CreateTraits will be
+// called instead
+wxAppTraits* wxAppWithHelpers::CreateTraits()
+{
+	return new Pcsx2AppTraits;
+}
+
 // Threads have their own deletion handler that propagates exceptions thrown by the thread to the UI.
 // (thus we have a fairly automatic threaded exception system!)
 void wxAppWithHelpers::OnDeleteThread( wxCommandEvent& evt )
@@ -675,7 +687,7 @@ void wxAppWithHelpers::OnDeleteThread( wxCommandEvent& evt )
 		return;
 	}
 
-	pxThreadLog.Write(thr->GetName(), (wxString)L"Thread object deleted successfully" + (thr->HasPendingException() ? L" [exception pending!]" : wxEmptyString));
+	pxThreadLog.Write(thr->GetName(), wxString(wxString(L"Thread object deleted successfully") + (thr->HasPendingException() ? L" [exception pending!]" : L"")).wc_str() );
 	thr->RethrowException();
 }
 

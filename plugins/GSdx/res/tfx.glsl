@@ -49,14 +49,12 @@ struct vertex
 
 #ifdef VERTEX_SHADER
 layout(location = 0) in vec2  i_st;
-layout(location = 1) in vec4  i_c;
-layout(location = 2) in float i_q;
-layout(location = 3) in uvec2 i_p;
-layout(location = 4) in uint  i_z;
-layout(location = 5) in uvec2 i_uv;
-layout(location = 6) in vec4  i_f;
-
-#if !pGL_ES && __VERSION__ > 140
+layout(location = 2) in vec4  i_c;
+layout(location = 3) in float i_q;
+layout(location = 4) in uvec2 i_p;
+layout(location = 5) in uint  i_z;
+layout(location = 6) in uvec2 i_uv;
+layout(location = 7) in vec4  i_f;
 
 out SHADER
 {
@@ -69,44 +67,26 @@ out SHADER
 #define VSout_c (VSout.c)
 #define VSout_fc (VSout.fc)
 
-#else
-
-#ifdef DISABLE_SSO
-out vec4 SHADERt;
-out vec4 SHADERc;
-flat out vec4 SHADERfc;
-#else
-layout(location = 0) out vec4 SHADERt;
-layout(location = 1) out vec4 SHADERc;
-flat layout(location = 2) out vec4 SHADERfc;
-#endif
-#define VSout_t SHADERt
-#define VSout_c SHADERc
-#define VSout_fc SHADERfc
-
-#endif
-
-#if !pGL_ES && __VERSION__ > 140
 out gl_PerVertex {
     invariant vec4 gl_Position;
     float gl_PointSize;
+#if !pGL_ES
     float gl_ClipDistance[];
+#endif
 };
-#endif
 
-#ifdef DISABLE_GL42
-layout(std140) uniform cb20
-#else
 layout(std140, binding = 20) uniform cb20
-#endif
 {
     vec2 VertexScale;
     vec2 VertexOffset;
     vec2 TextureScale;
 };
 
+#ifdef ZERO_TO_ONE_DEPTH
 const float exp_min32 = exp2(-32.0f);
+#else
 const float exp_min31 = exp2(-31.0f);
+#endif
 
 #ifdef SUBROUTINE_GL40
 // Function pointer type
@@ -181,7 +161,7 @@ void vs_main()
     p.xy = vec2(i_p) - vec2(0.05f, 0.05f);
     p.xy = p.xy * VertexScale - VertexOffset;
     p.w = 1.0f;
-#ifdef NV_DEPTH
+#ifdef ZERO_TO_ONE_DEPTH
     if(VS_LOGZ == 1) {
         p.z = log2(float(1u+z)) / 32.0f;
     } else {
@@ -210,14 +190,18 @@ void vs_main()
 in gl_PerVertex {
     invariant vec4 gl_Position;
     float gl_PointSize;
+#if !pGL_ES
     float gl_ClipDistance[];
+#endif
 } gl_in[];
 //in int gl_PrimitiveIDIn;
 
 out gl_PerVertex {
     vec4 gl_Position;
     float gl_PointSize;
+#if !pGL_ES
     float gl_ClipDistance[];
+#endif
 };
 //out int gl_PrimitiveID;
 
@@ -304,8 +288,6 @@ void gs_main()
 
 #ifdef FRAGMENT_SHADER
 
-#if !pGL_ES && __VERSION__ > 140
-
 in SHADER
 {
     vec4 t;
@@ -316,23 +298,6 @@ in SHADER
 #define PSin_t (PSin.t)
 #define PSin_c (PSin.c)
 #define PSin_fc (PSin.fc)
-
-#else
-
-#ifdef DISABLE_SSO
-in vec4 SHADERt;
-in vec4 SHADERc;
-flat in vec4 SHADERfc;
-#else
-layout(location = 0) in vec4 SHADERt;
-layout(location = 1) in vec4 SHADERc;
-flat layout(location = 2) in vec4 SHADERfc;
-#endif
-#define PSin_t SHADERt
-#define PSin_c SHADERc
-#define PSin_fc SHADERfc
-
-#endif
 
 // Same buffer but 2 colors for dual source blending
 #if pGL_ES
@@ -346,13 +311,8 @@ layout(location = 0, index = 1) out vec4 SV_Target1;
 layout(bindless_sampler, location = 0) uniform sampler2D TextureSampler;
 layout(bindless_sampler, location = 1) uniform sampler2D PaletteSampler;
 #else
-#ifdef DISABLE_GL42
-uniform sampler2D TextureSampler;
-uniform sampler2D PaletteSampler;
-#else
 layout(binding = 0) uniform sampler2D TextureSampler;
 layout(binding = 1) uniform sampler2D PaletteSampler;
-#endif
 #endif
 
 #ifndef DISABLE_GL42_image
@@ -372,20 +332,16 @@ layout(pixel_center_integer) in vec4 gl_FragCoord;
 #endif
 #endif
 
-#ifdef DISABLE_GL42
-layout(std140) uniform cb21
-#else
 layout(std140, binding = 21) uniform cb21
-#endif
 {
     vec3 FogColor;
     float AREF;
-    vec4 HalfTexel;
     vec4 WH;
-    vec4 MinMax;
     vec2 MinF;
     vec2 TA;
     uvec4 MskFix;
+    vec4 HalfTexel;
+    vec4 MinMax;
     vec4 TC_OffsetHack;
 };
 

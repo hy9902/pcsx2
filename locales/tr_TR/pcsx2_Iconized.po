@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PCSX2 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/PCSX2/pcsx2/issues\n"
-"POT-Creation-Date: 2014-04-06 11:47+0200\n"
+"POT-Creation-Date: 2014-12-23 19:50+0100\n"
 "PO-Revision-Date: 2014-01-13 10:02+0200\n"
 "Last-Translator: Ceyhun Özgöç <atiamar@hotmail.com>\n"
 "Language-Team: Ceyhun Özgöç (PyramidHead) <atiamar@hotmail.com>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: pcsx2\n"
 "X-Poedit-SearchPath-1: common\n"
 
-#: common/src/Utilities/Exceptions.cpp:254
+#: common/src/Utilities/Exceptions.cpp:275
 msgid ""
 "There is not enough virtual memory available, or necessary virtual memory "
 "mappings have already been reserved by other processes, services, or DLLs."
@@ -30,7 +30,7 @@ msgstr ""
 "Yetersiz sanal bellek miktarı veya gerekli sanal bellek diğer işlemler, "
 "hizmetler ya da DLL'ler tarafından ayrılmış."
 
-#: pcsx2/CDVD/CDVD.cpp:397
+#: pcsx2/CDVD/CDVD.cpp:398
 msgid ""
 "Playstation game discs are not supported by PCSX2.  If you want to emulate "
 "PSX games then you'll have to download a PSX-specific emulator, such as "
@@ -52,7 +52,7 @@ msgstr ""
 "bırakılması nedeniyle düşük sanal bellek miktarı olan bilgisayarlarda veya "
 "başka bir programın hafızanın tamamı kullanması nedeniyle olur."
 
-#: pcsx2/System.cpp:350
+#: pcsx2/System.cpp:354
 msgid ""
 "PCSX2 is unable to allocate memory needed for the PS2 virtual machine. Close "
 "out some memory hogging background tasks and try again."
@@ -60,17 +60,7 @@ msgstr ""
 "PCSX2, PS2 sanal makinesi için gerekli hafızayı ayıramıyor. Arkaplanda "
 "çalışan uygulamaları kapatıp yeniden deneyin."
 
-#: pcsx2/gui/AppInit.cpp:45
-msgid ""
-"Warning: Your computer does not support SSE2, which is required by many "
-"PCSX2 recompilers and plugins. Your options will be limited and emulation "
-"will be *very* slow."
-msgstr ""
-"Uyarı: Bilgisayarınız çoğu PCSX2 derleyicileri ve eklentileri tarafından "
-"kullanılan SSE2 özelliğini desteklemiyor. Kullanabileceğiniz seçenekler çok "
-"kısıtlı olacaktır ve emülatör aşırı derecede yavaş çalışacaktır."
-
-#: pcsx2/gui/AppInit.cpp:178
+#: pcsx2/gui/AppInit.cpp:146
 msgid ""
 "Warning: Some of the configured PS2 recompilers failed to initialize and "
 "have been disabled:"
@@ -78,7 +68,7 @@ msgstr ""
 "Uyarı: Yapılandırılmış bazı PS2 derleyicileri başlatılamadı ve devre dışı "
 "bırakıldı."
 
-#: pcsx2/gui/AppInit.cpp:226
+#: pcsx2/gui/AppInit.cpp:194
 msgid ""
 "Note: Recompilers are not necessary for PCSX2 to run, however they typically "
 "improve emulation speed substantially. You may have to manually re-enable "
@@ -88,7 +78,7 @@ msgstr ""
 "hızını oldukça artırırlar. Sorun ortadan kalktıktan sonra yukarıda "
 "listelenen derleyicileri el ile yeniden etkinleştirmeniz gerekebilir."
 
-#: pcsx2/gui/AppMain.cpp:585
+#: pcsx2/gui/AppMain.cpp:539
 msgid ""
 "PCSX2 requires a PS2 BIOS in order to run.  For legal reasons, you *must* "
 "obtain a BIOS from an actual PS2 unit that you own (borrowing doesn't "
@@ -98,7 +88,7 @@ msgstr ""
 "dolayı BIOS dosyasını *kendi* PS2 konsolunuzdan almalısınız. Daha fazla "
 "talimat için lütfen SSS ve kullanma kılavuzlarına danışın."
 
-#: pcsx2/gui/AppMain.cpp:665
+#: pcsx2/gui/AppMain.cpp:619
 msgid ""
 "'Ignore' to continue waiting for the thread to respond.\n"
 "'Cancel' to attempt to cancel the thread.\n"
@@ -152,7 +142,7 @@ msgstr ""
 "bunları 'İçe Aktar' veya 'Üzerine Yaz' seçeneklerinden birini seçmeniz "
 "istenecektir."
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:89
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:96
 #, c-format
 msgid ""
 "This wizard will help guide you through configuring plugins, memory cards, "
@@ -163,7 +153,7 @@ msgstr ""
 "konusunda yardımcı olacaktır. %s'i ilk kez yüklediyseniz beni oku dosyasına "
 "ve yapılandırma kılavuzuna göz atmanız önerilir."
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:132
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:139
 msgid ""
 "PCSX2 requires a *legal* copy of the PS2 BIOS in order to run games.\n"
 "You cannot use a copy obtained from a friend or the Internet.\n"
@@ -317,7 +307,7 @@ msgstr ""
 "Yapılandırma:Hafıza kartları menüsünü kullanarak düzeltebilir ve bunu "
 "yeniden etkinleştirebilirsiniz."
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:138
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:142
 msgid ""
 "Please select a valid BIOS.  If you are unable to make a valid selection "
 "then press Cancel to close the Configuration panel."
@@ -346,7 +336,7 @@ msgstr ""
 "Seçildiğinde bu klasör, PCSX2'nin şu anki ilişkilendirilmiş varsayılan "
 "kullanıcı modu ayarını otomatik olarak yansıtır."
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:55
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:54
 msgid ""
 "Zoom = 100: Fit the entire image to the window without any cropping.\n"
 "Above/Below 100: Zoom In/Out\n"
@@ -368,7 +358,7 @@ msgstr ""
 "Klavye: CTRL + NUMPAD-ARTI: Yakınlaştırma, CTRL + NUMPAD - EKSİ: "
 "Uzaklaştırma, CTRL + NUMPAD - *: 100/0"
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:58
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:57
 msgid ""
 "Vsync eliminates screen tearing but typically has a big performance hit. It "
 "usually only applies to fullscreen mode, and may not work with all GS "
@@ -378,24 +368,7 @@ msgstr ""
 "neden olur. Genel olarak yalnızca tam ekran modunda çalışır ve tüm GS "
 "eklentileri ile uyumlu olmayabilir."
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:61
-msgid ""
-"Enables Vsync when the framerate is exactly at full speed. Should it fall "
-"below that, Vsync gets disabled to avoid further performance penalties. "
-"Note: This currently only works well with GSdx as GS plugin and with it "
-"configured to use DX10/11 hardware rendering. Any other plugin or rendering "
-"mode will either ignore it or produce a black frame that blinks whenever the "
-"mode switches. It also requires Vsync to be enabled."
-msgstr ""
-"Kare hızı oranı tam olduğu zaman Vsync'i etkinleştirir. Kare hızı düşmeye "
-"başladığında performans kaybı oluşmaması için Vsync devre dışı bırakılır. "
-"Not: Öncelikle Vsync'in etkinleştirilmiş olması gerekir. Bu özellik şimdilik "
-"yalnızca GS eklentisi olarak GSdx seçildiğinde ve ayarlarından DX10/11 "
-"hardware rendering seçili olduğunda çalışır. GSdx dışındaki herhangi bir "
-"eklenti seçildiğinde özellik kullanılmaz ya da özellik her "
-"etkinleştirildiğinde siyah bir ekran gelir."
-
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:64
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:60
 msgid ""
 "Check this to force the mouse cursor invisible inside the GS window; useful "
 "if using the mouse as a primary control device for gaming.  By default the "
@@ -406,7 +379,7 @@ msgstr ""
 "kullanıyorsanız oldukça faydalıdır. Varsayılan olarak 2 saniye boyunca "
 "herhangi bir işlem yapılmadığında fare imleci otomatik olarak gizlenir."
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:67
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:63
 msgid ""
 "Enables automatic mode switch to fullscreen when starting or resuming "
 "emulation. You can still toggle fullscreen display at any time using alt-"
@@ -415,7 +388,7 @@ msgstr ""
 "Emülatör çalıştığında ya da devam ettirildiğinde otomatik olarak tam ekrana "
 "geçişi etkinleştirir. Tam ekrandan çıkmak için Alt+Enter'ı kullanabilirsiniz."
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:74
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:70
 msgid ""
 "Completely closes the often large and bulky GS window when pressing ESC or "
 "pausing the emulator."
@@ -423,7 +396,7 @@ msgstr ""
 "ESC tuşuna basıldığında ya da emülatör duraklatıldığında GS ekranı tamamen "
 "kapatılır."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:67
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:69
 msgid ""
 "Known to affect following games:\n"
 " * Digital Devil Saga (Fixes FMV and crashes)\n"
@@ -435,7 +408,7 @@ msgstr ""
 "* SSX (Görüntüleri ve çökmeleri düzeltir)\n"
 "* Resident Evil: Dead Aim (Görüntüde bozulmalara neden olur)"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:76
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:78
 msgid ""
 "Known to affect following games:\n"
 " * Bleach Blade Battler\n"
@@ -447,7 +420,7 @@ msgstr ""
 "* Growlanser II ve III\n"
 "* Wizardry"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:81
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:83
 msgid ""
 "Known to affect following games:\n"
 " * Mana Khemia 1 (Going \"off campus\")\n"
@@ -455,7 +428,7 @@ msgstr ""
 "Etkilediği bilinen oyunlar:\n"
 "* Mana Khemia 1 (Haritadan dışarı çıkma hatası için)\n"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:86
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:88
 msgid ""
 "Known to affect following games:\n"
 " * Test Drive Unlimited\n"
@@ -465,14 +438,12 @@ msgstr ""
 "* Test Drive Unlimited\n"
 "* Transformers"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:110
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:116
+#, fuzzy
 msgid ""
-"Gamefixes can work around wrong emulation in some titles. \n"
-"They may also cause compatibility or performance issues. \n"
-"\n"
 "It's better to enable 'Automatic game fixes' at the main menu instead, and "
-"leave this page empty. \n"
-"('Automatic' means: selectively use specific tested fixes for specific games)"
+"leave this page empty. ('Automatic' means: selectively use specific tested "
+"fixes for specific games)"
 msgstr ""
 "Oyun düzeltmeleri bazı oyunlarda işe yaramayabilir. \n"
 "Bunun yanı sıra uyumluluk ya da performans sorunlarına neden olabilirler. "
@@ -481,7 +452,22 @@ msgstr ""
 "('Otomatik' kelimesi test edilmiş düzeltmelerin belirli oyunlara doğrudan "
 "uygulanması anlamına gelir)"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:735
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:120
+#, fuzzy
+msgid ""
+"Gamefixes can work around wrong emulation in some titles. \n"
+"They may also cause compatibility or performance issues.\n"
+"\n"
+"The safest way is to make sure that all game fixes are completely disabled."
+msgstr ""
+"Oyun düzeltmeleri bazı oyunlarda işe yaramayabilir. \n"
+"Bunun yanı sıra uyumluluk ya da performans sorunlarına neden olabilirler. "
+"Ayarları buradan yapmak yerine ana menüden 'Otomatik Oyun Düzeltmeleri' "
+"seçeneğini etkinleştirmek çoğu zaman daha faydalıdır.\n"
+"('Otomatik' kelimesi test edilmiş düzeltmelerin belirli oyunlara doğrudan "
+"uygulanması anlamına gelir)"
+
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:745
 #, c-format
 msgid ""
 "You are about to delete the formatted memory card '%s'. All data on this "
@@ -490,14 +476,14 @@ msgstr ""
 "Biçimlendirilmiş '%s' hafıza kartını silmek üzeresiniz. Karttaki tüm veriler "
 "kaybolacaktır! Bunu yapmak istediğinizden kesinlikle emin misiniz?"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:771
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:781
 msgid ""
 "Failed: Duplicate is only allowed to an empty PS2-Port or to the file system."
 msgstr ""
 "Hata: Kopyalama yalnızca boş bir PS2-Portu veya dosya sistemi için "
 "geçerlidir."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:813
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:823
 #, c-format
 msgid "Failed: Destination memory card '%s' is in use."
 msgstr "Hata: Hedef %s hafıza kartı kullanımda."
@@ -566,7 +552,7 @@ msgstr ""
 "\n"
 "Ayarları uygulamak istediğinize emin misiniz?"
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:452
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:453
 #, c-format
 msgid ""
 "All plugins must have valid selections for %s to run.  If you are unable to "
@@ -755,7 +741,7 @@ msgstr ""
 "Dikkat: Bu seçenek oyun açıkken etkinleştirilebilir fakat kapatılamaz "
 "(görüntüler bozulur)."
 
-#: pcsx2/vtlb.cpp:731
+#: pcsx2/vtlb.cpp:832
 msgid ""
 "Your system is too low on virtual resources for PCSX2 to run. This can be "
 "caused by having a small or disabled swapfile, or by other programs that are "
@@ -765,7 +751,7 @@ msgstr ""
 "takas dosyasının çok küçük boyutlu olması ya da devre dışı bırakılması veya "
 "arkaplanda çalışan uygulamaların hafızanın tamamını kullanması sonucu oluşur."
 
-#: pcsx2/x86/sVU_zerorec.cpp:364
+#: pcsx2/x86/sVU_zerorec.cpp:363
 msgid ""
 "Out of Memory (sorta): The SuperVU recompiler was unable to reserve the "
 "specific memory ranges required, and will not be available for use.  This is "
@@ -775,3 +761,28 @@ msgstr ""
 "Hafıza hatası: SuperVU derleyicisi belirtilen hafıza değerlerini ayıramadığı "
 "için kullanılamıyor. Bu hata sVU zaten eski olduğundan ve onun yerine "
 "microVU kullansanız daha iyi olacağından çok da ciddi değildir. :)"
+
+#~ msgid ""
+#~ "Warning: Your computer does not support SSE2, which is required by many "
+#~ "PCSX2 recompilers and plugins. Your options will be limited and emulation "
+#~ "will be *very* slow."
+#~ msgstr ""
+#~ "Uyarı: Bilgisayarınız çoğu PCSX2 derleyicileri ve eklentileri tarafından "
+#~ "kullanılan SSE2 özelliğini desteklemiyor. Kullanabileceğiniz seçenekler "
+#~ "çok kısıtlı olacaktır ve emülatör aşırı derecede yavaş çalışacaktır."
+
+#~ msgid ""
+#~ "Enables Vsync when the framerate is exactly at full speed. Should it fall "
+#~ "below that, Vsync gets disabled to avoid further performance penalties. "
+#~ "Note: This currently only works well with GSdx as GS plugin and with it "
+#~ "configured to use DX10/11 hardware rendering. Any other plugin or "
+#~ "rendering mode will either ignore it or produce a black frame that blinks "
+#~ "whenever the mode switches. It also requires Vsync to be enabled."
+#~ msgstr ""
+#~ "Kare hızı oranı tam olduğu zaman Vsync'i etkinleştirir. Kare hızı düşmeye "
+#~ "başladığında performans kaybı oluşmaması için Vsync devre dışı bırakılır. "
+#~ "Not: Öncelikle Vsync'in etkinleştirilmiş olması gerekir. Bu özellik "
+#~ "şimdilik yalnızca GS eklentisi olarak GSdx seçildiğinde ve ayarlarından "
+#~ "DX10/11 hardware rendering seçili olduğunda çalışır. GSdx dışındaki "
+#~ "herhangi bir eklenti seçildiğinde özellik kullanılmaz ya da özellik her "
+#~ "etkinleştirildiğinde siyah bir ekran gelir."

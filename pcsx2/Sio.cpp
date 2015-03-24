@@ -48,7 +48,7 @@ static const float FORCED_MCD_EJECTION_MAX_MS_AFTER_MIN_TRIES =2800;
 wxString GetTimeMsStr(){
 	wxDateTime unow=wxDateTime::UNow();
 	wxString res;
-	res.Printf(L"%s.%03d", unow.Format(L"%H:%M:%S").c_str(), (int)unow.GetMillisecond() );
+	res.Printf(L"%s.%03d", WX_STR(unow.Format(L"%H:%M:%S")), (int)unow.GetMillisecond() );
 	return res;
 }
 
@@ -132,7 +132,7 @@ SIO_WRITE sioWriteStart(u8 data)
 	
 	// On mismatch, sio2.cmdlength (size1) is smaller than what it should (Persona 3)
 	// while size2 is the proper length. -KrossX
-	sio.bufSize = size2; //max(size1, size2);
+	sio.bufSize = size2; //std::max(size1, size2);
 
 	if(sio.bufSize)
 		sio.bufSize--;
@@ -319,7 +319,7 @@ SIO_WRITE memcardErase(u8 data)
 			{
 			case 0x82: // Erase
 				//siomode = SIO_DUMMY; // Nothing more to do here.
-				memcpy_fast(sio.buf, &header[1], 4);
+				memcpy(sio.buf, &header[1], 4);
 				sio.bufSize = 3;
 				mcd->EraseBlock();
 				break;
@@ -367,7 +367,7 @@ SIO_WRITE memcardWrite(u8 data)
 			switch(data)
 			{
 			case 0x42: // Write
-				memcpy_fast(sio.buf, header, 4);
+				memcpy(sio.buf, header, 4);
 				once = true;
 				break;
 
@@ -375,7 +375,7 @@ SIO_WRITE memcardWrite(u8 data)
 				if(once)
 				{
 					siomode = SIO_DUMMY; // Nothing more to do here.
-					memcpy_fast(sio.buf, &header[1], 4);
+					memcpy(sio.buf, &header[1], 4);
 					sio.bufSize = 3;
 
 					sio2.packet.recvVal1 = 0x1600; // Writing
@@ -454,7 +454,7 @@ SIO_WRITE memcardRead(u8 data)
 			switch(data)
 			{
 			case 0x43: // Read
-				memcpy_fast(sio.buf, header, 4);
+				memcpy(sio.buf, header, 4);
 				once = true;
 				break;
 
@@ -462,7 +462,7 @@ SIO_WRITE memcardRead(u8 data)
 				if(once)
 				{
 					siomode = SIO_DUMMY; // Nothing more to do here.
-					memcpy_fast(sio.buf, &header[1], 4);
+					memcpy(sio.buf, &header[1], 4);
 					sio.bufSize = 3;
 
 					sio2.packet.recvVal1 = 0x1700; // Reading
@@ -547,7 +547,7 @@ SIO_WRITE memcardInit()
 	if(mcd->ForceEjection_Timeout)
 	{
 		if(mcd->ForceEjection_Timeout == FORCED_MCD_EJECTION_MAX_TRIES && mcd->IsPresent())
-			Console.WriteLn( Color_Green,  L"[%s] Auto-ejecting memcard [port:%d, slot:%d]", GetTimeMsStr().c_str(), sio.GetPort(), sio.GetSlot());
+			Console.WriteLn( Color_Green,  L"[%s] Auto-ejecting memcard [port:%d, slot:%d]", WX_STR(GetTimeMsStr()), sio.GetPort(), sio.GetSlot());
 
 		mcd->ForceEjection_Timeout--;
 		forceEject = true;
@@ -563,13 +563,13 @@ SIO_WRITE memcardInit()
 			wxTimeSpan delta = wxDateTime::UNow().Subtract(mcd->ForceEjection_Timestamp);
 			if(delta.GetMilliseconds() >= FORCED_MCD_EJECTION_MAX_MS_AFTER_MIN_TRIES)
 			{
-				DevCon.Warning( L"[%s] Auto-eject: Timeout reached after mcd was accessed %d times [port:%d, slot:%d]", GetTimeMsStr().c_str(), numTimesAccessed, sio.GetPort(), sio.GetSlot());
+				DevCon.Warning( L"[%s] Auto-eject: Timeout reached after mcd was accessed %d times [port:%d, slot:%d]", WX_STR(GetTimeMsStr()), numTimesAccessed, sio.GetPort(), sio.GetSlot());
 				mcd->ForceEjection_Timeout = 0;	//Done. on next sio access the card will be seen as inserted.
 			}
 		}
 
 		if(mcd->ForceEjection_Timeout == 0 && mcd->IsPresent())
-			Console.WriteLn( Color_Green,  L"[%s] Re-inserting auto-ejected memcard [port:%d, slot:%d]", GetTimeMsStr().c_str(), sio.GetPort(), sio.GetSlot());
+			Console.WriteLn( Color_Green,  L"[%s] Re-inserting auto-ejected memcard [port:%d, slot:%d]", WX_STR(GetTimeMsStr()), sio.GetPort(), sio.GetSlot());
 	}
 			
 	if(!forceEject && mcd->IsPresent())
@@ -624,7 +624,7 @@ SIO_WRITE sioWriteMemcard(u8 data)
 				cmd.mc_xor				= info.Xor;
 				cmd.Z					= mcd->term;
 
-				memcpy_fast(&sio.buf[2], &cmd, sizeof(mc_command_0x26_tag));
+				memcpy(&sio.buf[2], &cmd, sizeof(mc_command_0x26_tag));
 			}
 			break;
 
@@ -698,7 +698,7 @@ SIO_WRITE sioWriteMemcardPSX(u8 data)
 		{
 		case 0x53: // PSX 'S'tate // haven't seen it happen yet
 			sio.buf[1] = mcd->FLAG;
-			memcpy_fast(&sio.buf[2], memcard_psx, 8);
+			memcpy(&sio.buf[2], memcard_psx, 8);
 			siomode = SIO_DUMMY;
 			break;
 

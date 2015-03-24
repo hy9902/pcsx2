@@ -23,6 +23,10 @@
 #include "GSState.h"
 #include "GSdx.h"
 
+#ifdef __linux__
+#include <sys/stat.h> // mkdir
+#endif
+
 //#define Offset_ST  // Fixes Persona3 mini map alignment which is off even in software rendering
 
 GSState::GSState()
@@ -46,6 +50,16 @@ GSState::GSState()
 	s_save = !!theApp.GetConfig("save", 0);
 	s_savez = !!theApp.GetConfig("savez", 0);
 	s_saven = theApp.GetConfig("saven", 0);
+#ifdef __linux__
+	if (s_dump) {
+		mkdir("/tmp/GS_HW_dump", 0777);
+		mkdir("/tmp/GS_SW_dump", 0777);
+	}
+#endif
+
+	//s_dump = 1;
+	//s_save = 1;
+	//s_savez = 1;
 
 	UserHacks_AggressiveCRC = !!theApp.GetConfig("UserHacks", 0) ? theApp.GetConfig("UserHacks_AggressiveCRC", 0) : 0;
 	UserHacks_DisableCrcHacks = !!theApp.GetConfig("UserHacks", 0) ? theApp.GetConfig( "UserHacks_DisableCrcHacks", 0 ) : 0;
@@ -847,7 +861,7 @@ template<int i> void GSState::GIFRegHandlerTEX0(const GIFReg* RESTRICT r)
 
 	if((TEX0.TBW & 1) && (TEX0.PSM == PSM_PSMT8 || TEX0.PSM == PSM_PSMT4))
 	{
-		ASSERT(TEX0.TBW == 1); // TODO
+		ASSERT(TEX0.TBW == 1); // TODO // Bouken Jidai Katsugeki Goemon
 
 		TEX0.TBW &= ~1; // GS User 2.6
 	}
@@ -1551,7 +1565,8 @@ void GSState::Read(uint8* mem, int len)
 		return;
 	}
 
-	if (!m_init_read_fifo_supported) {
+	if(!m_init_read_fifo_supported)
+	{
 		if(m_tr.x == sx && m_tr.y == sy)
 		{
 			InvalidateLocalMem(m_env.BITBLTBUF, GSVector4i(sx, sy, sx + w, sy + h));
@@ -2316,20 +2331,20 @@ void GSState::GrowVertexBuffer()
 	GSVertex* vertex = (GSVertex*)_aligned_malloc(sizeof(GSVertex) * maxcount, 32);
 	uint32* index = (uint32*)_aligned_malloc(sizeof(uint32) * maxcount * 3, 32); // worst case is slightly less than vertex number * 3
 
-	if (!vertex || !index)
+	if(vertex == NULL || index == NULL)
 	{
 		printf("GSdx: failed to allocate %d bytes for verticles and %d for indices.\n", sizeof(GSVertex) * maxcount, sizeof(uint32) * maxcount * 3);
 		throw GSDXError();
 	}
 
-	if (m_vertex.buff != NULL)
+	if(m_vertex.buff != NULL)
 	{
 		memcpy(vertex, m_vertex.buff, sizeof(GSVertex) * m_vertex.tail);
 
 		_aligned_free(m_vertex.buff);
 	}
 
-	if (m_index.buff != NULL)
+	if(m_index.buff != NULL)
 	{
 		memcpy(index, m_index.buff, sizeof(uint32) * m_index.tail);
 		
@@ -2425,6 +2440,8 @@ __forceinline void GSState::VertexKick(uint32 skip)
 			pmin = v2.min_i16(v1.min_i16(v3));
 			pmax = v2.max_i16(v1.max_i16(v3));
 			break;
+		default:
+			break;
 		}
 
 		GSVector4i test = pmax.lt16(m_scissor) | pmin.gt16(m_scissor.zwzwl()); 
@@ -2436,6 +2453,8 @@ __forceinline void GSState::VertexKick(uint32 skip)
 		case GS_TRIANGLEFAN:
 		case GS_SPRITE:
 			test |= m_nativeres ? pmin.eq16(pmax).zwzwl() : pmin.eq16(pmax);
+			break;
+		default:
 			break;
 		}
 
@@ -2459,6 +2478,8 @@ __forceinline void GSState::VertexKick(uint32 skip)
 			test |= GSVector4i::cast(cross == cross.yxwz());
 			*/
 			test = (test | v3 == v1) | (v1 == v2 | v3 == v2); 
+			break;
+		default:
 			break;
 		}
 		

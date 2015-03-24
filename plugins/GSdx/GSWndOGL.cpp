@@ -22,7 +22,7 @@
 #include "stdafx.h"
 #include "GSWndOGL.h"
 
-#if defined(_LINUX) && !defined(ENABLE_GLES)
+#if defined(__linux__) && !defined(ENABLE_GLES)
 GSWndOGL::GSWndOGL()
 	: m_NativeWindow(0), m_NativeDisplay(NULL), m_swapinterval(NULL)
 {
@@ -138,10 +138,7 @@ bool GSWndOGL::Attach(void* handle, bool managed)
 
 	m_NativeDisplay = XOpenDisplay(NULL);
 
-	if (theApp.GetConfig("reduce_gl_requirement_for_free_driver", 0) == 1)
-		CreateContext(3, 0);
-	else
-		CreateContext(3, 3);
+	CreateContext(3, 3);
 
 	AttachContext();
 

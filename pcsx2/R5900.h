@@ -37,6 +37,12 @@ namespace Exception
 	public:
 		explicit ExitCpuExecute() { }
 	};
+
+	class CancelInstruction
+	{
+	public:
+		explicit CancelInstruction() { }
+	};
 }
 
 // --------------------------------------------------------------------------------------
@@ -424,6 +430,7 @@ extern void cpuTlbMissW(u32 addr, u32 bd);
 extern void cpuTestHwInts();
 extern void cpuClearInt(uint n);
 extern void __fastcall GoemonPreloadTlb();
+extern void __fastcall GoemonUnloadTlb(u32 key);
 
 extern void cpuSetNextEvent( u32 startCycle, s32 delta );
 extern void cpuSetNextEventDelta( s32 delta );
@@ -435,6 +442,10 @@ extern void _cpuEventTest_Shared();		// for internal use by the Dynarecs and Int
 extern void cpuTestINTCInts();
 extern void cpuTestDMACInts();
 extern void cpuTestTIMRInts();
+
+// breakpoint code shared between interpreter and recompiler
+int isMemcheckNeeded(u32 pc);
+int isBreakpointNeeded(u32 addr);
 
 ////////////////////////////////////////////////////////////////////
 // Exception Codes

@@ -261,7 +261,7 @@ s32 cdvdReadConfig(u8* config)
 		((cdvd.COffset == 2) && (cdvd.CBlockIndex >= 7))
 		)
 	{
-		memzero_ptr<16>(config);
+		memset(config, 0, 16);
 		return 0;
 	}
 
@@ -359,10 +359,11 @@ static __fi void _reloadElfInfo(wxString elfpath)
 
 	elfptr = loadElf(elfpath);
 
+	elfptr->loadHeaders();
 	ElfCRC = elfptr->getCRC();
 	ElfEntry = elfptr->header.e_entry;
 	ElfTextRange = elfptr->getTextRange();
-	Console.WriteLn( Color_StrongBlue, L"ELF (%s) Game CRC = 0x%08X, EntryPoint = 0x%08X", elfpath.c_str(), ElfCRC, ElfEntry);
+	Console.WriteLn( Color_StrongBlue, L"ELF (%s) Game CRC = 0x%08X, EntryPoint = 0x%08X", WX_STR(elfpath), ElfCRC, ElfEntry);
 
 	// Note: Do not load game database info here.  This code is generic and called from
 	// BIOS key encryption as well as eeloadReplaceOSDSYS.  The first is actually still executing
@@ -429,7 +430,7 @@ void cdvdReadKey(u8, u16, u32 arg2, u8* key)
     cdvdReloadElfInfo();
 
 	// clear key values
-	memzero_ptr<16>(key);
+	memset(key, 0, 16);
 
 	if (!DiscSerial.IsEmpty())
 	{
@@ -438,10 +439,17 @@ void cdvdReadKey(u8, u16, u32 arg2, u8* key)
 
 		// combine the lower 7 bits of each char
 		// to make the 4 letters fit into a single u32
+#if wxMAJOR_VERSION >= 3
+		letters =	(s32)((DiscSerial[3].GetValue()&0x7F)<< 0) |
+					(s32)((DiscSerial[2].GetValue()&0x7F)<< 7) |
+					(s32)((DiscSerial[1].GetValue()&0x7F)<<14) |
+					(s32)((DiscSerial[0].GetValue()&0x7F)<<21);
+#else
 		letters =	(s32)((DiscSerial[3]&0x7F)<< 0) |
 					(s32)((DiscSerial[2]&0x7F)<< 7) |
 					(s32)((DiscSerial[1]&0x7F)<<14) |
 					(s32)((DiscSerial[0]&0x7F)<<21);
+#endif
 	}
 
 	// calculate magic numbers
@@ -717,7 +725,7 @@ int cdvdReadSector() {
 		mdest[11] = 0;
 
 		// normal 2048 bytes of sector data
-		memcpy_const(&mdest[12], cdr.Transfer, 2048);
+		memcpy(&mdest[12], cdr.Transfer, 2048);
 
 		// 4 bytes of edc (not calculated at present)
 		mdest[2060] = 0;
@@ -727,7 +735,7 @@ int cdvdReadSector() {
 	}
 	else
 	{
-		memcpy_fast( mdest, cdr.Transfer, cdvd.BlockSize);
+		memcpy( mdest, cdr.Transfer, cdvd.BlockSize);
 	}
 
 	// decrypt sector's bytes
@@ -1559,7 +1567,7 @@ static void cdvdWrite16(u8 rt)		 // SCOMMAND
 				cdvd.Param[cdvd.ParamP-5], cdvd.Param[cdvd.ParamP-3], cdvd.Param[cdvd.ParamP-2], cdvd.Param[cdvd.ParamP-1]);
 			Console.WriteLn("RTC Write Sec %d Min %d Hr %d Day %d Month %d Year %d", cdvd.RTC.second, cdvd.RTC.minute,
 				cdvd.RTC.hour, cdvd.RTC.day, cdvd.RTC.month, cdvd.RTC.year);*/
-			//memcpy_fast((u8*)&cdvd.RTC, cdvd.Param, 7);
+			//memcpy((u8*)&cdvd.RTC, cdvd.Param, 7);
 			break;
 
 		case 0x0A: // sceCdReadNVM (2:3)
@@ -1899,7 +1907,7 @@ static void cdvdWrite16(u8 rt)		 // SCOMMAND
 			}
 			else
 			{
-				memcpy_fast(cdvd.mg_buffer + cdvd.mg_size, cdvd.Param, cdvd.ParamC);
+				memcpy(cdvd.mg_buffer + cdvd.mg_size, cdvd.Param, cdvd.ParamC);
 				cdvd.mg_size += cdvd.ParamC;
 				cdvd.Result[0] = 0; // 0 complete ; 1 busy ; 0x80 error
 			}
@@ -1907,9 +1915,9 @@ static void cdvdWrite16(u8 rt)		 // SCOMMAND
 
 		case 0x8E: // sceMgReadData
 			SetResultSize( std::min(16, cdvd.mg_size) );
-			memcpy_fast(cdvd.Result, cdvd.mg_buffer, cdvd.ResultC);
+			memcpy(cdvd.Result, cdvd.mg_buffer, cdvd.ResultC);
 			cdvd.mg_size -= cdvd.ResultC;
-			memcpy_fast(cdvd.mg_buffer, cdvd.mg_buffer+cdvd.ResultC, cdvd.mg_size);
+			memcpy(cdvd.mg_buffer, cdvd.mg_buffer+cdvd.ResultC, cdvd.mg_size);
 			break;
 
 		case 0x88: // secrman: __mechacon_auth_0x88	//for now it is the same; so, fall;)
@@ -1976,7 +1984,7 @@ static void cdvdWrite16(u8 rt)		 // SCOMMAND
 		{
 			SetResultSize(3);//in:0
 			int bit_ofs = mg_BIToffset(cdvd.mg_buffer);
-			memcpy_fast(cdvd.mg_buffer, &cdvd.mg_buffer[bit_ofs], 8+16*cdvd.mg_buffer[bit_ofs+4]);
+			memcpy(cdvd.mg_buffer, &cdvd.mg_buffer[bit_ofs], 8+16*cdvd.mg_buffer[bit_ofs+4]);
 
 			cdvd.mg_maxsize = 0; // don't allow any write
 			cdvd.mg_size = 8+16*cdvd.mg_buffer[4];//new offset, i just moved the data

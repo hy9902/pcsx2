@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PCSX2 0.9.9\n"
 "Report-Msgid-Bugs-To: https://github.com/PCSX2/pcsx2/issues\n"
-"POT-Creation-Date: 2014-04-06 11:47+0200\n"
+"POT-Creation-Date: 2014-12-23 19:50+0100\n"
 "PO-Revision-Date: 2012-05-20 13:27+0200\n"
 "Last-Translator: kmartimo <kimmo.martimo@gmail.com>\n"
 "Language-Team: quarterlife <kimmo.martimo@gmail.com>\n"
@@ -23,23 +23,23 @@ msgstr ""
 "X-Poedit-SearchPath-0: pcsx2\n"
 "X-Poedit-SearchPath-1: common\n"
 
-#: common/include/Utilities/Exceptions.h:187
+#: common/include/Utilities/Exceptions.h:190
 msgid "No reason given."
 msgstr "Ei syytä annettu."
 
-#: common/include/Utilities/Exceptions.h:226
+#: common/include/Utilities/Exceptions.h:229
 msgid "Parse error"
 msgstr "Jäsennysvirhe"
 
-#: common/include/Utilities/Exceptions.h:250
+#: common/include/Utilities/Exceptions.h:253
 msgid "Your machine's hardware is incapable of running PCSX2.  Sorry dood."
 msgstr "Tietokoneesi laitteisto ei kykene suorittamaan PCSX2:hta. Pahoittelut."
 
-#: common/src/Utilities/Exceptions.cpp:219
+#: common/src/Utilities/Exceptions.cpp:240
 msgid "Oh noes! Out of memory!"
 msgstr "Voi ei! Muisti loppui kesken!"
 
-#: common/src/Utilities/Exceptions.cpp:234
+#: common/src/Utilities/Exceptions.cpp:255
 msgid ""
 "Virtual memory mapping failure!  Your system may have conflicting device "
 "drivers, services, or may simply have insufficient memory or resources to "
@@ -49,23 +49,23 @@ msgstr ""
 "laiteajureita, palveluita, tai liian vähän muistia tai resursseja PCSX2:den "
 "suuriin tarpeisiin."
 
-#: common/src/Utilities/Exceptions.cpp:307
+#: common/src/Utilities/Exceptions.cpp:328
 msgid "Path: "
 msgstr "Polku:"
 
-#: common/src/Utilities/Exceptions.cpp:311
+#: common/src/Utilities/Exceptions.cpp:332
 msgid "[Unnamed or unknown]"
 msgstr "[Nimetön tai tuntematon]"
 
-#: common/src/Utilities/Exceptions.cpp:331
+#: common/src/Utilities/Exceptions.cpp:352
 msgid "A file could not be created."
 msgstr "Tiedostoa ei voitu luoda."
 
-#: common/src/Utilities/Exceptions.cpp:351
+#: common/src/Utilities/Exceptions.cpp:372
 msgid "File not found."
 msgstr "Tiedostoa ei löytynyt."
 
-#: common/src/Utilities/Exceptions.cpp:371
+#: common/src/Utilities/Exceptions.cpp:392
 msgid ""
 "Permission denied while trying to open file, likely due to insufficient user "
 "account rights."
@@ -73,7 +73,7 @@ msgstr ""
 "Käyttö estetty tiedostoa avatessa, todennäköisesti käyttäjätilisi oikeudet "
 "eivät riitä."
 
-#: common/src/Utilities/Exceptions.cpp:391
+#: common/src/Utilities/Exceptions.cpp:412
 msgid ""
 "Unexpected end of file or stream encountered.  File is probably truncated or "
 "corrupted."
@@ -100,17 +100,17 @@ msgstr ""
 "Sisältää tyhjäkäynnin tapahtumaprosessoinnin ja muita harvinaisia "
 "tapahtumakäyttöjä."
 
-#: pcsx2/CDVD/InputIsoFile.cpp:231
+#: pcsx2/CDVD/InputIsoFile.cpp:238
 msgid "Unrecognized ISO image file format"
 msgstr "Tuntematon ISO-levykuvaformaatti"
 
-#: pcsx2/Elfheader.cpp:280
+#: pcsx2/Elfheader.cpp:165
 msgid "Cannot load ELF binary image.  The file may be corrupt or incomplete."
 msgstr ""
 "ELF-binaarikuvan lataus epäonnistui.  Tiedosto saattaa olla vahingoittunut "
 "tai epätäydellinen."
 
-#: pcsx2/Elfheader.cpp:282
+#: pcsx2/Elfheader.cpp:167
 msgid ""
 "If loading from an ISO image, this error may be caused by an unsupported ISO "
 "image type or a bug in PCSX2 ISO image support."
@@ -118,20 +118,20 @@ msgstr ""
 "Jos lataat ISO-levykuvasta, tämä virhe voi aiheutua ei-tuetusta ISO-"
 "levykuvaformaatista tai virheestä PCSX2:n ISO-levykuvatuessa."
 
-#: pcsx2/MTGS.cpp:867
+#: pcsx2/MTGS.cpp:871
 msgid ""
 "The MTGS thread has become unresponsive while waiting for the GS plugin to "
 "open."
 msgstr "MTGS-säie ei vastaa koska se odottaa GS-liitännäisen käynnistymistä."
 
-#: pcsx2/PluginManager.cpp:712
+#: pcsx2/PluginManager.cpp:716
 msgid ""
 "The savestate cannot be loaded, as it appears to be corrupt or incomplete."
 msgstr ""
 "Tilatallennusta ei voida ladata, koska se vaikuttaa olevan vioittunut tai "
 "epätäydellinen."
 
-#: pcsx2/PluginManager.cpp:722
+#: pcsx2/PluginManager.cpp:726
 #, c-format
 msgid ""
 "%s plugin failed to open.  Your computer may have insufficient resources, or "
@@ -140,7 +140,7 @@ msgstr ""
 "Liitännäisen %s avaaminen epäonnistui.  Tietokoneessasi saattaa olla liian "
 "vähäiset resurssit tai epäyhteensopivaa laitteistoa/ajureita."
 
-#: pcsx2/PluginManager.cpp:729
+#: pcsx2/PluginManager.cpp:733
 #, c-format
 msgid ""
 "%s plugin failed to initialize.  Your system may have insufficient memory or "
@@ -149,18 +149,18 @@ msgstr ""
 "Liitännäisen %s alustaminen epäonnistui.  Järjestelmässäsi saattaa olla "
 "liian vähän muistia tai muita tarvittuja resursseja."
 
-#: pcsx2/PluginManager.cpp:835
+#: pcsx2/PluginManager.cpp:839
 #, c-format
 msgid "The configured %s plugin file was not found"
 msgstr "Valitun %s-liitännäisen tiedostoa ei löytynyt"
 
-#: pcsx2/PluginManager.cpp:839
+#: pcsx2/PluginManager.cpp:843
 #, c-format
 msgid "The configured %s plugin file is not a valid dynamic library"
 msgstr ""
 "Valitun %s-liitännäisen tiedosto ei ole kelvollinen dynaaminen kirjasto"
 
-#: pcsx2/PluginManager.cpp:857
+#: pcsx2/PluginManager.cpp:865
 #, c-format
 msgid ""
 "The configured %s plugin is not a PCSX2 plugin, or is for an older "
@@ -169,14 +169,14 @@ msgstr ""
 "Valittu %s-liitännäinen ei ole PCSX2-liitännäinen tai se on tarkoitettu "
 "vanhalle PCSX2-versiolle, jota ei tueta."
 
-#: pcsx2/PluginManager.cpp:882
+#: pcsx2/PluginManager.cpp:890
 msgid ""
 "The plugin reports that your hardware or software/drivers are not supported."
 msgstr ""
 "Liitännäinen ilmoittaa että laitteistosi tai ohjelmistosi/ajurisi eivät ole "
 "tuettuja."
 
-#: pcsx2/PluginManager.cpp:903
+#: pcsx2/PluginManager.cpp:911
 msgid ""
 "Configured plugin is not a PCSX2 plugin, or is for an older unsupported "
 "version of PCSX2."
@@ -184,7 +184,7 @@ msgstr ""
 "Valittu liitännäinen ei ole PCSX2-liitännäinen tai se on tarkoitettu "
 "vanhalle PCSX2-versiolle, jota ei tueta."
 
-#: pcsx2/PluginManager.cpp:929
+#: pcsx2/PluginManager.cpp:937
 #, c-format
 msgid ""
 "Configured %s plugin is not a valid PCSX2 plugin, or is for an older "
@@ -193,15 +193,15 @@ msgstr ""
 "Valittu %s-liitännäinen ei ole kelvollinen PCSX2-liitännäinen tai se on "
 "tarkoitettu vanhalle PCSX2-versiolle, jota ei tueta."
 
-#: pcsx2/PluginManager.cpp:1358
+#: pcsx2/PluginManager.cpp:1366
 msgid "Internal Memorycard Plugin failed to initialize."
 msgstr "Sisäisen muistikorttiliitännäisen alustus epäonnistui."
 
-#: pcsx2/PluginManager.cpp:1755
+#: pcsx2/PluginManager.cpp:1763
 msgid "Unloaded Plugin"
 msgstr "Liitännäinen poistettu käytöstä"
 
-#: pcsx2/SaveState.cpp:342
+#: pcsx2/SaveState.cpp:343
 msgid "Cannot load savestate.  It is of an unknown or unsupported version."
 msgstr "Tilatallennusta ei voi ladata. Sen versio on tuntematon tai ei-tuettu."
 
@@ -400,7 +400,7 @@ msgstr "Erittäin aggressiivinen"
 msgid "Mostly Harmful"
 msgstr "Enimmäkseen haitallinen"
 
-#: pcsx2/gui/AppConfig.cpp:1075 pcsx2/gui/AppConfig.cpp:1081
+#: pcsx2/gui/AppConfig.cpp:1074 pcsx2/gui/AppConfig.cpp:1080
 msgid "Failed to overwrite existing settings file; permission was denied."
 msgstr ""
 "Olemassaolevan asetustiedoston ylikirjoitus epäonnistui; käyttö oli estetty."
@@ -409,107 +409,104 @@ msgstr ""
 msgid "Loading PS2 system plugins..."
 msgstr "Ladataan PS2-järjestelmäliitännäisiä..."
 
-#: pcsx2/gui/AppInit.cpp:43
-msgid "PCSX2 - SSE2 Recommended"
-msgstr "PCSX2 - SSE2:hta suositellaan"
-
-#: pcsx2/gui/AppInit.cpp:71
+#: pcsx2/gui/AppInit.cpp:49
+#, fuzzy
 msgid ""
-"SSE extensions are not available.  PCSX2 requires a cpu that supports the "
-"SSE instruction set."
+"SSE2 extensions are not available.  PCSX2 requires a cpu that supports the "
+"SSE2 instruction set."
 msgstr ""
 "SSE-laajennoksia ei ole saatavilla.  PCSX2 vaatii suorittimelta SSE-"
 "käskykantatuen."
 
-#: pcsx2/gui/AppInit.cpp:170
+#: pcsx2/gui/AppInit.cpp:138
 msgid "PCSX2 Recompiler Error(s)"
 msgstr "PCSX2 Uudelleenkääntäjän virhe(et)"
 
-#: pcsx2/gui/AppInit.cpp:240
+#: pcsx2/gui/AppInit.cpp:208
 msgid "All options are for the current session only and will not be saved.\n"
 msgstr ""
 "Kaikki valinnat ovat vain nykyiselle istunnolla ja niitä ei tallenneta.\n"
 
-#: pcsx2/gui/AppInit.cpp:250 pcsx2/gui/AppMain.cpp:301
+#: pcsx2/gui/AppInit.cpp:218 pcsx2/gui/AppMain.cpp:305
 msgid "IsoFile"
 msgstr "IsoFile"
 
-#: pcsx2/gui/AppInit.cpp:251
+#: pcsx2/gui/AppInit.cpp:219
 msgid "displays this list of command line options"
 msgstr "näyttää tämän listan komentorivivalitsimia"
 
-#: pcsx2/gui/AppInit.cpp:252
+#: pcsx2/gui/AppInit.cpp:220
 msgid "forces the program log/console to be visible"
 msgstr "pakottaa ohjelman lokin/konsolin näkyväksi"
 
-#: pcsx2/gui/AppInit.cpp:253
+#: pcsx2/gui/AppInit.cpp:221
 msgid "use fullscreen GS mode"
 msgstr "käytä koko näytön GS-tilaa"
 
-#: pcsx2/gui/AppInit.cpp:254
+#: pcsx2/gui/AppInit.cpp:222
 msgid "use windowed GS mode"
 msgstr "käytä ikkunoitua GS-tilaa"
 
-#: pcsx2/gui/AppInit.cpp:256
+#: pcsx2/gui/AppInit.cpp:224
 msgid "disables display of the gui while running games"
 msgstr "poistaa graafisen käyttöliittymän käytöstä pelejä pelattaessa"
 
-#: pcsx2/gui/AppInit.cpp:257
+#: pcsx2/gui/AppInit.cpp:225
 msgid "executes an ELF image"
 msgstr "suorittaa ELF-tiedoston"
 
-#: pcsx2/gui/AppInit.cpp:258
+#: pcsx2/gui/AppInit.cpp:226
 msgid "boots an empty dvd tray; use to enter the PS2 system menu"
 msgstr ""
 "käynnistää tyhjällä dvd-levykelkalla; käytä päästäksesi PS2:n "
 "järjestelmävalikkoon"
 
-#: pcsx2/gui/AppInit.cpp:259
+#: pcsx2/gui/AppInit.cpp:227
 msgid "boots from the CDVD plugin (overrides IsoFile parameter)"
 msgstr "käynnistää CDVD-liitännäiseltä (ohittaa IsoFile-valitsimen)"
 
-#: pcsx2/gui/AppInit.cpp:261
+#: pcsx2/gui/AppInit.cpp:229
 msgid "disables all speedhacks"
 msgstr "poistaa kaikki nopeusviritelmät käytöstä"
 
-#: pcsx2/gui/AppInit.cpp:262
+#: pcsx2/gui/AppInit.cpp:230
 msgid "use the specified comma or pipe-delimited list of gamefixes."
 msgstr ""
 "käytä määriteltyä, pilkulla tai putkella eroteltua, listaa pelikorjauksista."
 
-#: pcsx2/gui/AppInit.cpp:263
+#: pcsx2/gui/AppInit.cpp:231
 msgid "disables fast booting"
 msgstr "poistaa nopean käynnistyken käytöstä"
 
-#: pcsx2/gui/AppInit.cpp:265
+#: pcsx2/gui/AppInit.cpp:233
 msgid "changes the configuration file path"
 msgstr "vaihtaa asetustiedoston polun"
 
-#: pcsx2/gui/AppInit.cpp:266
+#: pcsx2/gui/AppInit.cpp:234
 msgid "specifies the PCSX2 configuration file to use"
 msgstr "määrittää käytettävän PCSX2-asetustiedoston"
 
-#: pcsx2/gui/AppInit.cpp:267
+#: pcsx2/gui/AppInit.cpp:235
 #, c-format
 msgid "forces %s to start the First-time Wizard"
 msgstr "pakottaa %s:n käynnistämään ensimmäisen käyttökerran asetusvelhon"
 
-#: pcsx2/gui/AppInit.cpp:268
+#: pcsx2/gui/AppInit.cpp:236
 msgid "enables portable mode operation (requires admin/root access)"
 msgstr ""
 "ottaa käytöön siirrettävän tilan (vaatii järjestelmänvalvoja/root-oikeudet)"
 
-#: pcsx2/gui/AppInit.cpp:272
+#: pcsx2/gui/AppInit.cpp:240
 #, c-format
 msgid "specify the file to use as the %s plugin"
 msgstr "määrittää tiedoston jota käytetään %s-liitännäisenä"
 
-#: pcsx2/gui/AppInit.cpp:320
+#: pcsx2/gui/AppInit.cpp:288
 #, c-format
 msgid "Plugin Override Error - %s"
 msgstr "Liittännäisen ohitusvirhe - %s"
 
-#: pcsx2/gui/AppInit.cpp:323
+#: pcsx2/gui/AppInit.cpp:291
 #, c-format
 msgid ""
 "%s Plugin Override Error!  The following file does not exist or is not a "
@@ -520,96 +517,96 @@ msgstr ""
 "ole kelvollinen %s-liitännäinen:\n"
 "\n"
 
-#: pcsx2/gui/AppInit.cpp:330
+#: pcsx2/gui/AppInit.cpp:298
 #, c-format
 msgid "Press OK to use the default configured plugin, or Cancel to close %s."
 msgstr ""
 "Paina OK käyttääksesi oletuksena määriteltyä liitännäistä, tai Peruuta "
 "sulkeaksesi %s:den."
 
-#: pcsx2/gui/AppInit.cpp:509
+#: pcsx2/gui/AppInit.cpp:477
 msgid "PCSX2 Error: Hardware Deficiency"
 msgstr "PCSX2-virhe: Laitteisto puutteellinen"
 
-#: pcsx2/gui/AppInit.cpp:509 pcsx2/gui/AppInit.cpp:521
+#: pcsx2/gui/AppInit.cpp:477 pcsx2/gui/AppInit.cpp:489
 #, c-format
 msgid "Press OK to close %s."
 msgstr "Paina OK sulkeaksesi %s:den."
 
-#: pcsx2/gui/AppInit.cpp:522
+#: pcsx2/gui/AppInit.cpp:490
 #, c-format
 msgid "%s Critical Error"
 msgstr "%s Kriittinen virhe"
 
-#: pcsx2/gui/AppInit.cpp:692
+#: pcsx2/gui/AppInit.cpp:660
 msgid "OK"
 msgstr "OK"
 
-#: pcsx2/gui/AppInit.cpp:693
+#: pcsx2/gui/AppInit.cpp:661
 msgid "&OK"
 msgstr "&OK"
 
-#: pcsx2/gui/AppInit.cpp:694
+#: pcsx2/gui/AppInit.cpp:662
 msgid "Cancel"
 msgstr "Peruuta"
 
-#: pcsx2/gui/AppInit.cpp:695
+#: pcsx2/gui/AppInit.cpp:663
 msgid "&Cancel"
 msgstr "&Peruuta"
 
-#: pcsx2/gui/AppInit.cpp:696
+#: pcsx2/gui/AppInit.cpp:664
 msgid "&Apply"
 msgstr "&Käytä"
 
-#: pcsx2/gui/AppInit.cpp:697
+#: pcsx2/gui/AppInit.cpp:665
 msgid "&Next >"
 msgstr "&Seuraava >"
 
-#: pcsx2/gui/AppInit.cpp:698
+#: pcsx2/gui/AppInit.cpp:666
 msgid "< &Back"
 msgstr "< &Edellinen"
 
-#: pcsx2/gui/AppInit.cpp:699
+#: pcsx2/gui/AppInit.cpp:667
 msgid "&Back"
 msgstr "&Edellinen"
 
-#: pcsx2/gui/AppInit.cpp:700
+#: pcsx2/gui/AppInit.cpp:668
 msgid "&Finish"
 msgstr "&Valmis"
 
-#: pcsx2/gui/AppInit.cpp:701
+#: pcsx2/gui/AppInit.cpp:669
 msgid "&Yes"
 msgstr "&Kyllä"
 
-#: pcsx2/gui/AppInit.cpp:702
+#: pcsx2/gui/AppInit.cpp:670
 msgid "&No"
 msgstr "&Ei"
 
-#: pcsx2/gui/AppInit.cpp:703
+#: pcsx2/gui/AppInit.cpp:671
 msgid "Browse"
 msgstr "Selaa"
 
-#: pcsx2/gui/AppInit.cpp:704
+#: pcsx2/gui/AppInit.cpp:672
 msgid "&Save"
 msgstr "&Tallenna"
 
-#: pcsx2/gui/AppInit.cpp:705
+#: pcsx2/gui/AppInit.cpp:673
 msgid "Save &As..."
 msgstr "Tallenna &nimellä..."
 
-#: pcsx2/gui/AppInit.cpp:706
+#: pcsx2/gui/AppInit.cpp:674
 msgid "&Help"
 msgstr "&Ohje"
 
-#: pcsx2/gui/AppInit.cpp:707
+#: pcsx2/gui/AppInit.cpp:675
 msgid "&Home"
 msgstr "&Koti"
 
-#: pcsx2/gui/AppInit.cpp:709
+#: pcsx2/gui/AppInit.cpp:677
 msgid "Show about dialog"
 msgstr "Näytä tietoja-ikkuna"
 
-#: pcsx2/gui/AppMain.cpp:89
+#: pcsx2/gui/AppMain.cpp:93
 msgid ""
 "\n"
 "\n"
@@ -619,35 +616,35 @@ msgstr ""
 "\n"
 "Paina Ok mennäksesi liitännäisten konfigurointipaneeliin."
 
-#: pcsx2/gui/AppMain.cpp:142 pcsx2/gui/AppMain.cpp:156
+#: pcsx2/gui/AppMain.cpp:146 pcsx2/gui/AppMain.cpp:160
 msgid ""
 "Warning!  System plugins have not been loaded.  PCSX2 may be inoperable."
 msgstr ""
 "Varoitus!  Järjestelmäliitännäisiä ei ole ladattu.  PCSX2 ei mahdollisesti "
 "toimi."
 
-#: pcsx2/gui/AppMain.cpp:311
+#: pcsx2/gui/AppMain.cpp:315
 #, c-format
 msgid "%s Commandline Options"
 msgstr "%s komentorivivalinnat"
 
-#: pcsx2/gui/AppMain.cpp:609
+#: pcsx2/gui/AppMain.cpp:563
 msgid "PS2 BIOS Error"
 msgstr "PS2 BIOS-virhe"
 
-#: pcsx2/gui/AppMain.cpp:610
+#: pcsx2/gui/AppMain.cpp:564
 msgid "Press Ok to go to the BIOS Configuration Panel."
 msgstr "Paina Ok mennäksesi BIOSin konfigurointipaneeliin."
 
-#: pcsx2/gui/AppMain.cpp:662
+#: pcsx2/gui/AppMain.cpp:616
 msgid "PCSX2 Unresponsive Thread"
 msgstr "PCSX2 säie ei vastaa"
 
-#: pcsx2/gui/AppMain.cpp:669
+#: pcsx2/gui/AppMain.cpp:623
 msgid "Terminate"
 msgstr "Lopeta"
 
-#: pcsx2/gui/AppMain.cpp:1017
+#: pcsx2/gui/AppMain.cpp:990
 msgid "Executing PS2 Virtual Machine..."
 msgstr "Suoritetaan PS2-virtuaalikonetta..."
 
@@ -833,7 +830,7 @@ msgstr "&Loki"
 msgid "&Sources"
 msgstr "Lä&hteet"
 
-#: pcsx2/gui/Debugger/DisassemblyDialog.cpp:112
+#: pcsx2/gui/Debugger/DisassemblyDialog.cpp:223
 msgid "panel"
 msgstr ""
 
@@ -891,11 +888,11 @@ msgstr "Olen nähnyt tarpeeksi"
 msgid "Assertion Failure - "
 msgstr "Oletusvirhe - "
 
-#: pcsx2/gui/Dialogs/BaseConfigurationDialog.cpp:193
+#: pcsx2/gui/Dialogs/BaseConfigurationDialog.cpp:194
 msgid "Saves a snapshot of this settings panel to a PNG file."
 msgstr "Tallentaa ruutukaappauksen tästä asetusikkunasta PNG-tiedostoksi."
 
-#: pcsx2/gui/Dialogs/BaseConfigurationDialog.cpp:308
+#: pcsx2/gui/Dialogs/BaseConfigurationDialog.cpp:309
 msgid "Save dialog screenshots to..."
 msgstr "Tallenna kuvakaappaukset sijaintiin..."
 
@@ -955,7 +952,7 @@ msgid "Select file name: "
 msgstr "Valitse tiedostonimi:"
 
 #: pcsx2/gui/Dialogs/CreateMemoryCardDialog.cpp:149
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:866
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:876
 #, c-format
 msgid "Error (%s)"
 msgstr "Virhe (%s)"
@@ -1042,11 +1039,11 @@ msgstr "Valitse kansio %s asetuksille"
 msgid "Settings"
 msgstr "Asetukset"
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:76
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:83
 msgid "Language selector"
 msgstr "Kielivalitsin"
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:79
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:86
 msgid ""
 "Change the language only if you need to.\n"
 "The system default should be fine for most operating systems."
@@ -1054,19 +1051,19 @@ msgstr ""
 "Vaihda kieltä vain tarvittaessa.\n"
 "Oletusarvon pitäisi olla sopiva useimmille käyttöjärjestelmille."
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:85
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:92
 msgid "Welcome to PCSX2!"
 msgstr "Tervetuloa PCSX2:een!"
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:96
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:103
 msgid "Configuration Guides (online)"
 msgstr "Asetusoppaat (online)"
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:100
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:107
 msgid "Readme / FAQ (Offline/PDF)"
 msgstr "Lue minut / UKK (Offline/PDF)"
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:109
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:116
 #, c-format
 msgid "%s First Time Configuration"
 msgstr "%s ensimmäisen käyttökerran konfiguraatio"
@@ -1208,47 +1205,47 @@ msgstr "Paina Lopeta sulkeaksesi %s:n välittömästi."
 msgid "Terminate App"
 msgstr "Lopeta ohjelma"
 
-#: pcsx2/gui/FrameForGS.cpp:384
+#: pcsx2/gui/FrameForGS.cpp:388
 msgid "GS Output is Disabled!"
 msgstr "GS-ulostulo ei ole käytössä!"
 
-#: pcsx2/gui/GlobalCommands.cpp:387 pcsx2/gui/MainFrame.cpp:417
+#: pcsx2/gui/GlobalCommands.cpp:386 pcsx2/gui/MainFrame.cpp:416
 msgid "Save state"
 msgstr "Tallenna tila"
 
-#: pcsx2/gui/GlobalCommands.cpp:388
+#: pcsx2/gui/GlobalCommands.cpp:387
 msgid "Saves the virtual machine state to the current slot."
 msgstr "Tallentaa virtuaalikoneen tilan nykyiseen paikkaan."
 
-#: pcsx2/gui/GlobalCommands.cpp:393 pcsx2/gui/MainFrame.cpp:416
+#: pcsx2/gui/GlobalCommands.cpp:392 pcsx2/gui/MainFrame.cpp:415
 msgid "Load state"
 msgstr "Lataa tila"
 
-#: pcsx2/gui/GlobalCommands.cpp:394
+#: pcsx2/gui/GlobalCommands.cpp:393
 msgid "Loads a virtual machine state from the current slot."
 msgstr "Lataa virtuaalikoneen tilan nykyisestä paikasta."
 
-#: pcsx2/gui/GlobalCommands.cpp:399
+#: pcsx2/gui/GlobalCommands.cpp:398
 msgid "Load State Backup"
 msgstr "Lataa tilan varmuuskopio"
 
-#: pcsx2/gui/GlobalCommands.cpp:400
+#: pcsx2/gui/GlobalCommands.cpp:399
 msgid "Loads virtual machine state backup for current slot."
 msgstr "Lataa virtuaalikoneen tilan varmuuskopion nykyiselle paikalle."
 
-#: pcsx2/gui/GlobalCommands.cpp:405
+#: pcsx2/gui/GlobalCommands.cpp:404
 msgid "Cycle to next slot"
 msgstr "Kierrä seuraavaan paikkaan"
 
-#: pcsx2/gui/GlobalCommands.cpp:406
+#: pcsx2/gui/GlobalCommands.cpp:405
 msgid "Cycles the current save slot in +1 fashion!"
 msgstr "Kiertää nykyistä tallennuspaikkaa +1 -tyylillä!"
 
-#: pcsx2/gui/GlobalCommands.cpp:411
+#: pcsx2/gui/GlobalCommands.cpp:410
 msgid "Cycle to prev slot"
 msgstr "Kierrä edelliseen paikkaan"
 
-#: pcsx2/gui/GlobalCommands.cpp:412
+#: pcsx2/gui/GlobalCommands.cpp:411
 msgid "Cycles the current save slot in -1 fashion!"
 msgstr "Kiertää nykyistä tallennuspaikkaa -1 -tyylillä!"
 
@@ -1265,7 +1262,7 @@ msgstr ""
 "On virheellistä pudottaa useita tiedostoja %s-ikkunaan.  Yksi kerrallaan, "
 "kiitos."
 
-#: pcsx2/gui/IsoDropTarget.cpp:87 pcsx2/gui/MainMenuClicks.cpp:339
+#: pcsx2/gui/IsoDropTarget.cpp:87 pcsx2/gui/MainMenuClicks.cpp:342
 msgid "Confirm PS2 Reset"
 msgstr "Vahvista PS2:n resetointi"
 
@@ -1316,278 +1313,268 @@ msgstr "&Asetukset"
 msgid "&Misc"
 msgstr "&Sekalaiset"
 
-#: pcsx2/gui/MainFrame.cpp:347
+#: pcsx2/gui/MainFrame.cpp:342
 msgid "&Debug"
 msgstr "&Debug"
 
-#: pcsx2/gui/MainFrame.cpp:360
-#, fuzzy, c-format
-msgid "%s  %d.%d.%d"
-msgstr "%s  %d.%d.%d %s"
-
-#: pcsx2/gui/MainFrame.cpp:365
-#, fuzzy, c-format
-msgid "%s  %d.%d.%d-%lld%s (git)  %s"
-msgstr "%s  %d.%d.%d.%d%s (svn)  %s"
-
-#: pcsx2/gui/MainFrame.cpp:402 pcsx2/gui/MainFrame.cpp:404
-#: pcsx2/gui/MainFrame.cpp:410
+#: pcsx2/gui/MainFrame.cpp:401 pcsx2/gui/MainFrame.cpp:403
+#: pcsx2/gui/MainFrame.cpp:409
 msgid "Initializing..."
 msgstr "Alustetaan..."
 
-#: pcsx2/gui/MainFrame.cpp:406
+#: pcsx2/gui/MainFrame.cpp:405
 msgid "Run ELF..."
 msgstr "Suorita ELF..."
 
-#: pcsx2/gui/MainFrame.cpp:407
+#: pcsx2/gui/MainFrame.cpp:406
 msgid "For running raw PS2 binaries directly"
 msgstr "Raakojen PS2-binaarien suorittamiseen"
 
-#: pcsx2/gui/MainFrame.cpp:419
+#: pcsx2/gui/MainFrame.cpp:418
 msgid "Backup before save"
 msgstr "Varmuuskopioi ennen tallennusta"
 
-#: pcsx2/gui/MainFrame.cpp:424
+#: pcsx2/gui/MainFrame.cpp:423
 msgid "Automatic Gamefixes"
 msgstr "Automaattiset pelikorjaukset"
 
-#: pcsx2/gui/MainFrame.cpp:425
+#: pcsx2/gui/MainFrame.cpp:424
 msgid "Automatically applies needed Gamefixes to known problematic games"
 msgstr ""
 "Automaattisesti käyttää tarvittavia pelikorjauksia tunnetusti ongelmallisiin "
 "peleihin"
 
-#: pcsx2/gui/MainFrame.cpp:427
+#: pcsx2/gui/MainFrame.cpp:426
 msgid "Enable Cheats"
 msgstr "Ota huijaukset käyttöön"
 
-#: pcsx2/gui/MainFrame.cpp:430
+#: pcsx2/gui/MainFrame.cpp:429
 #, fuzzy
 msgid "Enable Widescreen Patches"
 msgstr "Ota käyttöön nopeusviritelmät"
 
-#: pcsx2/gui/MainFrame.cpp:433
+#: pcsx2/gui/MainFrame.cpp:432
 msgid "Enable Host Filesystem"
 msgstr "Yhdistä isäntäjärjestelmän tiedostojärjestelmä"
 
-#: pcsx2/gui/MainFrame.cpp:438
+#: pcsx2/gui/MainFrame.cpp:437
 msgid "Shutdown"
 msgstr "Sammuta"
 
-#: pcsx2/gui/MainFrame.cpp:439
+#: pcsx2/gui/MainFrame.cpp:438
 msgid "Wipes all internal VM states and shuts down plugins."
 msgstr ""
 "Pyyhkii kaikki sisäiset virtuaalikoneen tilat ja sammuttaa liitännäiset."
 
-#: pcsx2/gui/MainFrame.cpp:441
+#: pcsx2/gui/MainFrame.cpp:440
 msgid "Exit"
 msgstr "Lopeta"
 
-#: pcsx2/gui/MainFrame.cpp:442
+#: pcsx2/gui/MainFrame.cpp:441
 #, c-format
 msgid "Closing %s may be hazardous to your health"
 msgstr "%s:n sulkeminen saattaa olla vaarallista terveydellesi"
 
-#: pcsx2/gui/MainFrame.cpp:449
+#: pcsx2/gui/MainFrame.cpp:448
 msgid "Iso Selector"
 msgstr "Iso-valitsin"
 
-#: pcsx2/gui/MainFrame.cpp:450
+#: pcsx2/gui/MainFrame.cpp:449
 msgid "Plugin Menu"
 msgstr "Liitännäisen valikko"
 
-#: pcsx2/gui/MainFrame.cpp:453
+#: pcsx2/gui/MainFrame.cpp:452
 msgid "Iso"
 msgstr "Iso"
 
-#: pcsx2/gui/MainFrame.cpp:453
+#: pcsx2/gui/MainFrame.cpp:452
 msgid "Makes the specified ISO image the CDVD source."
 msgstr "Tekee valitusta ISO-levykuvasta CDVD-lähteen."
 
-#: pcsx2/gui/MainFrame.cpp:454
+#: pcsx2/gui/MainFrame.cpp:453
 msgid "Plugin"
 msgstr "Liitännäinen"
 
-#: pcsx2/gui/MainFrame.cpp:454
+#: pcsx2/gui/MainFrame.cpp:453
 msgid "Uses an external plugin as the CDVD source."
 msgstr "Käyttää ulkoista liitännäistä CDVD-lähteenä."
 
-#: pcsx2/gui/MainFrame.cpp:455
+#: pcsx2/gui/MainFrame.cpp:454
 msgid "No disc"
 msgstr "Ei levyä"
 
-#: pcsx2/gui/MainFrame.cpp:455
+#: pcsx2/gui/MainFrame.cpp:454
 msgid "Use this to boot into your virtual PS2's BIOS configuration."
 msgstr "Käytä tätä käynnistääksesi virtuaalisen PS2:den BIOS-asetuksiin."
 
-#: pcsx2/gui/MainFrame.cpp:463
+#: pcsx2/gui/MainFrame.cpp:462
 msgid "Emulation &Settings"
 msgstr "Emulaation &asetukset"
 
-#: pcsx2/gui/MainFrame.cpp:464
+#: pcsx2/gui/MainFrame.cpp:463
 msgid "&Memory cards"
 msgstr "&Muistikortit"
 
-#: pcsx2/gui/MainFrame.cpp:465
+#: pcsx2/gui/MainFrame.cpp:464
 msgid "&Plugin/BIOS Selector"
 msgstr "&Liitännäis/BIOS-valitsin"
 
-#: pcsx2/gui/MainFrame.cpp:466 pcsx2/gui/Panels/GameDatabasePanel.cpp:346
+#: pcsx2/gui/MainFrame.cpp:465 pcsx2/gui/Panels/GameDatabasePanel.cpp:346
 msgid "Game Database Editor"
 msgstr "Pelitietokannan muokkaustyökalu"
 
-#: pcsx2/gui/MainFrame.cpp:472
+#: pcsx2/gui/MainFrame.cpp:471
 msgid "&Video (GS)"
 msgstr "&Video (GS)"
 
-#: pcsx2/gui/MainFrame.cpp:473
+#: pcsx2/gui/MainFrame.cpp:472
 msgid "&Audio (SPU2)"
 msgstr "&Ääni (SPU2)"
 
-#: pcsx2/gui/MainFrame.cpp:474
+#: pcsx2/gui/MainFrame.cpp:473
 msgid "&Controllers (PAD)"
 msgstr "&Ohjaimet (PAD)"
 
-#: pcsx2/gui/MainFrame.cpp:475
+#: pcsx2/gui/MainFrame.cpp:474
 msgid "Dev9"
 msgstr "Dev9"
 
-#: pcsx2/gui/MainFrame.cpp:476
+#: pcsx2/gui/MainFrame.cpp:475
 msgid "USB"
 msgstr "USB"
 
-#: pcsx2/gui/MainFrame.cpp:477
+#: pcsx2/gui/MainFrame.cpp:476
 msgid "Firewire"
 msgstr "Firewire"
 
-#: pcsx2/gui/MainFrame.cpp:483
+#: pcsx2/gui/MainFrame.cpp:482
 msgid "Multitap 1"
 msgstr "Multitap 1"
 
-#: pcsx2/gui/MainFrame.cpp:484
+#: pcsx2/gui/MainFrame.cpp:483
 msgid "Multitap 2"
 msgstr "Multitap 2"
 
-#: pcsx2/gui/MainFrame.cpp:487
+#: pcsx2/gui/MainFrame.cpp:486
 msgid "Clear all settings..."
 msgstr "Nollaa kaikki asetukset..."
 
-#: pcsx2/gui/MainFrame.cpp:488
+#: pcsx2/gui/MainFrame.cpp:487
 #, c-format
 msgid "Clears all %s settings and re-runs the startup wizard."
 msgstr ""
 "Nollaa kaikki %s:den asetukset ja ajaa ensimmäisen käyttökerran asetusvelhon "
 "uudelleen."
 
-#: pcsx2/gui/MainFrame.cpp:510
+#: pcsx2/gui/MainFrame.cpp:509
 msgid "About..."
 msgstr "Tietoja..."
 
-#: pcsx2/gui/MainFrame.cpp:519
+#: pcsx2/gui/MainFrame.cpp:514
 msgid "Open Debug Window..."
 msgstr ""
 
-#: pcsx2/gui/MainFrame.cpp:521
+#: pcsx2/gui/MainFrame.cpp:517
 msgid "Logging..."
 msgstr "Lokitus..."
 
-#: pcsx2/gui/MainFrame.cpp:599
+#: pcsx2/gui/MainFrame.cpp:595
 msgid "Pause"
 msgstr "Keskeytä"
 
-#: pcsx2/gui/MainFrame.cpp:600
+#: pcsx2/gui/MainFrame.cpp:596
 msgid "Safely pauses emulation and preserves the PS2 state."
 msgstr "Turvallisesti tauottaa emulaation ja säilyttää PS2:n tilan."
 
-#: pcsx2/gui/MainFrame.cpp:607
+#: pcsx2/gui/MainFrame.cpp:603
 msgid "Resume"
 msgstr "Jatka"
 
-#: pcsx2/gui/MainFrame.cpp:608
+#: pcsx2/gui/MainFrame.cpp:604
 msgid "Resumes the suspended emulation state."
 msgstr "Jatkaa keskeytetystä emulaatiotilasta."
 
-#: pcsx2/gui/MainFrame.cpp:612
+#: pcsx2/gui/MainFrame.cpp:608
 msgid "Pause/Resume"
 msgstr "Keskeytä/Jatka"
 
-#: pcsx2/gui/MainFrame.cpp:613
+#: pcsx2/gui/MainFrame.cpp:609
 msgid "No emulation state is active; cannot suspend or resume."
 msgstr "Ei aktiivista emulaatiotilaa; ei voi keskeyttää tai jatkaa."
 
-#: pcsx2/gui/MainFrame.cpp:622
+#: pcsx2/gui/MainFrame.cpp:618
 msgid "Restart"
 msgstr "Uudelleenkäynnistä"
 
-#: pcsx2/gui/MainFrame.cpp:623
+#: pcsx2/gui/MainFrame.cpp:619
 msgid "Simulates hardware reset of the PS2 virtual machine."
 msgstr "Simuloi PS2-virtuaalikoneen laitteiston resetointia."
 
-#: pcsx2/gui/MainFrame.cpp:628
+#: pcsx2/gui/MainFrame.cpp:624
 msgid "No emulation state is active; boot something first."
 msgstr "Ei aktiivista emulaatiotilaa; käynnistä jotain ensin."
 
-#: pcsx2/gui/MainFrame.cpp:636
+#: pcsx2/gui/MainFrame.cpp:632
 msgid "Reboot CDVD (full)"
 msgstr "Uudelleenkäynnistä CDVD (täysi)"
 
-#: pcsx2/gui/MainFrame.cpp:637
+#: pcsx2/gui/MainFrame.cpp:633
 msgid "Hard reset of the active VM."
 msgstr "Aktiivisen virtuaalikoneen pakotettu resetointi."
 
-#: pcsx2/gui/MainFrame.cpp:641
+#: pcsx2/gui/MainFrame.cpp:637
 msgid "Boot CDVD (full)"
 msgstr "Käynnistä CDVD (täysi)"
 
-#: pcsx2/gui/MainFrame.cpp:642
+#: pcsx2/gui/MainFrame.cpp:638
 msgid "Boot the VM using the current DVD or Iso source media"
 msgstr "Käynnistä virtuaalikone käyttäen nykyistä DVD- tai Iso-lähdettä"
 
-#: pcsx2/gui/MainFrame.cpp:650
+#: pcsx2/gui/MainFrame.cpp:646
 msgid "Reboot CDVD (fast)"
 msgstr "Uudelleenkäynnistä CDVD (nopea)"
 
-#: pcsx2/gui/MainFrame.cpp:651
+#: pcsx2/gui/MainFrame.cpp:647
 msgid "Reboot using fast BOOT (skips splash screens)"
 msgstr "Uudelleenkäynnistä nopeasti (ohittaa aloitusruudut)"
 
-#: pcsx2/gui/MainFrame.cpp:655
+#: pcsx2/gui/MainFrame.cpp:651
 msgid "Boot CDVD (fast)"
 msgstr "Käynnistä CDVD (nopea)"
 
-#: pcsx2/gui/MainFrame.cpp:656
+#: pcsx2/gui/MainFrame.cpp:652
 msgid "Use fast boot to skip PS2 startup and splash screens"
 msgstr ""
 "Käytä nopeaa käynnistystä PS2-käynnistyksen ja aloitusruutujen ohittamiseen"
 
-#: pcsx2/gui/MainFrame.cpp:718 pcsx2/gui/MainFrame.cpp:753
+#: pcsx2/gui/MainFrame.cpp:714 pcsx2/gui/MainFrame.cpp:749
 msgid "No plugin loaded"
 msgstr "Ei ladattua liitännäistä"
 
-#: pcsx2/gui/MainFrame.cpp:723
+#: pcsx2/gui/MainFrame.cpp:719
 msgid "Core GS Settings..."
 msgstr "GS:n ydinasetukset..."
 
-#: pcsx2/gui/MainFrame.cpp:724
+#: pcsx2/gui/MainFrame.cpp:720
 msgid ""
 "Modify hardware emulation settings regulated by the PCSX2 core virtual "
 "machine."
 msgstr ""
 "Muokkaa PCSX2:n ydinvirtuaalikoneen sääntelemiä laitteistoemulaatioasetuksia."
 
-#: pcsx2/gui/MainFrame.cpp:726
+#: pcsx2/gui/MainFrame.cpp:722
 msgid "Window Settings..."
 msgstr "Ikkunan asetukset..."
 
-#: pcsx2/gui/MainFrame.cpp:727
+#: pcsx2/gui/MainFrame.cpp:723
 msgid "Modify window and appearance options, including aspect ratio."
 msgstr "Muokkaa ikkunan ja ulkoasun asetuksia, kuvasuhde mukaanlukien."
 
-#: pcsx2/gui/MainFrame.cpp:734
+#: pcsx2/gui/MainFrame.cpp:730
 msgid "Plugin Settings..."
 msgstr "Liitännäisen asetukset..."
 
-#: pcsx2/gui/MainFrame.cpp:735
+#: pcsx2/gui/MainFrame.cpp:731
 #, c-format
 msgid "Opens the %s plugin's advanced settings dialog."
 msgstr "Avaa %s-liitännäisen edistyneiden asetusten valikon."
@@ -1638,27 +1625,32 @@ msgstr "Levykuvat (%s)"
 msgid "Blockdumps (%s)"
 msgstr "Lohkovedokset (%s)"
 
-#: pcsx2/gui/MainMenuClicks.cpp:267 pcsx2/gui/MainMenuClicks.cpp:288
+#: pcsx2/gui/MainMenuClicks.cpp:267
+#, fuzzy, c-format
+msgid "Compressed (%s)"
+msgstr "Lohkovedokset (%s)"
+
+#: pcsx2/gui/MainMenuClicks.cpp:270 pcsx2/gui/MainMenuClicks.cpp:291
 msgid "All Files (*.*)"
 msgstr "Kaikki tiedostot (*.*)"
 
-#: pcsx2/gui/MainMenuClicks.cpp:270
+#: pcsx2/gui/MainMenuClicks.cpp:273
 msgid "Select CDVD source iso..."
 msgstr "Valitse CDVD-lähteen ISO-levykuva..."
 
-#: pcsx2/gui/MainMenuClicks.cpp:287
+#: pcsx2/gui/MainMenuClicks.cpp:290
 msgid "Select ELF file..."
 msgstr "Valitse ELF-tiedosto..."
 
-#: pcsx2/gui/MainMenuClicks.cpp:313
+#: pcsx2/gui/MainMenuClicks.cpp:316
 msgid "ISO file not found!"
 msgstr "ISO-tiedostoa ei löytynyt!"
 
-#: pcsx2/gui/MainMenuClicks.cpp:315
+#: pcsx2/gui/MainMenuClicks.cpp:318
 msgid "An error occurred while trying to open the file:"
 msgstr "Tiedostoa avattessa tapahtui virhe:"
 
-#: pcsx2/gui/MainMenuClicks.cpp:316
+#: pcsx2/gui/MainMenuClicks.cpp:319
 msgid ""
 "Error: The configured ISO file does not exist.  Click OK to select a new ISO "
 "source for CDVD."
@@ -1666,7 +1658,7 @@ msgstr ""
 "Virhe: Valittua ISO-levykuvatiedostoa ei löydy.  Napsauta OK:ta valitaksesi "
 "uuden ISO-levykuvan CDVD:lle."
 
-#: pcsx2/gui/MainMenuClicks.cpp:387
+#: pcsx2/gui/MainMenuClicks.cpp:390
 msgid ""
 "You have selected the following ISO image into PCSX2:\n"
 "\n"
@@ -1700,19 +1692,19 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: pcsx2/gui/MemoryCardFile.cpp:584
+#: pcsx2/gui/MemoryCardFile.cpp:586
 msgid "File name empty or too short"
 msgstr "Tiedostonimi on tyhjä tai liian lyhyt"
 
-#: pcsx2/gui/MemoryCardFile.cpp:589
+#: pcsx2/gui/MemoryCardFile.cpp:591
 msgid "File name outside of required directory"
 msgstr "Tiedostonimi vaaditun kansion ulkopuolella"
 
-#: pcsx2/gui/MemoryCardFile.cpp:595
+#: pcsx2/gui/MemoryCardFile.cpp:597
 msgid "File name already exists"
 msgstr "Tiedostonimi on jo olemassa"
 
-#: pcsx2/gui/MemoryCardFile.cpp:602
+#: pcsx2/gui/MemoryCardFile.cpp:604
 msgid "The Operating-System prevents this file from being created"
 msgstr "Käyttöjärjestelmä estää tämän tiedoston luonnin"
 
@@ -1720,28 +1712,28 @@ msgstr "Käyttöjärjestelmä estää tämän tiedoston luonnin"
 msgid "Cannot apply settings..."
 msgstr "Ei pysty ottamaan asetuksia käyttöön..."
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:103
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:107
 msgid "BIOS Search Path:"
 msgstr "BIOS-hakupolku:"
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:104
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:108
 msgid "Select folder with PS2 BIOS roms"
 msgstr "Valitse PS2 BIOS-kuvat sisältävä kansio"
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:111
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:115
 msgid ""
 "Click the Browse button to select a different folder where PCSX2 will look "
 "for PS2 BIOS roms."
 msgstr ""
 "Paina Selaa-nappia valitaksesi kansion mistä PCSX2 etsii PS2 BIOS-kuvia."
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:113
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:117
 #: pcsx2/gui/Panels/MemoryCardListPanel.cpp:171
 #: pcsx2/gui/Panels/ThemeSelectorPanel.cpp:47
 msgid "Refresh list"
 msgstr "Päivitä lista"
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:115
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:119
 msgid "Select a BIOS rom:"
 msgstr "Valitse BIOS-kuva:"
 
@@ -1928,28 +1920,22 @@ msgid "Wait for Vsync on refresh"
 msgstr "Odota pystytahdistusta (Vsync) päivittäessä"
 
 #: pcsx2/gui/Panels/GSWindowPanel.cpp:51
-msgid "Dynamically toggle Vsync depending on frame rate (read tooltip!)"
-msgstr ""
-"Dynaamisesti kytke pystytahdistusta (Vsync) kehysnopeudesta riippuen (lue "
-"työkaluohje!)"
-
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:52
 msgid "Double-click toggles fullscreen mode"
 msgstr "Kaksoisnapsautus vaihtaa koko näytön tilaan ja siitä pois"
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:89
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:85
 msgid "Aspect Ratio:"
 msgstr "Kuvasuhde:"
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:91
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:87
 msgid "Custom Window Size:"
 msgstr "Mukautettu ikkunan koko:"
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:94
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:90
 msgid "Zoom:"
 msgstr "Zoom:"
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:175
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:166
 msgid ""
 "Invalid window dimensions specified: Size cannot contain non-numeric digits! "
 ">_<"
@@ -1966,11 +1952,11 @@ msgstr "Hae"
 msgid "Gamefixes"
 msgstr "Pelikorjaukset"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:38
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:40
 msgid "VU Add Hack - Fixes Tri-Ace games boot crash."
 msgstr "VU Add -viritelmä - Korjaa Tri-Acen pelien käynnistyskaatumisen."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:39
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:41
 msgid ""
 "Games that need this hack to boot:\n"
 " * Star Ocean 3\n"
@@ -1982,80 +1968,79 @@ msgstr ""
 " * Radiata Stories\n"
 " * Valkyrie Profile 2"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:42
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:44
 msgid "VU Clip Flag Hack - For Persona games (SuperVU recompiler only!)"
 msgstr ""
 "VU Clip Flag -viritelmä - Persona-sarjan peleille (Vain SuperVU-"
 "uudelleenkääntäjä!)"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:46
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:48
 msgid "FPU Compare Hack - For Digimon Rumble Arena 2."
 msgstr "FPU Compare -viritelmä - Digimon Rumble Arena 2:lle."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:50
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:52
 msgid "FPU Multiply Hack - For Tales of Destiny."
 msgstr "FPU Multiply -viritelmä - Tales of Destinylle."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:54
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:56
 msgid "FPU Negative Div Hack - For Gundam games."
 msgstr "FPU Negative Div -viritelmä - Gundam-sarjan peleille."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:58
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:60
 msgid "VU XGkick Hack - For Erementar Gerad."
 msgstr "VU XGkick -viritelmä - Erementar Geradille."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:62
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:64
 msgid "FFX videos fix - Fixes bad graphics overlay in FFX videos."
 msgstr "FFX videokorjaus - Korjaa huonot grafiikat FFX:n videoiden päällä."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:66
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:68
 msgid "EE timing hack - Multi purpose hack. Try if all else fails."
 msgstr ""
 "EE ajoitus -viritelmä - Monikäyttöinen viritelmä. Kokeile jos mikään muu ei "
 "auta."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:71
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:73
 msgid ""
 "Skip MPEG hack - Skips videos/FMVs in games to avoid game hanging/freezes."
 msgstr ""
 "Ohita MPEG -viritelmä - Ohittaa (väli)videot peleissä jumiutumisen "
 "välttämiseksi."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:75
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:77
 msgid "OPH Flag hack - Try if your game freezes showing the same frame."
 msgstr ""
 "OPH Flag -viritelmä - Kokeile jos pelisi jumiutuu näyttämään samaa kuvaa."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:80
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:82
 msgid "Ignore DMAC writes when it is busy."
 msgstr "Jätä huomiotta DMAC-kirjoitukset kun se on varattuna."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:85
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:87
 msgid "Simulate VIF1 FIFO read ahead. Fixes slow loading games."
 msgstr "Simuloi VIF1 FIFO etukäteisluku. Korjaa hitaasti latautuvat pelit."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:90
-msgid "Delay VIF1 Stalls (VIF1 FIFO) - For SOCOM 2 HUD."
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:92
+#, fuzzy
+msgid ""
+"Delay VIF1 Stalls (VIF1 FIFO) - For SOCOM 2 HUD & Spy Hunter loading hang."
 msgstr "Viivästytä VIF1-seisahtumisia (VIF1 FIFO) - SOCOM 2:n HUDille."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:94
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:96
 msgid "Ignore Bus Direction on Path3 Transfer - Used for Hotwheels"
 msgstr "Jätä huomiotta väylän suunta Path3-siirrossa - Käytetään Hotwheelsissä"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:98
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:100
 msgid "Switch to GSdx software rendering when a FMV plays"
 msgstr ""
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:109
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:104
+msgid "Preload TLB hack to avoid tlb miss on Goemon"
+msgstr ""
+
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:115
 msgid "Enable manual game fixes [Not recommended]"
 msgstr "Ota käyttöön manuaaliset pelikorjaukset [Ei suositella]"
-
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:114
-msgid ""
-"The safest way to make sure that all game fixes are completely disabled."
-msgstr ""
-"Turvallisin tapa varmistaa, että kaikki pelikorjaukset ovat poistettu täysin "
-"käytöstä."
 
 #: pcsx2/gui/Panels/LogOptionsPanels.cpp:249
 msgid "Enable Trace Logging"
@@ -2081,82 +2066,82 @@ msgstr ""
 msgid "Select folder with PS2 memory cards"
 msgstr "Valitse PS2-muistikortit sisältävä kansio"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:463
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:548
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:473
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:558
 msgid "Eject"
 msgstr "Poista käytöstä"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:464
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:474
 msgid "Duplicate ..."
 msgstr "Kopioi ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:465
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:475
 msgid "Rename ..."
 msgstr "Uudelleennimeä ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:466
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:530
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:557
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:476
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:540
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:567
 msgid "Create ..."
 msgstr "Luo ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:478
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:488
 msgid "Card: "
 msgstr "Kortti:"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:531
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:564
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:541
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:574
 msgid "Create a new memory card."
 msgstr "Luo uusi muistikortti."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:544
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:554
 msgid "Rename this memory card ..."
 msgstr "Uudelleennimeä tämä muistikortti ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:548
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:558
 msgid "Insert ..."
 msgstr "Aseta ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:549
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:559
 msgid "Eject the card from this port"
 msgstr "Poistaa muistikortin tästä muistikorttipaikasta"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:549
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:559
 msgid "Insert this card to a port ..."
 msgstr "Aseta tämä muistikortti muistikorttipaikkaan ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:553
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:563
 msgid "Create a duplicate of this memory card ..."
 msgstr "Tee kopio tästä muistikortista ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:557
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:567
 msgid "Delete"
 msgstr "Poista"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:560
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:570
 msgid "Permanently delete this memory card from disk (all contents are lost)"
 msgstr "Poistaa muistikortin peruuttamattomasti (kaikki sisältö menetetään)"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:562
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:572
 msgid "Create a new memory card and assign it to this Port."
 msgstr "Luo uusi muistikortti ja aseta se tähän muistikorttipaikkaan."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:739
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:749
 msgid "Delete memory file?"
 msgstr "Poistetaanko muistikorttitiedosto?"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:763
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:774
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:781
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:795
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:773
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:784
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:791
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:805
 msgid "Duplicate memory card"
 msgstr "Luo kopio muistikortista"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:763
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:773
 msgid "Failed: Can only duplicate an existing card."
 msgstr "Epäonnistui: vain olemassaolevia muistikortteja voi kopioida."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:781
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:791
 msgid ""
 "Select a name for the duplicate\n"
 "( '.ps2' will be added automatically)"
@@ -2164,25 +2149,25 @@ msgstr ""
 "Valitse kopion nimi\n"
 "( '.ps2' lisätään automaattisesti)"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:794
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:804
 #, c-format
 msgid "Failed: %s"
 msgstr "Epäonnistui: %s"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:819
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:829
 msgid "Copy failed!"
 msgstr "Kopiointi epäonnistui!"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:827
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:837
 #, c-format
 msgid "Memory card '%s' duplicated to '%s'."
 msgstr "Muistikortti '%s' kopioitiin muistikorttiin '%s'."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:831
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:841
 msgid "Success"
 msgstr "Onnistuminen"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:852
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:862
 #, c-format
 msgid ""
 "Select a new name for the memory card '%s'\n"
@@ -2191,121 +2176,121 @@ msgstr ""
 "Valitse uusi nimi muistikortille '%s'\n"
 "( '.ps2' lisätään automaattisesti)"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:855
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:867
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:883
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:865
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:877
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:893
 msgid "Rename memory card"
 msgstr "Uudelleennimeä muistikortti"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:883
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:893
 msgid "Error: Rename could not be completed.\n"
 msgstr "Virhe: Uudelleennimeämistä ei voitu suorittaa.\n"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:973
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:141
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:983
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:143
 #, c-format
 msgid "Port-%u / Multitap-%u--Port-1"
 msgstr "Paikka-%u / Multitap-%u--Paikka-1"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:974
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:142
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:984
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:144
 #, c-format
 msgid "             Multitap-%u--Port-%u"
 msgstr "             Multitap-%u--Paikka-%u"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:999
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1009
 msgid "Empty"
 msgstr "Tyhjä"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1005
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1015
 #, c-format
 msgid "Select a target port for '%s'"
 msgstr "Valitse kohdepaikka muistikortille '%s'"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1006
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1016
 msgid "Insert card"
 msgstr "Aseta muistikorttipaikkaan"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1066
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1076
 msgid "Eject card"
 msgstr "Poista muistikorttipaikasta"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1066
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1076
 msgid "Insert card ..."
 msgstr "Aseta muistikortti ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1067
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1077
 msgid "Duplicate card ..."
 msgstr "Kopio muistikortti ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1068
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1078
 msgid "Rename card ..."
 msgstr "Uudelleennimeä muistikortti ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1069
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1079
 msgid "Delete card"
 msgstr "Poista muistikortti"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1072
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1076
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1082
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1086
 msgid "Create a new card ..."
 msgstr "Luo uusi muistikortti ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1080
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1090
 msgid "Refresh List"
 msgstr "Päivitä lista"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:106
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:108
 msgid "PS2 Port"
 msgstr "PS2 Muistikorttipaikka"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:108
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:110
 msgid "Card (file) name"
 msgstr "Kortin (tiedosto)nimi"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:109
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:111
 msgid "Card size"
 msgstr "Koko"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:110
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:112
 msgid "Formatted"
 msgstr "Alustettu"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:111
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:113
 msgid "Type"
 msgstr ""
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:112
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:114
 msgid "Last Modified"
 msgstr "Viimeksi muokattu"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:113
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:115
 msgid "Created on"
 msgstr "Luotu"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:158
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:160
 msgid "No"
 msgstr "Ei"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:158
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:160
 msgid "Yes"
 msgstr "Kyllä"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:159
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:161
 #, fuzzy
 msgid "PS2"
 msgstr "FPS"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:159
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:161
 #, fuzzy
 msgid "PSX"
 msgstr "FPS"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:172
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:174
 msgid "[-- Unused cards --]"
 msgstr "[-- Käyttämättömät --]"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:174
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:176
 msgid "[-- No unused cards --]"
 msgstr "[-- Ei käyttämättömiä --]"
 
@@ -2386,28 +2371,28 @@ msgstr "Kaasu on pohjassa, kapteeni!"
 msgid "Enumerating available plugins..."
 msgstr "Listataan saatavilla olevia liitännäisiä..."
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:351
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:352
 msgid "Plugins Search Path:"
 msgstr "Liitännäisten etsintäpolku:"
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:352
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:353
 msgid "Select a folder with PCSX2 plugins"
 msgstr "Valitse PCSX2-liitännäisiä sisältävä kansio"
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:365
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:366
 msgid "Configure..."
 msgstr "Konfiguroi..."
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:374
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:375
 msgid "Click the Browse button to select a different folder for PCSX2 plugins."
 msgstr "Paina Selaa valitaksesi PCSX2-liitännäisten kansio."
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:473
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:474
 #, c-format
 msgid "Please select a valid plugin for the %s."
 msgstr "Ole hyvä ja valitse kelvollinen liitännäinen %s:lle."
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:511
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:512
 #, c-format
 msgid ""
 "The selected %s plugin failed to load.\n"
@@ -2420,7 +2405,7 @@ msgstr ""
 "Syy: %s\n"
 "\n"
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:722
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:723
 msgid "Completing tasks..."
 msgstr "Suoritetaan tehtäviä..."
 
@@ -2674,17 +2659,17 @@ msgstr ""
 "Tätä tilatallennusta ei voida ladata koska kriittisiä komponentteja "
 "puuttuu.  Katso yksityiskohdat lokitiedostosta."
 
-#: pcsx2/gui/i18n.cpp:63
+#: pcsx2/gui/i18n.cpp:70
 msgid " (default)"
 msgstr " (oletus)"
 
-#: pcsx2/ps2/BiosTools.cpp:83 pcsx2/ps2/BiosTools.cpp:151
+#: pcsx2/ps2/BiosTools.cpp:89 pcsx2/ps2/BiosTools.cpp:157
 msgid "The selected BIOS file is not a valid PS2 BIOS.  Please re-configure."
 msgstr ""
 "Valittu BIOS-tiedosto ei ole kelvollinen PS2-BIOS.  Ole hyvä ja tee "
 "asetukset uudelleen."
 
-#: pcsx2/ps2/BiosTools.cpp:244
+#: pcsx2/ps2/BiosTools.cpp:250
 msgid ""
 "The PS2 BIOS could not be loaded.  The BIOS has not been configured, or the "
 "configuration has been corrupted.  Please re-configure."
@@ -2692,29 +2677,50 @@ msgstr ""
 "PS2-BIOSta ei pystytty lataamaan.  Joko BIOSia ei ole konfiguroitu tai "
 "konfiguraatio on vioittunut.  Ole hyvä ja tee asetukset uudelleen."
 
-#: pcsx2/ps2/BiosTools.cpp:251
+#: pcsx2/ps2/BiosTools.cpp:257
 msgid "The configured BIOS file does not exist.  Please re-configure."
 msgstr ""
 "Valittua BIOS-tiedostoa ei ole olemassa.  Ole hyvä ja tee asetukset "
 "uudelleen."
 
 #: pcsx2/x86/ix86-32/iR5900-32.cpp:580
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s Extensions not found.  The R5900-32 recompiler requires a host CPU with "
-"MMX, SSE, and SSE2 extensions."
+"SSE2 extensions."
 msgstr ""
 "%s laajennoksia ei löytynyt.  R5900-32-uudelleenkääntäjä vaatii suorittimen, "
 "jossa on MMX-, SSE- ja SSE2-laajennokset."
 
 #: pcsx2/x86/microVU.cpp:28
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s Extensions not found.  microVU requires a host CPU with MMX, SSE, and "
-"SSE2 extensions."
+"%s Extensions not found.  microVU requires a host CPU with SSE2 extensions."
 msgstr ""
 "%s laajennoksia ei löytynyt.  microVU vaatii suorittimen, jossa on MMX-, "
 "SSE- ja SSE2-laajennokset."
+
+#~ msgid "PCSX2 - SSE2 Recommended"
+#~ msgstr "PCSX2 - SSE2:hta suositellaan"
+
+#~ msgid "Dynamically toggle Vsync depending on frame rate (read tooltip!)"
+#~ msgstr ""
+#~ "Dynaamisesti kytke pystytahdistusta (Vsync) kehysnopeudesta riippuen (lue "
+#~ "työkaluohje!)"
+
+#, fuzzy
+#~ msgid "%s  %d.%d.%d"
+#~ msgstr "%s  %d.%d.%d %s"
+
+#, fuzzy
+#~ msgid "%s  %d.%d.%d-%lld%s (git)  %s"
+#~ msgstr "%s  %d.%d.%d.%d%s (svn)  %s"
+
+#~ msgid ""
+#~ "The safest way to make sure that all game fixes are completely disabled."
+#~ msgstr ""
+#~ "Turvallisin tapa varmistaa, että kaikki pelikorjaukset ovat poistettu "
+#~ "täysin käytöstä."
 
 #~ msgid "(modded)"
 #~ msgstr "(muokattu)"

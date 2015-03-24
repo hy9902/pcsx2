@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the PCSX2 package.
 msgid ""
 msgstr ""
-"Project-Id-Version: PCSX2 1.1.0 (and later)\n"
+"Project-Id-Version: PCSX2 - 150206\n"
 "Report-Msgid-Bugs-To: https://github.com/PCSX2/pcsx2/issues\n"
-"POT-Creation-Date: 2014-04-06 11:47+0200\n"
-"PO-Revision-Date: 2014-01-13 21:37+0100\n"
+"POT-Creation-Date: 2015-02-06 16:19+0100\n"
+"PO-Revision-Date: 2015-02-06 16:25+0100\n"
 "Last-Translator: pgert <http://forums.pcsx2.net/User-pgert>\n"
 "Language-Team: http://forums.pcsx2.net/Thread-Swedish-GUI-translation-for-"
 "PCSX2-Svenskt-anv%C3%A4ndargr%C3%A4nssnitt-f%C3%B6r-PCSX2\n"
@@ -15,29 +15,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;pxL;_d;pxDt;_t;pxLt\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-Basepath: C:\\Arkiv\\PCSX2\\SVN\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 1.6.10\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: pcsx2\n"
 "X-Poedit-SearchPath-1: common\n"
 
-#: common/include/Utilities/Exceptions.h:187
-msgid "No reason given."
-msgstr "Ingen anledning given."
-
-#: common/include/Utilities/Exceptions.h:226
-msgid "Parse error"
-msgstr "Tolkningsfel"
-
-#: common/include/Utilities/Exceptions.h:250
-msgid "Your machine's hardware is incapable of running PCSX2.  Sorry dood."
-msgstr "Er maskinhårdvara är oförmögen att köra PCSX2. Beklagar snubben."
-
-#: common/src/Utilities/Exceptions.cpp:219
+#: common/src/Utilities/Exceptions.cpp:240
 msgid "Oh noes! Out of memory!"
 msgstr "Å-nää. Slut på minne!"
 
-#: common/src/Utilities/Exceptions.cpp:234
+#: common/src/Utilities/Exceptions.cpp:255
 msgid ""
 "Virtual memory mapping failure!  Your system may have conflicting device "
 "drivers, services, or may simply have insufficient memory or resources to "
@@ -47,23 +35,23 @@ msgstr ""
 "Ert system kanske har motstridande enhetsdrivrutiner, tjänster, \n"
 " eller otillräckliga hårdvaruresurser för att stödja PCSX2's höga behov."
 
-#: common/src/Utilities/Exceptions.cpp:307
+#: common/src/Utilities/Exceptions.cpp:328
 msgid "Path: "
-msgstr "Sökväg:"
+msgstr "Filväg:"
 
-#: common/src/Utilities/Exceptions.cpp:311
+#: common/src/Utilities/Exceptions.cpp:332
 msgid "[Unnamed or unknown]"
-msgstr "[Onamngiven eller okänd]"
+msgstr "[Onamngiven eller Okänd]"
 
-#: common/src/Utilities/Exceptions.cpp:331
+#: common/src/Utilities/Exceptions.cpp:352
 msgid "A file could not be created."
 msgstr "En fil kunde inte skapas."
 
-#: common/src/Utilities/Exceptions.cpp:351
+#: common/src/Utilities/Exceptions.cpp:372
 msgid "File not found."
 msgstr "Fil ej funnen."
 
-#: common/src/Utilities/Exceptions.cpp:371
+#: common/src/Utilities/Exceptions.cpp:392
 msgid ""
 "Permission denied while trying to open file, likely due to insufficient user "
 "account rights."
@@ -71,7 +59,7 @@ msgstr ""
 "Tillstånd att öppna filen nekades, troligen till följd av otillräcklig "
 "AnvändarBehörighet."
 
-#: common/src/Utilities/Exceptions.cpp:391
+#: common/src/Utilities/Exceptions.cpp:412
 msgid ""
 "Unexpected end of file or stream encountered.  File is probably truncated or "
 "corrupted."
@@ -97,16 +85,16 @@ msgstr ""
 "Innefattar tomgångshändelsebearbetning och några andra ovanliga "
 "händelseanvändningar."
 
-#: pcsx2/CDVD/InputIsoFile.cpp:231
+#: pcsx2/CDVD/InputIsoFile.cpp:238
 msgid "Unrecognized ISO image file format"
 msgstr "Oerkänt ISO-filformat"
 
-#: pcsx2/Elfheader.cpp:280
+#: pcsx2/Elfheader.cpp:165
 msgid "Cannot load ELF binary image.  The file may be corrupt or incomplete."
 msgstr ""
 "Kan inte ladda ELF-binären. Filen kan vara förstörd eller ofullständig."
 
-#: pcsx2/Elfheader.cpp:282
+#: pcsx2/Elfheader.cpp:167
 msgid ""
 "If loading from an ISO image, this error may be caused by an unsupported ISO "
 "image type or a bug in PCSX2 ISO image support."
@@ -114,7 +102,7 @@ msgstr ""
 "Om försök att ladda genom ISO-avbild har gjorts, kan detta fel ha orsakats "
 "av en ostödjandes ISO-typ, eller av ett fel i PCSX2's ISO-stöd."
 
-#: pcsx2/MTGS.cpp:867
+#: pcsx2/MTGS.cpp:871
 msgid ""
 "The MTGS thread has become unresponsive while waiting for the GS plugin to "
 "open."
@@ -122,13 +110,13 @@ msgstr ""
 "MTGS-tråden har blivit osvarandes under inväntningen av att GS-"
 "InsticksProgramet ska öppna."
 
-#: pcsx2/PluginManager.cpp:712
+#: pcsx2/PluginManager.cpp:716
 msgid ""
 "The savestate cannot be loaded, as it appears to be corrupt or incomplete."
 msgstr ""
 "Sparpunkten kan inte laddas, eftersom den verkar förstörd eller ofullständig."
 
-#: pcsx2/PluginManager.cpp:722
+#: pcsx2/PluginManager.cpp:726
 #, c-format
 msgid ""
 "%s plugin failed to open.  Your computer may have insufficient resources, or "
@@ -138,7 +126,7 @@ msgstr ""
 "Er dator kan ha otillräckliga erfordeliga resurser, \n"
 " eller oförenlig hårdvara/drivrutiner."
 
-#: pcsx2/PluginManager.cpp:729
+#: pcsx2/PluginManager.cpp:733
 #, c-format
 msgid ""
 "%s plugin failed to initialize.  Your system may have insufficient memory or "
@@ -147,17 +135,17 @@ msgstr ""
 "%s's InsticksProgram misslyckades att komma igång. \n"
 "Ert system kan ha otillräckligt med minne eller andra erfordeliga resurser."
 
-#: pcsx2/PluginManager.cpp:835
+#: pcsx2/PluginManager.cpp:839
 #, c-format
 msgid "The configured %s plugin file was not found"
 msgstr "Den konfigurerade %s-InsticksProgramsFilen hittades ej."
 
-#: pcsx2/PluginManager.cpp:839
+#: pcsx2/PluginManager.cpp:843
 #, c-format
 msgid "The configured %s plugin file is not a valid dynamic library"
 msgstr "Det konfigurerade %s-InsticksProgramet är inte en giltlig DLL."
 
-#: pcsx2/PluginManager.cpp:857
+#: pcsx2/PluginManager.cpp:865
 #, c-format
 msgid ""
 "The configured %s plugin is not a PCSX2 plugin, or is for an older "
@@ -166,14 +154,14 @@ msgstr ""
 "Det konfigurerade %s-InsticksProgramet är inte ett giltigt \n"
 " PCSX2-InsticksProgram, eller är för en äldre ostödjandes version av PCSX2."
 
-#: pcsx2/PluginManager.cpp:882
+#: pcsx2/PluginManager.cpp:890
 msgid ""
 "The plugin reports that your hardware or software/drivers are not supported."
 msgstr ""
 "InsticksProgramet rapporterar att Er hårdvara och/eller mjukvara/drivrutiner "
 "icke stödjes."
 
-#: pcsx2/PluginManager.cpp:903
+#: pcsx2/PluginManager.cpp:911
 msgid ""
 "Configured plugin is not a PCSX2 plugin, or is for an older unsupported "
 "version of PCSX2."
@@ -181,7 +169,7 @@ msgstr ""
 "Det konfigurerade InsticksProgramet är inte ett giltigt \n"
 " PCSX2-InsticksProgram, eller är för en äldre ostödjandes version av PCSX2."
 
-#: pcsx2/PluginManager.cpp:929
+#: pcsx2/PluginManager.cpp:937
 #, c-format
 msgid ""
 "Configured %s plugin is not a valid PCSX2 plugin, or is for an older "
@@ -190,15 +178,15 @@ msgstr ""
 "Det konfigurerade %s-InsticksProgramet är inte ett giltligt \n"
 " PCSX2-InsticksProgram, eller är för en äldre ostödjandes version av PCSX2."
 
-#: pcsx2/PluginManager.cpp:1358
+#: pcsx2/PluginManager.cpp:1366
 msgid "Internal Memorycard Plugin failed to initialize."
 msgstr "Det egna MinneskortsInsticksProgramet misslyckades att komma igång."
 
-#: pcsx2/PluginManager.cpp:1755
+#: pcsx2/PluginManager.cpp:1763
 msgid "Unloaded Plugin"
 msgstr "Oladdat InsticksProgram"
 
-#: pcsx2/SaveState.cpp:342
+#: pcsx2/SaveState.cpp:343
 msgid "Cannot load savestate.  It is of an unknown or unsupported version."
 msgstr ""
 "Kan ej ladda Sparpunkten eftersom den är av en okänd eller ostödjandes "
@@ -206,7 +194,7 @@ msgstr ""
 
 #: pcsx2/SourceLog.cpp:96
 msgid "Dumps detailed information for PS2 executables (ELFs)."
-msgstr "Skriver ut detaljerad information om PS2-körfiler (ELF'ar)."
+msgstr "Skriver ut detaljerad information om PS2 körfiler (ELF'ar)."
 
 #: pcsx2/SourceLog.cpp:101
 msgid ""
@@ -278,7 +266,7 @@ msgstr "IPU-aktivitet: hårdvaruregister, avkodningsprocedur & DMA-status, etc."
 
 #: pcsx2/SourceLog.cpp:211
 msgid "All GIFtag parse activity; path index, tag type, etc."
-msgstr "All slags GIF-märkestolkningssaktiviteter; sökvägsindex, märktyp, etc."
+msgstr "All slags GIF-märkestolkningssaktiviteter; vägindex, märktyp, etc."
 
 #: pcsx2/SourceLog.cpp:217
 msgid "All VIFcode processing; command, tag style, interrupts."
@@ -286,7 +274,7 @@ msgstr "All slags VIF-kodsbearbetning; instruktioner, märkstil & avbrott."
 
 #: pcsx2/SourceLog.cpp:223
 msgid "All processing involved in Path3 Masking"
-msgstr "All bearbetning inblandat i Path3 Maskering."
+msgstr "All bearbetning rörande Path3 Maskering"
 
 #: pcsx2/SourceLog.cpp:229
 msgid "Scratchpad's MFIFO activity."
@@ -348,10 +336,6 @@ msgstr "Spårar alla IOP-räknarhändelser och några räknarregisters aktivitet
 msgid "Detailed logging of CDVD hardware."
 msgstr "Detaljerad loggning av CDVD-hårdvara."
 
-#: pcsx2/System.h:221 pcsx2/System.h:222 pcsx2/System.h:223
-msgid "PCSX2 Message"
-msgstr "PCSX2 Meddelande"
-
 #: pcsx2/ZipTools/thread_gzip.cpp:82
 msgid ""
 "The savestate was not properly saved. The temporary file was created "
@@ -360,137 +344,137 @@ msgstr ""
 "Sparpunkten blev inte ordentligt sparad. Den tillfälliga filen skapades "
 "framgångsrikt med kunde inte flyttas till sin slutliga viloplats."
 
-#: pcsx2/gui/AppConfig.cpp:909
+#: pcsx2/gui/AppConfig.cpp:927
 msgid "Safest"
 msgstr "Säkrast"
 
-#: pcsx2/gui/AppConfig.cpp:910
+#: pcsx2/gui/AppConfig.cpp:928
 msgid "Safe (faster)"
 msgstr "Säkert (snabbare)"
 
-#: pcsx2/gui/AppConfig.cpp:911
+#: pcsx2/gui/AppConfig.cpp:929
 msgid "Balanced"
 msgstr "Balanserat"
 
-#: pcsx2/gui/AppConfig.cpp:912
+#: pcsx2/gui/AppConfig.cpp:930
 msgid "Aggressive"
 msgstr "Aggressivt"
 
-#: pcsx2/gui/AppConfig.cpp:913
+#: pcsx2/gui/AppConfig.cpp:931
 msgid "Aggressive plus"
 msgstr "Aggressivt plus"
 
-#: pcsx2/gui/AppConfig.cpp:914
+#: pcsx2/gui/AppConfig.cpp:932
 msgid "Mostly Harmful"
 msgstr "Mest Skadligt"
 
-#: pcsx2/gui/AppConfig.cpp:1075 pcsx2/gui/AppConfig.cpp:1081
+#: pcsx2/gui/AppConfig.cpp:1092 pcsx2/gui/AppConfig.cpp:1098
 msgid "Failed to overwrite existing settings file; permission was denied."
 msgstr ""
 "Misslyckades att skriva över befintlig InställningsFil; tillstånd nekades."
 
 #: pcsx2/gui/AppCorePlugins.cpp:404
 msgid "Loading PS2 system plugins..."
-msgstr "Laddar PS2-SystemInsticksProgram ..."
+msgstr "Laddar PS2 SystemInsticksProgram ..."
 
-#: pcsx2/gui/AppInit.cpp:43
-msgid "PCSX2 - SSE2 Recommended"
-msgstr "PCSX2 - SSE2 Anrådes"
-
-#: pcsx2/gui/AppInit.cpp:71
+#: pcsx2/gui/AppInit.cpp:49
 msgid ""
-"SSE extensions are not available.  PCSX2 requires a cpu that supports the "
-"SSE instruction set."
+"SSE2 extensions are not available.  PCSX2 requires a cpu that supports the "
+"SSE2 instruction set."
 msgstr ""
-"SSE-utökningar ej tillgängliga. PCSX2 kräver en CPU som stödjer "
-"instruktionsuppsättningen SSE."
+"SSE2-utökningar ej tillgängliga. PCSX2 kräver en CPU som stödjer "
+"instruktionsuppsättningen SSE2."
 
-#: pcsx2/gui/AppInit.cpp:170
+#: pcsx2/gui/AppInit.cpp:138
 msgid "PCSX2 Recompiler Error(s)"
 msgstr "PCSX2 OmkompilerarFel"
 
-#: pcsx2/gui/AppInit.cpp:240
+#: pcsx2/gui/AppInit.cpp:217
 msgid "All options are for the current session only and will not be saved.\n"
 msgstr ""
 "Alla valmöjligheter gäller endast för den nuvarande sessionen och kommer "
 "inte att sparas. \n"
 
-#: pcsx2/gui/AppInit.cpp:250 pcsx2/gui/AppMain.cpp:301
+#: pcsx2/gui/AppInit.cpp:227 pcsx2/gui/AppMain.cpp:305
 msgid "IsoFile"
 msgstr "ISO-fil"
 
-#: pcsx2/gui/AppInit.cpp:251
+#: pcsx2/gui/AppInit.cpp:228
 msgid "displays this list of command line options"
 msgstr "uppvisar listan av instruktionsmöjligheter"
 
-#: pcsx2/gui/AppInit.cpp:252
+#: pcsx2/gui/AppInit.cpp:229
 msgid "forces the program log/console to be visible"
 msgstr "tvingar programets logg/konsol att uppenbara sig"
 
-#: pcsx2/gui/AppInit.cpp:253
+#: pcsx2/gui/AppInit.cpp:230
 msgid "use fullscreen GS mode"
 msgstr "använd Helskärms GS-läge"
 
-#: pcsx2/gui/AppInit.cpp:254
+#: pcsx2/gui/AppInit.cpp:231
 msgid "use windowed GS mode"
 msgstr "använd inramat GS-läge"
 
-#: pcsx2/gui/AppInit.cpp:256
+#: pcsx2/gui/AppInit.cpp:233
 msgid "disables display of the gui while running games"
 msgstr "spärrar uppvisning av GUI medans spel körs"
 
-#: pcsx2/gui/AppInit.cpp:257
+#: pcsx2/gui/AppInit.cpp:234
+msgid "when nogui - prompt before exiting on suspend"
+msgstr "vid ingen GUI - anmärk innan utträde"
+
+#: pcsx2/gui/AppInit.cpp:236
 msgid "executes an ELF image"
 msgstr "kör en ELF-avbild"
 
-#: pcsx2/gui/AppInit.cpp:258
-msgid "boots an empty dvd tray; use to enter the PS2 system menu"
-msgstr "kör igång en tom DVD-tråg; använd för att åtkomma PS2's systemmeny"
+#: pcsx2/gui/AppInit.cpp:237
+msgid "boots an empty DVD tray; use to enter the PS2 system menu"
+msgstr "kör igång en tom DVD-tråg; använd för att åtkomma PS2's SystemMeny"
 
-#: pcsx2/gui/AppInit.cpp:259
+#: pcsx2/gui/AppInit.cpp:238
 msgid "boots from the CDVD plugin (overrides IsoFile parameter)"
 msgstr "kör igång från CDVD-InsticksProgramet (åsidosätter ISO-fil parameter)"
 
-#: pcsx2/gui/AppInit.cpp:261
+#: pcsx2/gui/AppInit.cpp:240
 msgid "disables all speedhacks"
-msgstr "spärrar alla Uppsnabbningshackar"
+msgstr "spärrar alla UppsnabbningsHackar"
 
-#: pcsx2/gui/AppInit.cpp:262
+#: pcsx2/gui/AppInit.cpp:241
 msgid "use the specified comma or pipe-delimited list of gamefixes."
 msgstr "använd den angivna komma- eller linjeavgränsande listan av Spelfixar."
 
-#: pcsx2/gui/AppInit.cpp:263
+#: pcsx2/gui/AppInit.cpp:242
 msgid "disables fast booting"
 msgstr "spärrar Snabbkörning"
 
-#: pcsx2/gui/AppInit.cpp:265
+#: pcsx2/gui/AppInit.cpp:244
 msgid "changes the configuration file path"
-msgstr "ändrar KonfigurationsfilSökvägen"
+msgstr "ändrar KonfigurationfilsVägen"
 
-#: pcsx2/gui/AppInit.cpp:266
+#: pcsx2/gui/AppInit.cpp:245
 msgid "specifies the PCSX2 configuration file to use"
 msgstr "anger PCSX2-KonfigurationsFilen att använda"
 
-#: pcsx2/gui/AppInit.cpp:267
+#: pcsx2/gui/AppInit.cpp:246
 #, c-format
 msgid "forces %s to start the First-time Wizard"
 msgstr "tvingar %s att köra KonfigurationsDialogen"
 
-#: pcsx2/gui/AppInit.cpp:268
+#: pcsx2/gui/AppInit.cpp:247
 msgid "enables portable mode operation (requires admin/root access)"
 msgstr "möjliggör flyttbart-läge procedur (kräver AdministarörsBehörighet)"
 
-#: pcsx2/gui/AppInit.cpp:272
+#: pcsx2/gui/AppInit.cpp:251
 #, c-format
 msgid "specify the file to use as the %s plugin"
 msgstr "ange filen att använda som %s's InsticksProgram"
 
-#: pcsx2/gui/AppInit.cpp:320
+#: pcsx2/gui/AppInit.cpp:299
 #, c-format
 msgid "Plugin Override Error - %s"
 msgstr "Insticks Åsidosättande Fel - %s"
 
-#: pcsx2/gui/AppInit.cpp:323
+#: pcsx2/gui/AppInit.cpp:302
 #, c-format
 msgid ""
 "%s Plugin Override Error!  The following file does not exist or is not a "
@@ -501,96 +485,96 @@ msgstr ""
 " eller är icke ett giltligt %s-InsticksProgram: \n"
 "\n"
 
-#: pcsx2/gui/AppInit.cpp:330
+#: pcsx2/gui/AppInit.cpp:309
 #, c-format
 msgid "Press OK to use the default configured plugin, or Cancel to close %s."
 msgstr ""
 "Tryck ''Vidare'' för att använda det FörvalsKonfigurerade InsticksProgramet, "
 "eller ''Avbryt'' för att stänga %s."
 
-#: pcsx2/gui/AppInit.cpp:509
-msgid "PCSX2 Error: Hardware Deficiency"
-msgstr "PCSX2 Fel: HårdvaruBristfällighet"
-
-#: pcsx2/gui/AppInit.cpp:509 pcsx2/gui/AppInit.cpp:521
+#: pcsx2/gui/AppInit.cpp:489 pcsx2/gui/AppInit.cpp:501
 #, c-format
 msgid "Press OK to close %s."
 msgstr "Tryck ''Vidare'' för att stänga %s."
 
-#: pcsx2/gui/AppInit.cpp:522
+#: pcsx2/gui/AppInit.cpp:489
+msgid "PCSX2 Error: Hardware Deficiency"
+msgstr "PCSX2 Fel: HårdvaruBristfällighet"
+
+#: pcsx2/gui/AppInit.cpp:502
 #, c-format
 msgid "%s Critical Error"
 msgstr "%s Kritiskt Fel"
 
-#: pcsx2/gui/AppInit.cpp:692
+#: pcsx2/gui/AppInit.cpp:672
 msgid "OK"
 msgstr "Vidare"
 
-#: pcsx2/gui/AppInit.cpp:693
+#: pcsx2/gui/AppInit.cpp:673
 msgid "&OK"
 msgstr "&Vidare"
 
-#: pcsx2/gui/AppInit.cpp:694
+#: pcsx2/gui/AppInit.cpp:674
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: pcsx2/gui/AppInit.cpp:695
+#: pcsx2/gui/AppInit.cpp:675
 msgid "&Cancel"
 msgstr "&Avbryt"
 
-#: pcsx2/gui/AppInit.cpp:696
+#: pcsx2/gui/AppInit.cpp:676
 msgid "&Apply"
 msgstr "&Tillämpa"
 
-#: pcsx2/gui/AppInit.cpp:697
+#: pcsx2/gui/AppInit.cpp:677
 msgid "&Next >"
 msgstr "&Nästa >"
 
-#: pcsx2/gui/AppInit.cpp:698
+#: pcsx2/gui/AppInit.cpp:678
 msgid "< &Back"
 msgstr "< &Tillbaka"
 
-#: pcsx2/gui/AppInit.cpp:699
+#: pcsx2/gui/AppInit.cpp:679
 msgid "&Back"
 msgstr "&Tillbaka"
 
-#: pcsx2/gui/AppInit.cpp:700
+#: pcsx2/gui/AppInit.cpp:680
 msgid "&Finish"
 msgstr "&Slutför"
 
-#: pcsx2/gui/AppInit.cpp:701
+#: pcsx2/gui/AppInit.cpp:681
 msgid "&Yes"
 msgstr "&Ja"
 
-#: pcsx2/gui/AppInit.cpp:702
+#: pcsx2/gui/AppInit.cpp:682
 msgid "&No"
 msgstr "&Nej"
 
-#: pcsx2/gui/AppInit.cpp:703
+#: pcsx2/gui/AppInit.cpp:683
 msgid "Browse"
 msgstr "Bläddra"
 
-#: pcsx2/gui/AppInit.cpp:704
+#: pcsx2/gui/AppInit.cpp:684
 msgid "&Save"
 msgstr "&Spara"
 
-#: pcsx2/gui/AppInit.cpp:705
+#: pcsx2/gui/AppInit.cpp:685
 msgid "Save &As..."
 msgstr "Spara So&m ..."
 
-#: pcsx2/gui/AppInit.cpp:706
+#: pcsx2/gui/AppInit.cpp:686
 msgid "&Help"
 msgstr "&Hjälp"
 
-#: pcsx2/gui/AppInit.cpp:707
+#: pcsx2/gui/AppInit.cpp:687
 msgid "&Home"
 msgstr "&Hem"
 
-#: pcsx2/gui/AppInit.cpp:709
+#: pcsx2/gui/AppInit.cpp:689
 msgid "Show about dialog"
 msgstr "InfoDialog om PCSX2."
 
-#: pcsx2/gui/AppMain.cpp:89
+#: pcsx2/gui/AppMain.cpp:93
 msgid ""
 "\n"
 "\n"
@@ -600,44 +584,44 @@ msgstr ""
 "\n"
 "Tryck ''Vidare'' för att gå till InsticksKonfigurationsPanelen."
 
-#: pcsx2/gui/AppMain.cpp:142 pcsx2/gui/AppMain.cpp:156
+#: pcsx2/gui/AppMain.cpp:146 pcsx2/gui/AppMain.cpp:160
 msgid ""
 "Warning!  System plugins have not been loaded.  PCSX2 may be inoperable."
 msgstr ""
 "Varning! SystemInsticksProgram har inte laddats. PCSX2 kan vara oduglig."
 
-#: pcsx2/gui/AppMain.cpp:311
+#: pcsx2/gui/AppMain.cpp:315
 #, c-format
 msgid "%s Commandline Options"
 msgstr "%s Instruktionsmöjligheter"
 
-#: pcsx2/gui/AppMain.cpp:609
+#: pcsx2/gui/AppMain.cpp:563
 msgid "PS2 BIOS Error"
-msgstr "PS2-BIOS Fel"
+msgstr "PS2 BIOS Fel"
 
-#: pcsx2/gui/AppMain.cpp:610
+#: pcsx2/gui/AppMain.cpp:564
 msgid "Press Ok to go to the BIOS Configuration Panel."
-msgstr "Tryck ''Vidare'' för att gå till BIOS-KonfigurationsPanelen."
+msgstr "Tryck ''Vidare'' för att gå till BIOS KonfigurationsPanelen."
 
-#: pcsx2/gui/AppMain.cpp:662
+#: pcsx2/gui/AppMain.cpp:616
 msgid "PCSX2 Unresponsive Thread"
 msgstr "PCSX2 Osvarande tråd"
 
-#: pcsx2/gui/AppMain.cpp:669
+#: pcsx2/gui/AppMain.cpp:623
 msgid "Terminate"
 msgstr "Avsluta"
 
-#: pcsx2/gui/AppMain.cpp:1017
+#: pcsx2/gui/AppMain.cpp:991
 msgid "Executing PS2 Virtual Machine..."
 msgstr "Kör PS2's Virtuella Maskin ..."
 
 #: pcsx2/gui/AppRes.cpp:72
-msgid "Browse for an Iso that is not in your recent history."
-msgstr "Bläddra efter en ISO som inte redan är i Er lista."
-
-#: pcsx2/gui/AppRes.cpp:72
 msgid "Browse..."
 msgstr "Bläddra ..."
+
+#: pcsx2/gui/AppRes.cpp:72
+msgid "Browse for an Iso that is not in your recent history."
+msgstr "Bläddra efter en ISO som inte redan är i Er lista."
 
 #: pcsx2/gui/AppUserMode.cpp:95
 msgid "The following folders exist, but are not writable:"
@@ -677,57 +661,55 @@ msgstr ""
 "Försök att ta bort filen vid namn \"portable.ini\" ifrån Er "
 "InstallationsMapp egenhändigt."
 
-#: pcsx2/gui/ApplyState.h:55
-msgid "Cannot apply new settings, one of the settings is invalid."
-msgstr ""
-"Kan inte tillämpa de nya Inställningarna, eftersom att minst en av dom är "
-"ogiltlig."
-
 #: pcsx2/gui/ConsoleLogger.cpp:120
 msgid "Save log question"
 msgstr "Spara loggfråga"
 
-#: pcsx2/gui/ConsoleLogger.cpp:417
-msgid "Fits a lot of log in a microcosmically small area."
-msgstr "Klämmer in mycket loggning i en mikroskopiskt liten yta."
-
-#: pcsx2/gui/ConsoleLogger.cpp:417
+#: pcsx2/gui/ConsoleLogger.cpp:418
 msgid "Small"
 msgstr "Litet"
 
-#: pcsx2/gui/ConsoleLogger.cpp:419
-msgid "It's what I use (the programmer guy)."
-msgstr "Det är vad Jag (programmerarsnubben) använder."
+#: pcsx2/gui/ConsoleLogger.cpp:418
+msgid "Fits a lot of log in a microcosmically small area."
+msgstr "Klämmer in mycket loggning i en mikroskopiskt liten yta."
 
-#: pcsx2/gui/ConsoleLogger.cpp:419 pcsx2/gui/Panels/CpuPanel.cpp:38
+#: pcsx2/gui/ConsoleLogger.cpp:420 pcsx2/gui/Panels/CpuPanel.cpp:38
 msgid "Normal"
 msgstr "Normalt"
 
-#: pcsx2/gui/ConsoleLogger.cpp:421
-msgid "Its nice and readable."
-msgstr "Det är fint och läsbart."
+#: pcsx2/gui/ConsoleLogger.cpp:420
+msgid "It's what I use (the programmer guy)."
+msgstr "Det är vad Jag (programmerarsnubben) använder."
 
-#: pcsx2/gui/ConsoleLogger.cpp:421
+#: pcsx2/gui/ConsoleLogger.cpp:422
 msgid "Large"
 msgstr "Stort"
 
-#: pcsx2/gui/ConsoleLogger.cpp:423
+#: pcsx2/gui/ConsoleLogger.cpp:422
+msgid "Its nice and readable."
+msgstr "Det är fint och läsbart."
+
+#: pcsx2/gui/ConsoleLogger.cpp:424
 msgid "Huge"
 msgstr "Enormt"
 
-#: pcsx2/gui/ConsoleLogger.cpp:423
+#: pcsx2/gui/ConsoleLogger.cpp:424
 msgid "In case you have a really high res display."
 msgstr "Utifall att Ni har en riktigt hög upplösning."
 
-#: pcsx2/gui/ConsoleLogger.cpp:427
-msgid "Default soft-tone color scheme."
-msgstr "FörvalsMjukatmosfärs-färgtema."
-
-#: pcsx2/gui/ConsoleLogger.cpp:427
+#: pcsx2/gui/ConsoleLogger.cpp:428
 msgid "Light theme"
 msgstr "Ljust tema"
 
 #: pcsx2/gui/ConsoleLogger.cpp:428
+msgid "Default soft-tone color scheme."
+msgstr "FörvalsMjukatmosfärs-färgtema."
+
+#: pcsx2/gui/ConsoleLogger.cpp:429
+msgid "Dark theme"
+msgstr "Mörkt tema"
+
+#: pcsx2/gui/ConsoleLogger.cpp:429
 msgid ""
 "Classic black color scheme for people who enjoy having text seared into "
 "their optic nerves."
@@ -735,90 +717,94 @@ msgstr ""
 "Klassiskt svart färgtema för folk som njuter av att ha text svedd in i sina "
 "synnerver."
 
-#: pcsx2/gui/ConsoleLogger.cpp:428
-msgid "Dark theme"
-msgstr "Mörkt tema"
-
-#: pcsx2/gui/ConsoleLogger.cpp:431
+#: pcsx2/gui/ConsoleLogger.cpp:432
 msgid "Always on Top"
 msgstr "Alltid överst"
 
-#: pcsx2/gui/ConsoleLogger.cpp:432
+#: pcsx2/gui/ConsoleLogger.cpp:433
 msgid ""
 "When checked the log window will be visible over other foreground windows."
 msgstr "När markerad kommer loggfönstret att bli synligt över andra fönster."
 
-#: pcsx2/gui/ConsoleLogger.cpp:434
+#: pcsx2/gui/ConsoleLogger.cpp:435
 msgid "&Save..."
 msgstr "&Spara ..."
 
-#: pcsx2/gui/ConsoleLogger.cpp:434
+#: pcsx2/gui/ConsoleLogger.cpp:435
 msgid "Save log contents to file"
 msgstr "Spara logginnehåll till fil"
 
-#: pcsx2/gui/ConsoleLogger.cpp:435
+#: pcsx2/gui/ConsoleLogger.cpp:436
 msgid "C&lear"
 msgstr "&Rensa"
 
-#: pcsx2/gui/ConsoleLogger.cpp:435
+#: pcsx2/gui/ConsoleLogger.cpp:436
 msgid "Clear the log window contents"
 msgstr "Rensa loggfönsterinnehållet"
 
-#: pcsx2/gui/ConsoleLogger.cpp:437 pcsx2/gui/Dialogs/SysConfigDialog.cpp:264
+#: pcsx2/gui/ConsoleLogger.cpp:438 pcsx2/gui/Dialogs/SysConfigDialog.cpp:264
 msgid "Appearance"
 msgstr "Framträdande"
 
-#: pcsx2/gui/ConsoleLogger.cpp:439
+#: pcsx2/gui/ConsoleLogger.cpp:440
 msgid "&Close"
 msgstr "St&äng"
 
-#: pcsx2/gui/ConsoleLogger.cpp:439
+#: pcsx2/gui/ConsoleLogger.cpp:440
 msgid "Close this log window; contents are preserved"
 msgstr "Stäng detta loggfönster; innehållet bevaras"
 
-#: pcsx2/gui/ConsoleLogger.cpp:443
+#: pcsx2/gui/ConsoleLogger.cpp:444
 msgid "Dev/Verbose"
 msgstr "Utförliga loggar"
 
-#: pcsx2/gui/ConsoleLogger.cpp:443
+#: pcsx2/gui/ConsoleLogger.cpp:444
 msgid "Shows PCSX2 developer logs"
 msgstr "Visar PCSX2's utvecklarloggar"
 
-#: pcsx2/gui/ConsoleLogger.cpp:444
+#: pcsx2/gui/ConsoleLogger.cpp:445
 msgid "CDVD reads"
 msgstr "CDVD läsningar"
 
-#: pcsx2/gui/ConsoleLogger.cpp:444
+#: pcsx2/gui/ConsoleLogger.cpp:445
 msgid "Shows disk read activity"
 msgstr "Visar diskläsaraktivitet"
 
-#: pcsx2/gui/ConsoleLogger.cpp:461
+#: pcsx2/gui/ConsoleLogger.cpp:462
 msgid "Enable all"
 msgstr "Möjliggör allt"
 
-#: pcsx2/gui/ConsoleLogger.cpp:461
+#: pcsx2/gui/ConsoleLogger.cpp:462
 msgid "Enables all log source filters."
 msgstr "Möjliggör alla loggkällsfilter."
 
-#: pcsx2/gui/ConsoleLogger.cpp:462
+#: pcsx2/gui/ConsoleLogger.cpp:463
 msgid "Disable all"
 msgstr "Spärra allt"
 
-#: pcsx2/gui/ConsoleLogger.cpp:462
+#: pcsx2/gui/ConsoleLogger.cpp:463
 msgid "Disables all log source filters."
 msgstr "Spärrar alla loggkällsfilter."
 
 #: pcsx2/gui/ConsoleLogger.cpp:464
+msgid "Restore Default"
+msgstr "Återställ Förval"
+
+#: pcsx2/gui/ConsoleLogger.cpp:464
+msgid "Restore default source filters."
+msgstr "Återställ FörvalsKällfilter."
+
+#: pcsx2/gui/ConsoleLogger.cpp:466
 msgid "&Log"
 msgstr "&Logg"
 
-#: pcsx2/gui/ConsoleLogger.cpp:465
+#: pcsx2/gui/ConsoleLogger.cpp:467
 msgid "&Sources"
 msgstr "&Källor"
 
-#: pcsx2/gui/Debugger/DisassemblyDialog.cpp:112
+#: pcsx2/gui/Debugger/DisassemblyDialog.cpp:223
 msgid "panel"
-msgstr ""
+msgstr "panel"
 
 #: pcsx2/gui/Dialogs/AboutBoxDialog.cpp:35
 #, c-format
@@ -826,12 +812,12 @@ msgid "About %s"
 msgstr "Om %s"
 
 #: pcsx2/gui/Dialogs/AboutBoxDialog.cpp:55
-msgid "Betatesting"
-msgstr "Betatestare"
-
-#: pcsx2/gui/Dialogs/AboutBoxDialog.cpp:55
 msgid "Previous versions"
 msgstr "Föregående versioner"
+
+#: pcsx2/gui/Dialogs/AboutBoxDialog.cpp:55
+msgid "Betatesting"
+msgstr "Betatestare"
 
 #: pcsx2/gui/Dialogs/AboutBoxDialog.cpp:55
 msgid "Webmasters"
@@ -862,7 +848,6 @@ msgid "PCSX2 Official Website and Forums"
 msgstr "PCSX2's officiella Websida & Forum"
 
 #: pcsx2/gui/Dialogs/AboutBoxDialog.cpp:106
-#, fuzzy
 msgid "PCSX2 Official Git Repository at GitHub"
 msgstr "PCSX2's officiella SVN-magasin hos GitHub"
 
@@ -874,17 +859,17 @@ msgstr "Jag har sett nog"
 msgid "Assertion Failure - "
 msgstr "PåståendesMisslyckande - "
 
-#: pcsx2/gui/Dialogs/BaseConfigurationDialog.cpp:193
+#: pcsx2/gui/Dialogs/BaseConfigurationDialog.cpp:194
 msgid "Saves a snapshot of this settings panel to a PNG file."
 msgstr "Gör en Stillbild av denna InställningsPanel till en PNG-fil."
 
-#: pcsx2/gui/Dialogs/BaseConfigurationDialog.cpp:308
+#: pcsx2/gui/Dialogs/BaseConfigurationDialog.cpp:309
 msgid "Save dialog screenshots to..."
 msgstr "Spara DialogSkärmsbilder i ..."
 
 #: pcsx2/gui/Dialogs/BiosSelectorDialog.cpp:31
 msgid "BIOS Selector"
-msgstr "BIOS-Väljare"
+msgstr "BIOS Väljare"
 
 #: pcsx2/gui/Dialogs/ConfirmationDialogs.cpp:193
 msgid "Do not show this dialog again."
@@ -938,7 +923,7 @@ msgid "Select file name: "
 msgstr "Välj filnamn:"
 
 #: pcsx2/gui/Dialogs/CreateMemoryCardDialog.cpp:149
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:866
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:876
 #, c-format
 msgid "Error (%s)"
 msgstr "Fel (%s)"
@@ -966,7 +951,7 @@ msgid ""
 "and BIOS versions."
 msgstr ""
 "Detta är den (av Sony) standard-föreskrivna storleken \n"
-" och stödjes av alla spel och BIOS-versioner."
+" och stödjes av alla spel och BIOS versioner."
 
 #: pcsx2/gui/Dialogs/CreateMemoryCardDialog.cpp:195
 msgid ""
@@ -993,7 +978,7 @@ msgstr ""
 msgid "16 and 32 MB cards have roughly the same compatibility factor."
 msgstr ""
 "16 & 32 MB kort har ungefär \n"
-" samma förenlighetsegenskap."
+" samma FörenlighetsEgenskap."
 
 #: pcsx2/gui/Dialogs/CreateMemoryCardDialog.cpp:202
 msgid "32 MB"
@@ -1008,7 +993,7 @@ msgid ""
 "Low compatibility warning: Yes it's very big, but may not work with many "
 "games."
 msgstr ""
-"Låg förenlighets varning: Jo den är väldigt stor, \n"
+"Varning för låg förenlighet: Jo den är väldigt stor, \n"
 " men fungerar måhända inte för många spel."
 
 #: pcsx2/gui/Dialogs/CreateMemoryCardDialog.cpp:207
@@ -1021,39 +1006,40 @@ msgstr ""
 " är möjliga (dock osannolika)."
 
 #: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:47
-#, c-format
-msgid "Select a folder for %s settings"
-msgstr "Välj en Mapp för %s-Inställningar"
-
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:47
 msgid "Settings"
 msgstr "Inställningar"
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:76
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:47
+#, c-format
+msgid "Select a folder for %s settings"
+msgstr "Välj en Mapp för %s-inställningar"
+
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:83
+#: pcsx2/gui/Dialogs/SysConfigDialog.cpp:274
 msgid "Language selector"
 msgstr "SpråkVäljare"
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:79
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:86
 msgid ""
 "Change the language only if you need to.\n"
 "The system default should be fine for most operating systems."
 msgstr ""
-"Ändra bara språket om Ni behöver göra så. \n"
+"Ändra bara språket om Ni anser Er behöva göra så. \n"
 "SystemFörvalet borde gå bra för de flesta OperativSystem."
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:85
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:92
 msgid "Welcome to PCSX2!"
 msgstr "Välkommen till PCSX2!"
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:96
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:103
 msgid "Configuration Guides (online)"
 msgstr "KonfigurationsVägledningen (uppkopplat)"
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:100
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:107
 msgid "Readme / FAQ (Offline/PDF)"
 msgstr "Läs mig / FAQ (urkopplat/PDF)"
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:109
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:116
 #, c-format
 msgid "%s First Time Configuration"
 msgstr "%s's KonfigurationsDialog"
@@ -1065,7 +1051,7 @@ msgstr "Speldatabas - %s"
 
 #: pcsx2/gui/Dialogs/ImportSettingsDialog.cpp:24
 msgid "Import Existing Settings?"
-msgstr "Importera befintliga Inställningar?"
+msgstr "Importera befintliga inställningar?"
 
 #: pcsx2/gui/Dialogs/ImportSettingsDialog.cpp:36
 msgid "Import"
@@ -1089,7 +1075,7 @@ msgstr "MinneskortsHanteraren"
 
 #: pcsx2/gui/Dialogs/McdConfigDialog.cpp:108
 msgid "Drag cards to or from PS2-ports"
-msgstr "Dra kort till eler från PS2-socklar"
+msgstr "Dra kort till eller från PS2-socklar"
 
 #: pcsx2/gui/Dialogs/McdConfigDialog.cpp:109
 msgid ""
@@ -1193,47 +1179,51 @@ msgstr "Tryck ''Avsluta'' för att avsluta %s omedelebart."
 msgid "Terminate App"
 msgstr "Avsluta Tillämpning"
 
-#: pcsx2/gui/FrameForGS.cpp:384
+#: pcsx2/gui/FrameForGS.cpp:388
 msgid "GS Output is Disabled!"
 msgstr "GS Utsignal är Spärrad!"
 
-#: pcsx2/gui/GlobalCommands.cpp:387 pcsx2/gui/MainFrame.cpp:417
+#: pcsx2/gui/GlobalCommands.cpp:295
+msgid "Exit PCSX2?"
+msgstr "Avsluta PCSX2?"
+
+#: pcsx2/gui/GlobalCommands.cpp:417 pcsx2/gui/MainFrame.cpp:416
 msgid "Save state"
 msgstr "Skapa Sparpunkt"
 
-#: pcsx2/gui/GlobalCommands.cpp:388
+#: pcsx2/gui/GlobalCommands.cpp:418
 msgid "Saves the virtual machine state to the current slot."
 msgstr "Sparar VM-tillståndet till den nuvarande Spalten."
 
-#: pcsx2/gui/GlobalCommands.cpp:393 pcsx2/gui/MainFrame.cpp:416
+#: pcsx2/gui/GlobalCommands.cpp:423 pcsx2/gui/MainFrame.cpp:415
 msgid "Load state"
 msgstr "Ladda Sparpunkt"
 
-#: pcsx2/gui/GlobalCommands.cpp:394
+#: pcsx2/gui/GlobalCommands.cpp:424
 msgid "Loads a virtual machine state from the current slot."
 msgstr "Laddar ett VM-tillstånd från den nuvarande Spalten."
 
-#: pcsx2/gui/GlobalCommands.cpp:399
+#: pcsx2/gui/GlobalCommands.cpp:429
 msgid "Load State Backup"
 msgstr "Ladda SparpunktsKopia"
 
-#: pcsx2/gui/GlobalCommands.cpp:400
+#: pcsx2/gui/GlobalCommands.cpp:430
 msgid "Loads virtual machine state backup for current slot."
 msgstr "Laddar VM-tillståndskopian för den nuvarande Spalten."
 
-#: pcsx2/gui/GlobalCommands.cpp:405
+#: pcsx2/gui/GlobalCommands.cpp:435
 msgid "Cycle to next slot"
 msgstr "Cyklar till nästa Spalt"
 
-#: pcsx2/gui/GlobalCommands.cpp:406
+#: pcsx2/gui/GlobalCommands.cpp:436
 msgid "Cycles the current save slot in +1 fashion!"
 msgstr "Cyklar den nuvarande Spalten i +1 vis!"
 
-#: pcsx2/gui/GlobalCommands.cpp:411
+#: pcsx2/gui/GlobalCommands.cpp:441
 msgid "Cycle to prev slot"
 msgstr "Cyklar till föregående Spalt"
 
-#: pcsx2/gui/GlobalCommands.cpp:412
+#: pcsx2/gui/GlobalCommands.cpp:442
 msgid "Cycles the current save slot in -1 fashion!"
 msgstr "Cyklar den nuvarande Spalten i -1 vis!"
 
@@ -1249,7 +1239,7 @@ msgid ""
 msgstr ""
 "Det är felaktigt att släppa flera filer på ett %s-fönster. En i taget, tack."
 
-#: pcsx2/gui/IsoDropTarget.cpp:87 pcsx2/gui/MainMenuClicks.cpp:339
+#: pcsx2/gui/IsoDropTarget.cpp:87 pcsx2/gui/MainMenuClicks.cpp:347
 msgid "Confirm PS2 Reset"
 msgstr "Bekräfta PS2 Återställning"
 
@@ -1270,7 +1260,7 @@ msgstr "Ni har släppt följande ISO-avbild i %s:"
 #: pcsx2/gui/MainFrame.cpp:36
 #, c-format
 msgid "Slot %d"
-msgstr "Spalt  %d"
+msgstr "Spalt %d"
 
 #: pcsx2/gui/MainFrame.cpp:42 pcsx2/gui/Saveslots.cpp:150
 msgid "Backup"
@@ -1300,255 +1290,244 @@ msgstr "&Konfig"
 msgid "&Misc"
 msgstr "&Övrigt"
 
-#: pcsx2/gui/MainFrame.cpp:347
+#: pcsx2/gui/MainFrame.cpp:342
 msgid "&Debug"
 msgstr "&Felsök"
 
-#: pcsx2/gui/MainFrame.cpp:360
-#, fuzzy, c-format
-msgid "%s  %d.%d.%d"
-msgstr "%s  %d.%d.%d %s"
-
-#: pcsx2/gui/MainFrame.cpp:365
-#, fuzzy, c-format
-msgid "%s  %d.%d.%d-%lld%s (git)  %s"
-msgstr "%s  %d.%d.%d.%d%s (svn)  %s"
-
-#: pcsx2/gui/MainFrame.cpp:402 pcsx2/gui/MainFrame.cpp:404
-#: pcsx2/gui/MainFrame.cpp:410
+#: pcsx2/gui/MainFrame.cpp:401 pcsx2/gui/MainFrame.cpp:403
+#: pcsx2/gui/MainFrame.cpp:409
 msgid "Initializing..."
 msgstr "Initialisering ..."
 
-#: pcsx2/gui/MainFrame.cpp:406
+#: pcsx2/gui/MainFrame.cpp:405
 msgid "Run ELF..."
 msgstr "Kör ELF ..."
 
-#: pcsx2/gui/MainFrame.cpp:407
+#: pcsx2/gui/MainFrame.cpp:406
 msgid "For running raw PS2 binaries directly"
 msgstr "För att direktköra råa PS2-binärer."
 
-#: pcsx2/gui/MainFrame.cpp:419
+#: pcsx2/gui/MainFrame.cpp:418
 msgid "Backup before save"
 msgstr "Magasinera vid Överskrivning"
 
-#: pcsx2/gui/MainFrame.cpp:424
+#: pcsx2/gui/MainFrame.cpp:423
 msgid "Automatic Gamefixes"
 msgstr "Automatiska Spelfixar"
 
-#: pcsx2/gui/MainFrame.cpp:425
+#: pcsx2/gui/MainFrame.cpp:424
 msgid "Automatically applies needed Gamefixes to known problematic games"
 msgstr ""
 "Tillämpar automatiskt erfordeliga Spelfixar för till vetskap problematiska "
 "spel."
 
-#: pcsx2/gui/MainFrame.cpp:427
+#: pcsx2/gui/MainFrame.cpp:426
 msgid "Enable Cheats"
 msgstr "Möjliggör Fuskisar"
 
-#: pcsx2/gui/MainFrame.cpp:430
+#: pcsx2/gui/MainFrame.cpp:429
 msgid "Enable Widescreen Patches"
 msgstr "Möjliggör Bredbildsfixar"
 
-#: pcsx2/gui/MainFrame.cpp:433
+#: pcsx2/gui/MainFrame.cpp:432
 msgid "Enable Host Filesystem"
 msgstr "Möjliggör Värdfilsystem"
 
-#: pcsx2/gui/MainFrame.cpp:438
+#: pcsx2/gui/MainFrame.cpp:437
 msgid "Shutdown"
 msgstr "Avsluta Emulering"
 
-#: pcsx2/gui/MainFrame.cpp:439
+#: pcsx2/gui/MainFrame.cpp:438
 msgid "Wipes all internal VM states and shuts down plugins."
 msgstr "Rensar alla inhemska VM-tillstånd och stänger InsticksProgram."
 
-#: pcsx2/gui/MainFrame.cpp:441
+#: pcsx2/gui/MainFrame.cpp:440
 msgid "Exit"
 msgstr "Stäng av Emulatorn"
 
-#: pcsx2/gui/MainFrame.cpp:442
+#: pcsx2/gui/MainFrame.cpp:441
 #, c-format
 msgid "Closing %s may be hazardous to your health"
 msgstr "Att stänga %s kan vara riskfyllt för Edert välbefinnande."
 
-#: pcsx2/gui/MainFrame.cpp:449
+#: pcsx2/gui/MainFrame.cpp:448
 msgid "Iso Selector"
 msgstr "ISO väljare"
 
-#: pcsx2/gui/MainFrame.cpp:450
+#: pcsx2/gui/MainFrame.cpp:449
 msgid "Plugin Menu"
 msgstr "InsticksMeny"
 
-#: pcsx2/gui/MainFrame.cpp:453
+#: pcsx2/gui/MainFrame.cpp:452
 msgid "Iso"
 msgstr "ISO"
 
-#: pcsx2/gui/MainFrame.cpp:453
+#: pcsx2/gui/MainFrame.cpp:452
 msgid "Makes the specified ISO image the CDVD source."
 msgstr "Gör den ovan angivna ISO-avbilden till CDVD-källa."
 
-#: pcsx2/gui/MainFrame.cpp:454
+#: pcsx2/gui/MainFrame.cpp:453
 msgid "Plugin"
 msgstr "InsticksProgram"
 
-#: pcsx2/gui/MainFrame.cpp:454
+#: pcsx2/gui/MainFrame.cpp:453
 msgid "Uses an external plugin as the CDVD source."
 msgstr "Använder ett utomstående InsticksProgram som CDVD-källa."
 
-#: pcsx2/gui/MainFrame.cpp:455
+#: pcsx2/gui/MainFrame.cpp:454
 msgid "No disc"
 msgstr "Disklös"
 
-#: pcsx2/gui/MainFrame.cpp:455
+#: pcsx2/gui/MainFrame.cpp:454
 msgid "Use this to boot into your virtual PS2's BIOS configuration."
-msgstr "Använd detta för att köra Er virtuella PS2's BIOS-konfiguration."
+msgstr "Använd detta för att köra Er virtuella PS2's BIOS konfiguration."
 
-#: pcsx2/gui/MainFrame.cpp:463
+#: pcsx2/gui/MainFrame.cpp:462
 msgid "Emulation &Settings"
 msgstr "&EmuleringsInställningar"
 
-#: pcsx2/gui/MainFrame.cpp:464
+#: pcsx2/gui/MainFrame.cpp:463
 msgid "&Memory cards"
 msgstr "&MinneskortsHanteraren"
 
-#: pcsx2/gui/MainFrame.cpp:465
+#: pcsx2/gui/MainFrame.cpp:464
 msgid "&Plugin/BIOS Selector"
 msgstr "&SystemInställningar"
 
-#: pcsx2/gui/MainFrame.cpp:466 pcsx2/gui/Panels/GameDatabasePanel.cpp:346
+#: pcsx2/gui/MainFrame.cpp:465 pcsx2/gui/Panels/GameDatabasePanel.cpp:346
 msgid "Game Database Editor"
 msgstr "SpeldatabasRedigerare"
 
-#: pcsx2/gui/MainFrame.cpp:472
+#: pcsx2/gui/MainFrame.cpp:471
 msgid "&Video (GS)"
 msgstr "&Video (GS)"
 
-#: pcsx2/gui/MainFrame.cpp:473
+#: pcsx2/gui/MainFrame.cpp:472
 msgid "&Audio (SPU2)"
 msgstr "&Ljud (SPU2)"
 
-#: pcsx2/gui/MainFrame.cpp:474
+#: pcsx2/gui/MainFrame.cpp:473
 msgid "&Controllers (PAD)"
 msgstr "&Manövrering (PAD)"
 
-#: pcsx2/gui/MainFrame.cpp:475
+#: pcsx2/gui/MainFrame.cpp:474
 msgid "Dev9"
 msgstr "Dev9"
 
-#: pcsx2/gui/MainFrame.cpp:476
+#: pcsx2/gui/MainFrame.cpp:475
 msgid "USB"
 msgstr "USB"
 
-#: pcsx2/gui/MainFrame.cpp:477
+#: pcsx2/gui/MainFrame.cpp:476
 msgid "Firewire"
 msgstr "Firewire"
 
-#: pcsx2/gui/MainFrame.cpp:483
+#: pcsx2/gui/MainFrame.cpp:482
 msgid "Multitap 1"
 msgstr "Flerplugg 1"
 
-#: pcsx2/gui/MainFrame.cpp:484
+#: pcsx2/gui/MainFrame.cpp:483
 msgid "Multitap 2"
 msgstr "Flerplugg 2"
 
-#: pcsx2/gui/MainFrame.cpp:487
+#: pcsx2/gui/MainFrame.cpp:486
 msgid "Clear all settings..."
 msgstr "Rensa alla Inställningar ..."
 
-#: pcsx2/gui/MainFrame.cpp:488
+#: pcsx2/gui/MainFrame.cpp:487
 #, c-format
 msgid "Clears all %s settings and re-runs the startup wizard."
-msgstr "Rensa alla %s-Inställningar och återkör KonfigurationsDialogen."
+msgstr "Rensa alla %s-inställningar och återkör KonfigurationsDialogen."
 
-#: pcsx2/gui/MainFrame.cpp:510
+#: pcsx2/gui/MainFrame.cpp:509
 msgid "About..."
 msgstr "Om ..."
 
-#: pcsx2/gui/MainFrame.cpp:519
+#: pcsx2/gui/MainFrame.cpp:514
 msgid "Open Debug Window..."
-msgstr "Öppna felsöksfönster..."
+msgstr "Öppna FelsöksDialog ..."
 
-#: pcsx2/gui/MainFrame.cpp:521
+#: pcsx2/gui/MainFrame.cpp:517
 msgid "Logging..."
 msgstr "Loggning ..."
 
-#: pcsx2/gui/MainFrame.cpp:599
+#: pcsx2/gui/MainFrame.cpp:595
 msgid "Pause"
 msgstr "Pausa"
 
-#: pcsx2/gui/MainFrame.cpp:600
+#: pcsx2/gui/MainFrame.cpp:596
 msgid "Safely pauses emulation and preserves the PS2 state."
 msgstr "Säker halt av emulering som bevarar PS2-tillståndet."
 
-#: pcsx2/gui/MainFrame.cpp:607
+#: pcsx2/gui/MainFrame.cpp:603
 msgid "Resume"
 msgstr "Återuppta"
 
-#: pcsx2/gui/MainFrame.cpp:608
+#: pcsx2/gui/MainFrame.cpp:604
 msgid "Resumes the suspended emulation state."
 msgstr "Återupptar det pausade emuleringstillståndet."
 
-#: pcsx2/gui/MainFrame.cpp:612
+#: pcsx2/gui/MainFrame.cpp:608
 msgid "Pause/Resume"
 msgstr "Pausa/Återuppta"
 
-#: pcsx2/gui/MainFrame.cpp:613
+#: pcsx2/gui/MainFrame.cpp:609
 msgid "No emulation state is active; cannot suspend or resume."
 msgstr "Inget emuleringstillstånd är aktivt; inget att Pausa/Återuppta."
 
-#: pcsx2/gui/MainFrame.cpp:622
+#: pcsx2/gui/MainFrame.cpp:618
 msgid "Restart"
 msgstr "Omstart"
 
-#: pcsx2/gui/MainFrame.cpp:623
+#: pcsx2/gui/MainFrame.cpp:619
 msgid "Simulates hardware reset of the PS2 virtual machine."
 msgstr "Simulerar hårdvaruåterställningen för PS2's Virtuella Maskin."
 
-#: pcsx2/gui/MainFrame.cpp:628
+#: pcsx2/gui/MainFrame.cpp:624
 msgid "No emulation state is active; boot something first."
 msgstr "Inget emuleringstillstånd är aktivt - kör något först."
 
-#: pcsx2/gui/MainFrame.cpp:636
+#: pcsx2/gui/MainFrame.cpp:632
 msgid "Reboot CDVD (full)"
 msgstr "Återkör CDVD (fullt)"
 
-#: pcsx2/gui/MainFrame.cpp:637
+#: pcsx2/gui/MainFrame.cpp:633
 msgid "Hard reset of the active VM."
 msgstr "Full återställning av aktiv VM."
 
-#: pcsx2/gui/MainFrame.cpp:641
+#: pcsx2/gui/MainFrame.cpp:637
 msgid "Boot CDVD (full)"
 msgstr "Kör CDVD (fullt)"
 
-#: pcsx2/gui/MainFrame.cpp:642
+#: pcsx2/gui/MainFrame.cpp:638
 msgid "Boot the VM using the current DVD or Iso source media"
 msgstr "Kör VM'n med det nuvarande DVD/ISO mediumet som källa."
 
-#: pcsx2/gui/MainFrame.cpp:650
+#: pcsx2/gui/MainFrame.cpp:646
 msgid "Reboot CDVD (fast)"
 msgstr "Återkör CDVD (snabbt)"
 
-#: pcsx2/gui/MainFrame.cpp:651
+#: pcsx2/gui/MainFrame.cpp:647
 msgid "Reboot using fast BOOT (skips splash screens)"
 msgstr "Återkör med Snabbuppkörning (hoppar över plaskskärmar)"
 
-#: pcsx2/gui/MainFrame.cpp:655
+#: pcsx2/gui/MainFrame.cpp:651
 msgid "Boot CDVD (fast)"
 msgstr "Kör CDVD (snabbt)"
 
-#: pcsx2/gui/MainFrame.cpp:656
+#: pcsx2/gui/MainFrame.cpp:652
 msgid "Use fast boot to skip PS2 startup and splash screens"
-msgstr ""
-"Använd Snabbuppkörning för att hoppa över PS2-uppstart och plaskskärmar."
+msgstr "Använd detta för att hoppa över PS2-uppstart och plaskskärmar."
 
-#: pcsx2/gui/MainFrame.cpp:718 pcsx2/gui/MainFrame.cpp:753
+#: pcsx2/gui/MainFrame.cpp:714 pcsx2/gui/MainFrame.cpp:749
 msgid "No plugin loaded"
 msgstr "Inget InsticksProgram laddat"
 
-#: pcsx2/gui/MainFrame.cpp:723
+#: pcsx2/gui/MainFrame.cpp:719
 msgid "Core GS Settings..."
-msgstr "Kärn-GS Inställningar ..."
+msgstr "Kärn GS inställningar ..."
 
-#: pcsx2/gui/MainFrame.cpp:724
+#: pcsx2/gui/MainFrame.cpp:720
 msgid ""
 "Modify hardware emulation settings regulated by the PCSX2 core virtual "
 "machine."
@@ -1556,90 +1535,96 @@ msgstr ""
 "Ändra HårdvaruEmuleringsInställningar reglerade av PCSX2's kärn Virtuella "
 "Maskin."
 
-#: pcsx2/gui/MainFrame.cpp:726
+#: pcsx2/gui/MainFrame.cpp:722
 msgid "Window Settings..."
 msgstr "FönsterInställningar ..."
 
-#: pcsx2/gui/MainFrame.cpp:727
+#: pcsx2/gui/MainFrame.cpp:723
 msgid "Modify window and appearance options, including aspect ratio."
 msgstr "Ändra fönster och UtseendeTillämpningar, däribland Bildkvot."
 
-#: pcsx2/gui/MainFrame.cpp:734
+#: pcsx2/gui/MainFrame.cpp:730
 msgid "Plugin Settings..."
 msgstr "InsticksInställningar ..."
 
-#: pcsx2/gui/MainFrame.cpp:735
+#: pcsx2/gui/MainFrame.cpp:731
 #, c-format
 msgid "Opens the %s plugin's advanced settings dialog."
 msgstr "Öppnar %s-InsticksProgramets avancerade InställningsDialog."
 
-#: pcsx2/gui/MainMenuClicks.cpp:109
+#: pcsx2/gui/MainMenuClicks.cpp:114
 msgid "Reset all settings?"
-msgstr "Återställa alla Inställningar?"
+msgstr "Återställa alla inställningar?"
 
-#: pcsx2/gui/MainMenuClicks.cpp:137
+#: pcsx2/gui/MainMenuClicks.cpp:142
 msgid "Confirm ISO image change"
 msgstr "Bekräfta ISO-avbildförändring"
 
-#: pcsx2/gui/MainMenuClicks.cpp:143
+#: pcsx2/gui/MainMenuClicks.cpp:148
 msgid "Do you want to swap discs or boot the new image (via system reset)?"
 msgstr ""
 "Vill Ni byta disk eller köra den nya avbilden \n"
 " (genom systemåterställning)?"
 
-#: pcsx2/gui/MainMenuClicks.cpp:145 pcsx2/gui/MainMenuClicks.cpp:191
+#: pcsx2/gui/MainMenuClicks.cpp:150 pcsx2/gui/MainMenuClicks.cpp:196
 msgid "Swap Disc"
 msgstr "Byt Disk"
 
-#: pcsx2/gui/MainMenuClicks.cpp:181
+#: pcsx2/gui/MainMenuClicks.cpp:186
 msgid "Confirm CDVD source change"
 msgstr "Bekräfta CDVD-källförändring"
 
-#: pcsx2/gui/MainMenuClicks.cpp:184
+#: pcsx2/gui/MainMenuClicks.cpp:189
 #, c-format
 msgid "You've selected to switch the CDVD source from %s to %s."
 msgstr "Ni har valt att byta CDVD-källa från %s till %s."
 
-#: pcsx2/gui/MainMenuClicks.cpp:188
+#: pcsx2/gui/MainMenuClicks.cpp:193
 msgid "Do you want to swap discs or boot the new image (system reset)?"
 msgstr "Vill Ni byta disk eller köra den nya avbilden (systemåterställning)?"
 
-#: pcsx2/gui/MainMenuClicks.cpp:258
+#: pcsx2/gui/MainMenuClicks.cpp:263
 #, c-format
 msgid "All Supported (%s)"
 msgstr "Alla Stödjandes (%s)"
 
-#: pcsx2/gui/MainMenuClicks.cpp:261
+#: pcsx2/gui/MainMenuClicks.cpp:266
 #, c-format
 msgid "Disc Images (%s)"
 msgstr "Diskavbilder (%s)"
 
-#: pcsx2/gui/MainMenuClicks.cpp:264
+#: pcsx2/gui/MainMenuClicks.cpp:269
 #, c-format
 msgid "Blockdumps (%s)"
 msgstr "Blockdumpar (%s)"
 
-#: pcsx2/gui/MainMenuClicks.cpp:267 pcsx2/gui/MainMenuClicks.cpp:288
+#: pcsx2/gui/MainMenuClicks.cpp:272
+#, c-format
+msgid "Compressed (%s)"
+msgstr "Komprimerade (%s)"
+
+#: pcsx2/gui/MainMenuClicks.cpp:275 pcsx2/gui/MainMenuClicks.cpp:296
 msgid "All Files (*.*)"
 msgstr "Alla Filer (*.*)"
 
-#: pcsx2/gui/MainMenuClicks.cpp:270
-msgid "Select CDVD source iso..."
-msgstr "Välj CDVD'ns käll-ISO ..."
+#: pcsx2/gui/MainMenuClicks.cpp:278
+msgid "Select disc image, gzip compressed disc image, or block-dump..."
+msgstr ""
+"Välj disk-avbild, gzip-komprimerad disk-avbild, eller block-dumpning ..."
 
-#: pcsx2/gui/MainMenuClicks.cpp:287
+#: pcsx2/gui/MainMenuClicks.cpp:295
 msgid "Select ELF file..."
 msgstr "Välj ELF-fil ..."
 
-#: pcsx2/gui/MainMenuClicks.cpp:313
+#: pcsx2/gui/MainMenuClicks.cpp:321
 msgid "ISO file not found!"
 msgstr "ISO-fil hittades ej!"
 
-#: pcsx2/gui/MainMenuClicks.cpp:315
+#: pcsx2/gui/MainMenuClicks.cpp:323
 msgid "An error occurred while trying to open the file:"
 msgstr "Ett fel uppstod medans försök gjordes att öppna filen:"
 
-#: pcsx2/gui/MainMenuClicks.cpp:316
+#: pcsx2/gui/MainMenuClicks.cpp:324
 msgid ""
 "Error: The configured ISO file does not exist.  Click OK to select a new ISO "
 "source for CDVD."
@@ -1647,7 +1632,7 @@ msgstr ""
 "Fel: Den konfigurerade ISO-filen finns ej. Klicka ''Vidare'' för att välja "
 "en ny ISO-källa till CDVD'n."
 
-#: pcsx2/gui/MainMenuClicks.cpp:387
+#: pcsx2/gui/MainMenuClicks.cpp:395
 msgid ""
 "You have selected the following ISO image into PCSX2:\n"
 "\n"
@@ -1681,49 +1666,49 @@ msgstr ""
 "%s \n"
 "\n"
 
-#: pcsx2/gui/MemoryCardFile.cpp:584
+#: pcsx2/gui/MemoryCardFile.cpp:586
 msgid "File name empty or too short"
 msgstr "Filnamnet är tomt eller för kort"
 
-#: pcsx2/gui/MemoryCardFile.cpp:589
+#: pcsx2/gui/MemoryCardFile.cpp:591
 msgid "File name outside of required directory"
 msgstr "Filnamnet är utanför den krävda Mappen"
 
-#: pcsx2/gui/MemoryCardFile.cpp:595
+#: pcsx2/gui/MemoryCardFile.cpp:597
 msgid "File name already exists"
 msgstr "Filnamnet finns redan"
 
-#: pcsx2/gui/MemoryCardFile.cpp:602
+#: pcsx2/gui/MemoryCardFile.cpp:604
 msgid "The Operating-System prevents this file from being created"
 msgstr "OperativSystemet hindrar denna fil från att skapas"
 
 #: pcsx2/gui/Panels/BaseApplicableConfigPanel.cpp:103
 msgid "Cannot apply settings..."
-msgstr "Kan ej tillämpa Inställningar ..."
+msgstr "Kan ej tillämpa inställningar ..."
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:103
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:107
 msgid "BIOS Search Path:"
-msgstr "BIOS-Sökväg:"
+msgstr "BIOS Filväg:"
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:104
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:108
 msgid "Select folder with PS2 BIOS roms"
-msgstr "Välj Mapp med PS2-BIOS ROM"
+msgstr "Välj Mapp med PS2 BIOS ROM"
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:111
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:115
 msgid ""
 "Click the Browse button to select a different folder where PCSX2 will look "
 "for PS2 BIOS roms."
 msgstr ""
 "Klicka på ''Bläddra'' för att välja en annan Mapp för PCSX2 att söka efter "
-"PS2-BIOS ROM."
+"PS2 BIOS ROM."
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:113
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:117
 #: pcsx2/gui/Panels/MemoryCardListPanel.cpp:171
 #: pcsx2/gui/Panels/ThemeSelectorPanel.cpp:47
 msgid "Refresh list"
 msgstr "Aktualisera"
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:115
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:119
 msgid "Select a BIOS rom:"
 msgstr "Välj ett BIOS ROM:"
 
@@ -1814,7 +1799,7 @@ msgstr "Möjliggör EE-förråd (Långsammare)"
 msgid "Interpreter only; provided for diagnostic"
 msgstr "Endast tolkare; tillhandahålls för Diagnostiksyften."
 
-#: pcsx2/gui/Panels/CpuPanel.cpp:169 pcsx2/gui/Panels/CpuPanel.cpp:221
+#: pcsx2/gui/Panels/CpuPanel.cpp:169 pcsx2/gui/Panels/CpuPanel.cpp:223
 #: pcsx2/gui/Panels/SpeedhacksPanel.cpp:99
 msgid "Restore Defaults"
 msgstr "Återställ Förval"
@@ -1839,11 +1824,11 @@ msgstr ""
 "Ny VU-omkompilerare med mycket \n"
 " förbättrad förenlighet. Anrådes."
 
-#: pcsx2/gui/Panels/CpuPanel.cpp:188
+#: pcsx2/gui/Panels/CpuPanel.cpp:189
 msgid "superVU Recompiler [legacy]"
 msgstr "superVU (sVU) Omkompilerare [legat]"
 
-#: pcsx2/gui/Panels/CpuPanel.cpp:189
+#: pcsx2/gui/Panels/CpuPanel.cpp:190
 msgid ""
 "Useful for diagnosing bugs or clamping issues in the new mVU recompiler."
 msgstr ""
@@ -1852,7 +1837,7 @@ msgstr ""
 
 #: pcsx2/gui/Panels/DirPickerPanel.cpp:64
 msgid "Path does not exist"
-msgstr "Väg finns ej"
+msgstr "Filvägen finns ej"
 
 #: pcsx2/gui/Panels/DirPickerPanel.cpp:155
 msgid "Use default setting"
@@ -1908,26 +1893,22 @@ msgid "Wait for Vsync on refresh"
 msgstr "Invänta Vsync vid Aktualisering"
 
 #: pcsx2/gui/Panels/GSWindowPanel.cpp:51
-msgid "Dynamically toggle Vsync depending on frame rate (read tooltip!)"
-msgstr "Dynamiskt växla Vsync beroende på bildfrekvens (läs verktygstips!)"
-
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:52
 msgid "Double-click toggles fullscreen mode"
 msgstr "Dubbelklick växlar Skärmläge"
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:89
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:85
 msgid "Aspect Ratio:"
 msgstr "Bildkvot (''F6''):"
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:91
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:87
 msgid "Custom Window Size:"
 msgstr "Skräddad Fönsterstorlek:"
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:94
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:90
 msgid "Zoom:"
 msgstr "Zoom:"
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:175
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:166
 msgid ""
 "Invalid window dimensions specified: Size cannot contain non-numeric digits! "
 ">_<"
@@ -1944,11 +1925,11 @@ msgstr "Sök"
 msgid "Gamefixes"
 msgstr "Spelfixar"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:38
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:40
 msgid "VU Add Hack - Fixes Tri-Ace games boot crash."
 msgstr "VU Tilläggs Hack - åtgärdar ''Tri-Ace'' spelens uppkörskrasch."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:39
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:41
 msgid ""
 "Games that need this hack to boot:\n"
 " * Star Ocean 3\n"
@@ -1960,80 +1941,79 @@ msgstr ""
 " * ''Radiata Stories'' \n"
 " * ''Valkyrie Profile 2''"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:42
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:44
 msgid "VU Clip Flag Hack - For Persona games (SuperVU recompiler only!)"
 msgstr ""
 "VU Klipp Flagg Hack - för ''Persona'' spel (endast superVU-omkompilerare)."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:46
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:48
 msgid "FPU Compare Hack - For Digimon Rumble Arena 2."
 msgstr "FPU Jämför Hack - för ''Digimon Rumble Arena 2''."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:50
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:52
 msgid "FPU Multiply Hack - For Tales of Destiny."
 msgstr "FPU Multiplikations Hack - för ''Tales of Destiny''."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:54
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:56
 msgid "FPU Negative Div Hack - For Gundam games."
 msgstr "FPU Negativ Diverse Hack - för ''Gundam'' spel."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:58
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:60
 msgid "VU XGkick Hack - For Erementar Gerad."
 msgstr "VU XGkick Hack - för ''Erementar Gerad''."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:62
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:64
 msgid "FFX videos fix - Fixes bad graphics overlay in FFX videos."
 msgstr "FFX videofix - löser dålig grafiköverdragning för FFX-videor."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:66
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:68
 msgid "EE timing hack - Multi purpose hack. Try if all else fails."
 msgstr "EE tids hack - en flersyftes hack. Försök om allt annat misslyckas."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:71
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:73
 msgid ""
 "Skip MPEG hack - Skips videos/FMVs in games to avoid game hanging/freezes."
 msgstr ""
 "Hoppa över MPEG hack - hoppar över FMV-videor i spel för att undgå att de "
 "hänger/fryses."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:75
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:77
 msgid "OPH Flag hack - Try if your game freezes showing the same frame."
 msgstr ""
 "OPH Flagg hack - Försök ifall Ert spel hänger/fryser sig, visandes samma "
 "bild."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:80
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:82
 msgid "Ignore DMAC writes when it is busy."
 msgstr "Förbise DMAC-skrivningar när denna är upptagen."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:85
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:87
 msgid "Simulate VIF1 FIFO read ahead. Fixes slow loading games."
 msgstr "Simulera ''VIF1 FIFO läs vidare'' - åtgärdar långsamt laddande spel."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:90
-msgid "Delay VIF1 Stalls (VIF1 FIFO) - For SOCOM 2 HUD."
-msgstr "Fördröj ''VIF1 uppehåll'' (VIF1 FIFO) - för ''SOCOM 2'' HUD."
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:92
+msgid ""
+"Delay VIF1 Stalls (VIF1 FIFO) - For SOCOM 2 HUD & Spy Hunter loading hang."
+msgstr ""
+"Fördröj ''VIF1 uppehåll'' (VIF1 FIFO) - för HUD i ''SOCOM 2'' & "
+"laddningshäng i ''Spy Hunter''."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:94
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:96
 msgid "Ignore Bus Direction on Path3 Transfer - Used for Hotwheels"
 msgstr ""
 "Förbise Bussriktning vid ''Path3 Överföring'' - används för ''Hotwheels''."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:98
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:100
 msgid "Switch to GSdx software rendering when a FMV plays"
 msgstr "Växla till GSdx Mjukvaruframställning när FMV-videor spelas."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:109
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:104
+msgid "Preload TLB hack to avoid tlb miss on Goemon"
+msgstr "Förladda TLB hack för att undvika TLB fel hoss ''Goemon''."
+
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:115
 msgid "Enable manual game fixes [Not recommended]"
 msgstr "Möjliggör egenhändiga Spelfixar [Avrådes]"
-
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:114
-msgid ""
-"The safest way to make sure that all game fixes are completely disabled."
-msgstr ""
-"Det bästa sättet att försäkra Er om att \n"
-" alla egenhändiga Spelfixar är helt \n"
-" spärrade, är att ha denna Avmarkerad."
 
 #: pcsx2/gui/Panels/LogOptionsPanels.cpp:249
 msgid "Enable Trace Logging"
@@ -2057,84 +2037,84 @@ msgstr ""
 
 #: pcsx2/gui/Panels/MemoryCardListPanel.cpp:166
 msgid "Select folder with PS2 memory cards"
-msgstr "Välj Mapp med PS2-Minneskort"
+msgstr "Välj Mapp med PS2 Minneskort"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:463
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:548
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:473
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:558
 msgid "Eject"
 msgstr "Utmata"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:464
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:474
 msgid "Duplicate ..."
 msgstr "Dubblera ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:465
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:475
 msgid "Rename ..."
 msgstr "Namnbyt ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:466
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:530
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:557
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:476
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:540
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:567
 msgid "Create ..."
 msgstr "Skapa ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:478
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:488
 msgid "Card: "
 msgstr "Minneskort: "
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:531
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:564
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:541
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:574
 msgid "Create a new memory card."
 msgstr "Skapa ett nytt Minneskort."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:544
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:554
 msgid "Rename this memory card ..."
 msgstr "Namnbyt detta Minneskort ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:548
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:558
 msgid "Insert ..."
 msgstr "Inmata ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:549
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:559
 msgid "Eject the card from this port"
 msgstr "Utmata Minneskortet från denna sockel"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:549
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:559
 msgid "Insert this card to a port ..."
 msgstr "Inmata detta kort till en sockel ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:553
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:563
 msgid "Create a duplicate of this memory card ..."
 msgstr "Dubblera detta Minneskort ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:557
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:567
 msgid "Delete"
 msgstr "Kassera"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:560
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:570
 msgid "Permanently delete this memory card from disk (all contents are lost)"
 msgstr "Kassera detta Minneskort (allt innehåll går förlorat)"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:562
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:572
 msgid "Create a new memory card and assign it to this Port."
 msgstr "Skapa ett nytt Minneskort och anvisa den till denna Sockel."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:739
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:749
 msgid "Delete memory file?"
 msgstr "Kassera minnesfil?"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:763
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:774
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:781
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:795
-msgid "Duplicate memory card"
-msgstr "Dubblera Minneskort"
-
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:763
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:773
 msgid "Failed: Can only duplicate an existing card."
 msgstr "Misslyckades: Kan endast dubblera ett befintligt kort."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:781
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:773
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:784
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:791
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:805
+msgid "Duplicate memory card"
+msgstr "Dubblera Minneskort"
+
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:791
 msgid ""
 "Select a name for the duplicate\n"
 "( '.ps2' will be added automatically)"
@@ -2142,25 +2122,25 @@ msgstr ""
 "Välj ett namn för dubbletten \n"
 " (''.ps2'' läggs till automatiskt):"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:794
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:804
 #, c-format
 msgid "Failed: %s"
 msgstr "Misslyckades: %s"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:819
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:829
 msgid "Copy failed!"
 msgstr "Kopiering misslyckades!"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:827
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:837
 #, c-format
 msgid "Memory card '%s' duplicated to '%s'."
 msgstr "Minneskort ''%s'' dubblerad till ''%s''."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:831
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:841
 msgid "Success"
 msgstr "Framgång"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:852
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:862
 #, c-format
 msgid ""
 "Select a new name for the memory card '%s'\n"
@@ -2169,119 +2149,119 @@ msgstr ""
 "Välj ett nytt namn för Minneskortet ''%s'' \n"
 " (''.ps2'' läggs till automatiskt):"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:855
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:867
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:883
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:865
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:877
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:893
 msgid "Rename memory card"
 msgstr "Namnbyt Minneskort"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:883
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:893
 msgid "Error: Rename could not be completed.\n"
 msgstr "Fel: Namnbyte kunde inte fullgöras. \n"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:973
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:141
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:983
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:143
 #, c-format
 msgid "Port-%u / Multitap-%u--Port-1"
 msgstr "Sockel-%u / Flerplugg-%u--Sockel-1"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:974
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:142
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:984
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:144
 #, c-format
 msgid "             Multitap-%u--Port-%u"
 msgstr "             Flerplugg-%u--Sockel-%u"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:999
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1009
 msgid "Empty"
 msgstr "Tom"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1005
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1015
 #, c-format
 msgid "Select a target port for '%s'"
 msgstr "Välj en målsockel för ''%s''"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1006
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1016
 msgid "Insert card"
 msgstr "Inmata kort"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1066
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1076
 msgid "Eject card"
 msgstr "Utmata kort"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1066
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1076
 msgid "Insert card ..."
 msgstr "Inmata kort ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1067
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1077
 msgid "Duplicate card ..."
 msgstr "Dubblera kort ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1068
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1078
 msgid "Rename card ..."
 msgstr "Namnbyt kort ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1069
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1079
 msgid "Delete card"
 msgstr "Kassera kort"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1072
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1076
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1082
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1086
 msgid "Create a new card ..."
 msgstr "Skapa ett nytt kort ..."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1080
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:1090
 msgid "Refresh List"
 msgstr "Aktualisera"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:106
-msgid "PS2 Port"
-msgstr "PS2-Sockel"
-
 #: pcsx2/gui/Panels/MemoryCardListView.cpp:108
+msgid "PS2 Port"
+msgstr "PS2 Sockel"
+
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:110
 msgid "Card (file) name"
 msgstr "Kort (fil) namn"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:109
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:111
 msgid "Card size"
 msgstr "Kortstorlek"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:110
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:112
 msgid "Formatted"
 msgstr "Formaterad"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:111
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:113
 msgid "Type"
 msgstr "Typ"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:112
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:114
 msgid "Last Modified"
 msgstr "Senast Modifierad"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:113
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:115
 msgid "Created on"
 msgstr "Skapad den"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:158
-msgid "No"
-msgstr "Nej"
-
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:158
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:160
 msgid "Yes"
 msgstr "Ja"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:159
-msgid "PS2"
-msgstr "PS2"
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:160
+msgid "No"
+msgstr "Nej"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:159
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:161
 msgid "PSX"
 msgstr "PSX"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:172
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:161
+msgid "PS2"
+msgstr "PS2"
+
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:174
 msgid "[-- Unused cards --]"
 msgstr "[-- Oanvända kort --]"
 
-#: pcsx2/gui/Panels/MemoryCardListView.cpp:174
+#: pcsx2/gui/Panels/MemoryCardListView.cpp:176
 msgid "[-- No unused cards --]"
 msgstr "[-- Inga oanvända kort --]"
 
@@ -2306,19 +2286,19 @@ msgid ""
 "This setting may require administration privileges from your operating "
 "system, depending on how your system is configured."
 msgstr ""
-"Beroende av hur Ert system är konfigurerat kan OperativSystemet kräva "
-"AdministratörsPrivilegier för denna Inställning."
+"Till följd av hur Ert system är konfigurerat kan OperativSystemet kräva "
+"AdministratörsPrivilegier för denna inställning."
 
 #: pcsx2/gui/Panels/MiscPanelStuff.cpp:60
 #, c-format
 msgid "Select a document root for %s"
 msgstr "Välj en dokument-rot för %s"
 
-#: pcsx2/gui/Panels/MiscPanelStuff.cpp:118
+#: pcsx2/gui/Panels/MiscPanelStuff.cpp:124
 msgid "Apply"
 msgstr "Tillämpa"
 
-#: pcsx2/gui/Panels/MiscPanelStuff.cpp:119
+#: pcsx2/gui/Panels/MiscPanelStuff.cpp:125
 msgid "Make this language my default right now!"
 msgstr "Gör genast detta till mitt FörvalsSpråk!"
 
@@ -2348,7 +2328,7 @@ msgstr "Välj en Mapp för loggar/dumpar"
 
 #: pcsx2/gui/Panels/PluginSelectorPanel.cpp:230
 msgid "Applying settings..."
-msgstr "Tillämpar Inställningar ..."
+msgstr "Tillämpar inställningar ..."
 
 #: pcsx2/gui/Panels/PluginSelectorPanel.cpp:240
 msgid "Shutdown PS2 virtual machine?"
@@ -2362,30 +2342,30 @@ msgstr "Jag ger henne allt hon har, Kapten!"
 msgid "Enumerating available plugins..."
 msgstr "Uppräknar tillgängliga InsticksProgram ..."
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:351
-msgid "Plugins Search Path:"
-msgstr "InsticksProgramsSökväg:"
-
 #: pcsx2/gui/Panels/PluginSelectorPanel.cpp:352
+msgid "Plugins Search Path:"
+msgstr "InsticksProgramsFilväg:"
+
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:353
 msgid "Select a folder with PCSX2 plugins"
 msgstr "Välj en Mapp med PCSX2-InsticksProgram"
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:365
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:366
 msgid "Configure..."
 msgstr "Konfigurera ..."
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:374
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:375
 msgid "Click the Browse button to select a different folder for PCSX2 plugins."
 msgstr ""
 "Klicka på ''Bläddra'' för att välja en annan Mapp för PCSX2's "
 "InsticksProgram."
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:473
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:474
 #, c-format
 msgid "Please select a valid plugin for the %s."
 msgstr "Välj ett giltigt InsticksProgram för %s."
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:511
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:512
 #, c-format
 msgid ""
 "The selected %s plugin failed to load.\n"
@@ -2398,20 +2378,20 @@ msgstr ""
 "Anledning: %s \n"
 "\n"
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:722
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:723
 msgid "Completing tasks..."
 msgstr "Fullföljer uppgifter ..."
 
 #: pcsx2/gui/Panels/SpeedhacksPanel.cpp:87
 msgid "Enable speedhacks"
-msgstr "Möjliggör Uppsnabbningshackar"
+msgstr "Möjliggör UppsnabbningsHackisar"
 
 #: pcsx2/gui/Panels/SpeedhacksPanel.cpp:91
 msgid ""
 "A safe and easy way to make sure that all speedhacks are completely disabled."
 msgstr ""
 "Ett lätt och säkert sätt att försäkra Er \n"
-" om att alla Uppsnabbningshackar är helt \n"
+" om att alla UppsnabbningsHackar är helt \n"
 " spärrade, är att ha denna Avmarkerad."
 
 #: pcsx2/gui/Panels/SpeedhacksPanel.cpp:100
@@ -2442,8 +2422,7 @@ msgstr "mVU Flagg Hack"
 msgid ""
 "Good Speedup and High Compatibility; may cause bad graphics... [Recommended]"
 msgstr ""
-"Bra uppsnabbning och hög förenlighet; \n"
-" kan orsaka dålig grafik ... [Anrådes]"
+"Bra uppsnabbning och hög förenlighet; kan vålla dålig grafik ... [Anrådes]"
 
 #: pcsx2/gui/Panels/SpeedhacksPanel.cpp:150
 msgid "MTVU (Multi-Threaded microVU1)"
@@ -2454,8 +2433,8 @@ msgid ""
 "Good Speedup and High Compatibility; may cause hanging... [Recommended if 3+ "
 "cores]"
 msgstr ""
-"Bra uppsnabbning och hög förenlighet; kan orsaka \n"
-" att det hänger sig ... [Anrådes för 3+ kärnor]"
+"Bra uppsnabbning och hög förenlighet; kan vålla att det hänger sig ... "
+"[Anrådes för 3+ kärnor]"
 
 #: pcsx2/gui/Panels/SpeedhacksPanel.cpp:162
 msgid "Other Hacks"
@@ -2470,8 +2449,8 @@ msgid ""
 "Huge speedup for some games, with almost no compatibility side effects. "
 "[Recommended]"
 msgstr ""
-"Enorm uppsnabbning för vissa spel, men \n"
-" nästan utan förenlighetsbieffekter. [Anrådes]"
+"Enorm uppsnabbning för vissa spel, men nästan utan FörenlighetsBieffekter. "
+"[Anrådes]"
 
 #: pcsx2/gui/Panels/SpeedhacksPanel.cpp:167
 msgid "Enable Wait Loop Detection"
@@ -2481,8 +2460,7 @@ msgstr "Möjliggör VäntgångsUpptäckning"
 msgid ""
 "Moderate speedup for some games, with no known side effects. [Recommended]"
 msgstr ""
-"Måttlig uppsnabbning för vissa spel, \n"
-" dock utan kända bieffekter. [Anrådes]"
+"Måttlig uppsnabbning för vissa spel, dock utan kända bieffekter. [Anrådes]"
 
 #: pcsx2/gui/Panels/SpeedhacksPanel.cpp:170
 msgid "Enable fast CDVD"
@@ -2490,13 +2468,11 @@ msgstr "Möjliggör snabb CDVD"
 
 #: pcsx2/gui/Panels/SpeedhacksPanel.cpp:171
 msgid "Fast disc access, less loading times. [Not Recommended]"
-msgstr ""
-"Snabb disktillgång med färre \n"
-" antal laddningar. [Avrådes]"
+msgstr "Snabb disktillgång med färre antal laddningar. [Avrådes]"
 
 #: pcsx2/gui/Panels/ThemeSelectorPanel.cpp:37
 msgid "Themes Search Path:"
-msgstr "Sökväg för Teman:"
+msgstr "Filväg för Teman:"
 
 #: pcsx2/gui/Panels/ThemeSelectorPanel.cpp:38
 msgid "Select folder containing PCSX2 visual themes"
@@ -2516,15 +2492,14 @@ msgstr "Välj ett tema:"
 
 #: pcsx2/gui/Panels/VideoPanel.cpp:34
 msgid "Disable Framelimiting"
-msgstr "Spärra Bildhastighetsbegränsning"
+msgstr "Spärra Bildhastighetsreglering"
 
 #: pcsx2/gui/Panels/VideoPanel.cpp:35
 msgid ""
 "Useful for running benchmarks. Toggle this option in-game by pressing F4."
 msgstr ""
-"Användbart för att köra enligt Riktmärkningar. \n"
-"Omkoppla denna tillämpning i aktivt spel \n"
-" genom att trycka på ''F4''."
+"Användbart för att köra enligt Riktmärkningar. Omkoppla denna tillämpning i "
+"aktivt spel genom att trycka på ''F4''."
 
 #: pcsx2/gui/Panels/VideoPanel.cpp:59
 msgid "Base Framerate Adjust:"
@@ -2595,8 +2570,8 @@ msgid ""
 "For troubleshooting potential bugs in the MTGS only, as it is potentially "
 "very slow."
 msgstr ""
-"Endast för att problemlösa eventuella fel inom \n"
-" MTGS, eftersom det möjligen är mycket långsamt."
+"Endast för att problemlösa eventuella fel inom MTGS, eftersom det möjligen "
+"är mycket långsamt."
 
 #: pcsx2/gui/Panels/VideoPanel.cpp:298
 msgid "Disable all GS output"
@@ -2616,7 +2591,7 @@ msgstr "Bildöverhoppning"
 
 #: pcsx2/gui/Panels/VideoPanel.cpp:317
 msgid "Framelimiter"
-msgstr "Bildbegränsning"
+msgstr "Bildhastighetsreglering"
 
 #: pcsx2/gui/SysState.cpp:283
 msgid "Cannot load this savestate.  The state is an unsupported version."
@@ -2652,43 +2627,99 @@ msgstr ""
 "Oförmögen att ladda denna Sparpunkt till följd av saknade kritiska "
 "Komponenter. Se loggfil för detaljer."
 
-#: pcsx2/gui/i18n.cpp:63
+#: pcsx2/gui/i18n.cpp:70
 msgid " (default)"
 msgstr " (förval)"
 
-#: pcsx2/ps2/BiosTools.cpp:83 pcsx2/ps2/BiosTools.cpp:151
+#: pcsx2/ps2/BiosTools.cpp:89 pcsx2/ps2/BiosTools.cpp:157
 msgid "The selected BIOS file is not a valid PS2 BIOS.  Please re-configure."
-msgstr "Den valda BIOS-filen är inte ett giltligt PS2-BIOS. Omkonfigurera!"
+msgstr "Den valda BIOS filen är inte ett giltligt PS2 BIOS. Omkonfigurera!"
 
-#: pcsx2/ps2/BiosTools.cpp:244
+#: pcsx2/ps2/BiosTools.cpp:250
 msgid ""
 "The PS2 BIOS could not be loaded.  The BIOS has not been configured, or the "
 "configuration has been corrupted.  Please re-configure."
 msgstr ""
-"PS2-BIOS'et kunde inte laddas eftersom det inte har konfigurerats, eller så "
+"PS2 BIOS'et kunde inte laddas eftersom det inte har konfigurerats, eller så "
 "har konfigurationen förstörts. Omkonfigurera!"
 
-#: pcsx2/ps2/BiosTools.cpp:251
+#: pcsx2/ps2/BiosTools.cpp:257
 msgid "The configured BIOS file does not exist.  Please re-configure."
-msgstr "Den konfigurerade BIOS-filen finns ej. Omkonfigurera!"
+msgstr "Den konfigurerade BIOS filen finns ej. Omkonfigurera!"
 
 #: pcsx2/x86/ix86-32/iR5900-32.cpp:580
 #, c-format
 msgid ""
 "%s Extensions not found.  The R5900-32 recompiler requires a host CPU with "
-"MMX, SSE, and SSE2 extensions."
+"SSE2 extensions."
 msgstr ""
-"%s-utökningar ej funna. Omkompilatorn R5900-32 kräver en värd-CPU med "
-"instruktionsuppsättningarna MMX, SSE, & SSE2."
+"%s-utökningar ej funna. Omkompilatorn R5900-32 kräver en värd-CPU med SSE2-"
+"utökningar."
 
 #: pcsx2/x86/microVU.cpp:28
 #, c-format
 msgid ""
-"%s Extensions not found.  microVU requires a host CPU with MMX, SSE, and "
-"SSE2 extensions."
+"%s Extensions not found.  microVU requires a host CPU with SSE2 extensions."
 msgstr ""
-"%s-utökningar ej funna. microVU kräver en värd-CPU med "
-"instruktionsuppsättningarna MMX, SSE, & SSE2."
+"%s-utökningar ej funna. microVU kräver en värd-CPU med SSE2-utökningar."
+
+#: common/include/Utilities/Exceptions.h:190
+msgid "No reason given."
+msgstr "Ingen anledning given."
+
+#: common/include/Utilities/Exceptions.h:229
+msgid "Parse error"
+msgstr "Tolkningsfel"
+
+#: common/include/Utilities/Exceptions.h:253
+msgid "Your machine's hardware is incapable of running PCSX2.  Sorry dood."
+msgstr "Er maskinhårdvara är oförmögen att köra PCSX2. Beklagar snubben."
+
+#: pcsx2/System.h:223 pcsx2/System.h:224 pcsx2/System.h:225
+msgid "PCSX2 Message"
+msgstr "PCSX2 Meddelande"
+
+#: pcsx2/gui/ApplyState.h:55
+msgid "Cannot apply new settings, one of the settings is invalid."
+msgstr ""
+"Kan ej tillämpa de nya inställningarna, eftersom att minst en av dom är "
+"ogiltlig."
+
+#~ msgid "Select CDVD source iso..."
+#~ msgstr "Välj CDVD'ns käll-ISO ..."
+
+#~ msgid "PCSX2 - SSE2 Recommended"
+#~ msgstr "PCSX2 - SSE2 Anrådes"
+
+#~ msgid "Dynamically toggle Vsync depending on frame rate (read tooltip!)"
+#~ msgstr "Växla Vsync dynamiskt efter Bildfrekvens (läs verktygstips!)"
+
+#~ msgid "%s  %d.%d.%d"
+#~ msgstr "%s  %d.%d.%d"
+
+#~ msgid "%s  %d.%d.%d-%lld%s (git)  %s"
+#~ msgstr "%s  %d.%d.%d-%lld%s (git)  %s"
+
+#~ msgid ""
+#~ "Gamefixes can work around wrong emulation in some titles. \n"
+#~ "They may also cause compatibility or performance issues.\n"
+#~ "\n"
+#~ "The safest way to make sure that all game fixes are completely disabled."
+#~ msgstr ""
+#~ "Spelfixar kan åtgärda felaktig emulering för vissa titlar. \n"
+#~ "De kan dock orsaka Förenlighets- och/eller PrestandaProblem. \n"
+#~ "Ni får stänga av Spelfixar egenhändigt när Ni byter spel. \n"
+#~ "\n"
+#~ "Det bästa sättet att försäkra Er \n"
+#~ " om att alla egenhändiga Spelfixar är helt \n"
+#~ " spärrade, är att ha denna Avmarkerad."
+
+#~ msgid ""
+#~ "The safest way to make sure that all game fixes are completely disabled."
+#~ msgstr ""
+#~ "Det bästa sättet att försäkra Er om att \n"
+#~ " alla egenhändiga Spelfixar är helt \n"
+#~ " spärrade, är att ha denna Avmarkerad."
 
 #~ msgid "(modded)"
 #~ msgstr "(modifierade)"
@@ -2805,7 +2836,7 @@ msgstr ""
 #~ msgstr ""
 #~ "\n"
 #~ "\n"
-#~ "Bemärk:  'Byt namn ' och  'Ta bort ' kräver först tillämpning av pågående "
+#~ "Bemärk: ''Byt namn'' och ''Ta bort'' kräver först tillämpning av pågående "
 #~ "förändringar."
 
 #~ msgid "Error: Please apply pending changes before proceeding."
@@ -2821,8 +2852,8 @@ msgstr ""
 #~ "Fel: Minneskortsfilen är för närvarande i användning.\n"
 #~ "\n"
 #~ "1. Förhindra denna sockel (om den inte redan är så).\n"
-#~ "2. Klicka 'Tillämpa'.\n"
-#~ "3. Fortsätt med 'Ta bort'."
+#~ "2. Klicka ''Tillämpa''.\n"
+#~ "3. Fortsätt med ''Ta bort''."
 
 #~ msgid ""
 #~ "Error: Memory card file currently in use.\n"
@@ -2835,8 +2866,8 @@ msgstr ""
 #~ "Fel: Minneskortsfilen är för närvarande i användning.\n"
 #~ "\n"
 #~ "1. Förhindra denna sockel (om den inte redan är så).\n"
-#~ "2. Klicka 'Tillämpa'.\n"
-#~ "3. Fortsätt med 'Byt namn'.\n"
+#~ "2. Klicka ''Tillämpa''.\n"
+#~ "3. Fortsätt med ''Byt namn''.\n"
 #~ "4. Glöm inte att åter-möjligöra denna sockel."
 
 #~ msgid "Rename canceled"
@@ -2894,7 +2925,7 @@ msgstr ""
 #~ "%s will create the following folder for documents.  You can change this "
 #~ "setting later, at any time."
 #~ msgstr ""
-#~ "%s kommer att skapa följande mapp för dokument.  Ni kan ändra denna "
+#~ "%s kommer att skapa följande mapp för dokument. Ni kan ändra denna "
 #~ "inställning senare, när som helst."
 
 #~ msgid "Flush to Zero"

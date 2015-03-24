@@ -57,7 +57,7 @@ wxString SaveStateBase::GetFilename( int slot )
 	if (serialName.IsEmpty()) serialName = L"BIOS";
 
 	return (g_Conf->Folders.Savestates +
-		pxsFmt( L"%s (%08X).%02d.p2s", serialName.c_str(), ElfCRC, slot )).GetFullPath();
+		pxsFmt( L"%s (%08X).%02d.p2s", WX_STR(serialName), ElfCRC, slot )).GetFullPath();
 
 	//return (g_Conf->Folders.Savestates +
 	//	pxsFmt( L"%08X.%03d", ElfCRC, slot )).GetFullPath();
@@ -126,7 +126,7 @@ SaveStateBase& SaveStateBase::FreezeBios()
 	pxToUTF8 utf8(BiosDescription);
 
 	memzero( biosdesc );
-	memcpy_fast( biosdesc, utf8, std::min( sizeof(biosdesc), utf8.Length() ) );
+	memcpy( biosdesc, utf8, std::min( sizeof(biosdesc), utf8.Length() ) );
 	
 	Freeze( bioscheck );
 	Freeze( biosdesc );
@@ -138,7 +138,7 @@ SaveStateBase& SaveStateBase::FreezeBios()
 		Console.Indent(2).Error(
 			"Current BIOS:   %ls (crc=0x%08x)\n"
 			"Savestate BIOS: %s (crc=0x%08x)\n",
-			BiosDescription.c_str(), BiosChecksum,
+			BiosDescription.wx_str(), BiosChecksum,
 			biosdesc, bioscheck
 		);
 	}
@@ -282,7 +282,7 @@ void memSavingState::FreezeMem( void* data, int size )
 	if (!size) return;
 
 	m_memory->MakeRoomFor( m_idx + size );
-	memcpy_fast( m_memory->GetPtr(m_idx), data, size );
+	memcpy( m_memory->GetPtr(m_idx), data, size );
 	m_idx += size;
 }
 
@@ -322,7 +322,7 @@ void memLoadingState::FreezeMem( void* data, int size )
 {
 	const u8* const src = m_memory->GetPtr(m_idx);
 	m_idx += size;
-	memcpy_fast( data, src, size );
+	memcpy( data, src, size );
 }
 
 // --------------------------------------------------------------------------------------

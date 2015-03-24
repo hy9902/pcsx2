@@ -1,13 +1,13 @@
 #-------------------------------------------------------------------------------
 #                              Dependency message print
 #-------------------------------------------------------------------------------
-set(msg_dep_common_libs "check these libraries -> wxWidgets (>=2.8.10), sparsehash (>=1.5), aio")
+set(msg_dep_common_libs "check these libraries -> wxWidgets (>=2.8.10), aio")
 set(msg_dep_pcsx2       "check these libraries -> wxWidgets (>=2.8.10), gtk2 (>=2.16), zlib (>=1.2.4), pcsx2 common libs")
 set(msg_dep_cdvdiso     "check these libraries -> bzip2 (>=1.0.5), gtk2 (>=2.16)")
 set(msg_dep_zerogs      "check these libraries -> glew (>=1.6), opengl, X11, nvidia-cg-toolkit (>=2.1)")
 set(msg_dep_gsdx        "check these libraries -> opengl, egl, X11")
-set(msg_dep_onepad      "check these libraries -> sdl (==1.2)")
-set(msg_dep_spu2x       "check these libraries -> soundtouch (>=1.5), alsa, portaudio (>=1.9), sdl (==1.2) pcsx2 common libs")
+set(msg_dep_onepad      "check these libraries -> sdl (>=1.2), X11")
+set(msg_dep_spu2x       "check these libraries -> soundtouch (>=1.5), alsa, portaudio (>=1.9), sdl (>=1.2) pcsx2 common libs")
 set(msg_dep_zerospu2    "check these libraries -> soundtouch (>=1.5), alsa")
 if(GLSL_API)
 	set(msg_dep_zzogl       "check these libraries -> glew (>=1.6), jpeg (>=6.2), opengl, X11, pcsx2 common libs")
@@ -21,13 +21,23 @@ endif()
 # Check for additional dependencies.
 # If all dependencies are available, including OS, build it
 #-------------------------------------------------------------------------------
+if (GTK2_FOUND OR GTK3_FOUND)
+    set(GTKn_FOUND TRUE)
+else()
+    set(GTKn_FOUND FALSE)
+endif()
+
+if(SDL_FOUND OR SDL2_FOUND)
+    set(SDLn_FOUND TRUE)
+else()
+    set(SDLn_FOUND FALSE)
+endif()
 
 #---------------------------------------
 #			Common libs
 # requires: -wx
-#           -sparsehash
 #---------------------------------------
-if(wxWidgets_FOUND AND SPARSEHASH_FOUND)
+if(wxWidgets_FOUND)
     set(common_libs TRUE)
 elseif(NOT EXISTS "${CMAKE_SOURCE_DIR}/common/src")
     set(common_libs FALSE)
@@ -46,7 +56,7 @@ endif()
 #           -aio
 #---------------------------------------
 # Common dependancy
-if(wxWidgets_FOUND AND ZLIB_FOUND AND common_libs AND AIO_FOUND)
+if(wxWidgets_FOUND AND ZLIB_FOUND AND common_libs AND NOT (Linux AND NOT AIO_FOUND))
     set(pcsx2_core TRUE)
 elseif(NOT EXISTS "${CMAKE_SOURCE_DIR}/pcsx2")
     set(pcsx2_core FALSE)
@@ -56,7 +66,7 @@ else()
     message(STATUS "${msg_dep_pcsx2}")
 endif()
 # Linux need also gtk2
-if(Linux AND pcsx2_core AND NOT GTK2_FOUND)
+if(UNIX AND pcsx2_core AND NOT GTKn_FOUND)
     set(pcsx2_core FALSE)
     message(STATUS "Skip build of pcsx2 core: miss some dependencies")
     message(STATUS "${msg_dep_pcsx2}")
@@ -74,7 +84,7 @@ endif()
 #---------------------------------------
 #			CDVDnull
 #---------------------------------------
-if(GTK2_FOUND)
+if(GTKn_FOUND)
     set(CDVDnull TRUE)
 endif()
 #---------------------------------------
@@ -86,7 +96,7 @@ endif()
 #           -gtk2 (linux)
 #---------------------------------------
 if(EXTRA_PLUGINS)
-    if(BZIP2_FOUND AND GTK2_FOUND)
+    if(BZIP2_FOUND AND GTKn_FOUND)
         set(CDVDiso TRUE)
     elseif(NOT EXISTS "${CMAKE_SOURCE_DIR}/plugins/CDVDiso")
         set(CDVDiso FALSE)
@@ -107,7 +117,7 @@ endif()
 #---------------------------------------
 #			dev9null
 #---------------------------------------
-if(GTK2_FOUND)
+if(GTKn_FOUND)
     set(dev9null TRUE)
 endif()
 #---------------------------------------
@@ -115,7 +125,7 @@ endif()
 #---------------------------------------
 #			FWnull
 #---------------------------------------
-if(GTK2_FOUND)
+if(GTKn_FOUND)
     set(FWnull TRUE)
 endif()
 #---------------------------------------
@@ -123,7 +133,7 @@ endif()
 #---------------------------------------
 #			GSnull
 #---------------------------------------
-if(GTK2_FOUND AND EXTRA_PLUGINS)
+if(GTKn_FOUND AND EXTRA_PLUGINS)
     set(GSnull TRUE)
 endif()
 #---------------------------------------
@@ -134,7 +144,7 @@ endif()
 # requires: -OpenGL
 #			-X11
 #---------------------------------------
-if(OPENGL_FOUND AND X11_FOUND AND EGL_FOUND)
+if(OPENGL_FOUND AND X11_FOUND AND EGL_FOUND AND GTKn_FOUND)
     set(GSdx TRUE)
 elseif(NOT EXISTS "${CMAKE_SOURCE_DIR}/plugins/GSdx")
 	set(GSdx FALSE)
@@ -172,25 +182,16 @@ endif()
 # requires:	-GLEW
 #			-OpenGL
 #			-X11
-#			-CG (only with cg build
+#			-CG (only with cg build)
 #			-JPEG
 #           -common_libs
 #---------------------------------------
-if((GLEW_FOUND AND OPENGL_FOUND AND X11_FOUND AND JPEG_FOUND AND common_libs) AND (CG_FOUND OR GLSL_API))
+if((GLEW_FOUND AND OPENGL_FOUND AND X11_FOUND AND JPEG_FOUND AND common_libs AND GTKn_FOUND) AND (CG_FOUND OR GLSL_API))
 	set(zzogl TRUE)
-    if(CG_FOUND AND NOT GLSL_API AND EXTRA_PLUGINS)
-		set(zzoglcg TRUE)
-	else()
-		set(zzoglcg FALSE)
-	endif()
 elseif(NOT EXISTS "${CMAKE_SOURCE_DIR}/plugins/zzogl-pg")
 	set(zzogl FALSE)
-	set(zzoglcg FALSE)
-	set(REBUILD_SHADER FALSE)
 else()
 	set(zzogl FALSE)
-	set(zzoglcg FALSE)
-	set(REBUILD_SHADER FALSE)
     message(STATUS "Skip build of zzogl: miss some dependencies")
     message(STATUS "${msg_dep_zzogl}")
 endif()
@@ -199,8 +200,17 @@ endif()
 #---------------------------------------
 #			PadNull
 #---------------------------------------
-if(GTK2_FOUND AND EXTRA_PLUGINS)
+if(GTKn_FOUND AND EXTRA_PLUGINS)
     set(PadNull TRUE)
+endif()
+#---------------------------------------
+
+#---------------------------------------
+#			LilyPad
+# requires: -X11
+#---------------------------------------
+if(GTKn_FOUND AND X11_FOUND)
+    set(LilyPad TRUE)
 endif()
 #---------------------------------------
 
@@ -208,8 +218,9 @@ endif()
 #			onepad
 #---------------------------------------
 # requires: -SDL
+#			-X11
 #---------------------------------------
-if(SDL_FOUND)
+if(SDLn_FOUND AND X11_FOUND)
 	set(onepad TRUE)
 elseif(NOT EXISTS "${CMAKE_SOURCE_DIR}/plugins/onepad")
 	set(onepad FALSE)
@@ -223,7 +234,7 @@ endif()
 #---------------------------------------
 #			SPU2null
 #---------------------------------------
-if(GTK2_FOUND AND EXTRA_PLUGINS)
+if(GTKn_FOUND AND EXTRA_PLUGINS)
     set(SPU2null TRUE)
 endif()
 #---------------------------------------
@@ -237,7 +248,7 @@ endif()
 #           -SDL
 #           -common_libs
 #---------------------------------------
-if(ALSA_FOUND AND PORTAUDIO_FOUND AND SOUNDTOUCH_FOUND AND SDL_FOUND AND common_libs)
+if(ALSA_FOUND AND PORTAUDIO_FOUND AND SOUNDTOUCH_FOUND AND SDLn_FOUND AND common_libs)
 	set(spu2-x TRUE)
 elseif(NOT EXISTS "${CMAKE_SOURCE_DIR}/plugins/spu2-x")
 	set(spu2-x FALSE)
@@ -274,7 +285,7 @@ endif()
 #---------------------------------------
 #			USBnull
 #---------------------------------------
-if(GTK2_FOUND)
+if(GTKn_FOUND)
     set(USBnull TRUE)
 endif()
 #---------------------------------------
@@ -285,7 +296,6 @@ set(cdvdGigaherz FALSE)
 set(CDVDisoEFP FALSE)
 set(CDVDolio FALSE)
 set(CDVDpeops FALSE)
-set(LilyPad FALSE)
 set(PeopsSPU2 FALSE)
 set(SSSPSXPAD FALSE)
 set(xpad FALSE)

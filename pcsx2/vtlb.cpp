@@ -96,8 +96,8 @@ template< typename DataType >
 DataType __fastcall vtlb_memRead(u32 addr)
 {
 	static const uint DataSize = sizeof(DataType) * 8;
-	u32 vmv=vtlbdata.vmap[addr>>VTLB_PAGE_BITS];
-	s32 ppf=addr+vmv;
+	uptr vmv=vtlbdata.vmap[addr>>VTLB_PAGE_BITS];
+	sptr ppf=addr+vmv;
 
 	if (!(ppf<0))
 	{
@@ -151,8 +151,8 @@ DataType __fastcall vtlb_memRead(u32 addr)
 
 void __fastcall vtlb_memRead64(u32 mem, mem64_t *out)
 {
-	u32 vmv=vtlbdata.vmap[mem>>VTLB_PAGE_BITS];
-	s32 ppf=mem+vmv;
+	uptr vmv=vtlbdata.vmap[mem>>VTLB_PAGE_BITS];
+	sptr ppf=mem+vmv;
 
 	if (!(ppf<0))
 	{
@@ -178,8 +178,8 @@ void __fastcall vtlb_memRead64(u32 mem, mem64_t *out)
 }
 void __fastcall vtlb_memRead128(u32 mem, mem128_t *out)
 {
-	u32 vmv=vtlbdata.vmap[mem>>VTLB_PAGE_BITS];
-	s32 ppf=mem+vmv;
+	uptr vmv=vtlbdata.vmap[mem>>VTLB_PAGE_BITS];
+	sptr ppf=mem+vmv;
 
 	if (!(ppf<0))
 	{
@@ -211,8 +211,8 @@ void __fastcall vtlb_memWrite(u32 addr, DataType data)
 {
 	static const uint DataSize = sizeof(DataType) * 8;
 
-	u32 vmv=vtlbdata.vmap[addr>>VTLB_PAGE_BITS];
-	s32 ppf=addr+vmv;
+	uptr vmv=vtlbdata.vmap[addr>>VTLB_PAGE_BITS];
+	sptr ppf=addr+vmv;
 	if (!(ppf<0))
 	{		
 		if (!CHECK_EEREC) 
@@ -259,8 +259,8 @@ void __fastcall vtlb_memWrite(u32 addr, DataType data)
 
 void __fastcall vtlb_memWrite64(u32 mem, const mem64_t* value)
 {
-	u32 vmv=vtlbdata.vmap[mem>>VTLB_PAGE_BITS];
-	s32 ppf=mem+vmv;
+	uptr vmv=vtlbdata.vmap[mem>>VTLB_PAGE_BITS];
+	sptr ppf=mem+vmv;
 	if (!(ppf<0))
 	{		
 		if (!CHECK_EEREC) 
@@ -287,8 +287,8 @@ void __fastcall vtlb_memWrite64(u32 mem, const mem64_t* value)
 
 void __fastcall vtlb_memWrite128(u32 mem, const mem128_t *value)
 {
-	u32 vmv=vtlbdata.vmap[mem>>VTLB_PAGE_BITS];
-	s32 ppf=mem+vmv;
+	uptr vmv=vtlbdata.vmap[mem>>VTLB_PAGE_BITS];
+	sptr ppf=mem+vmv;
 	if (!(ppf<0))
 	{
 		if (!CHECK_EEREC) 
@@ -339,7 +339,9 @@ static void GoemonTlbMissDebug()
 
 	for (u32 i = 0; i < 150; i++) {
 		if (tlb[i].valid == 0x1 && tlb[i].low_add != tlb[i].high_add)
-			DevCon.WriteLn("Entry %d is valid. From V:0x%8.8x to V:0x%8.8x (P:0x%8.8x)", i, tlb[i].low_add, tlb[i].high_add, tlb[i].physical_add);
+			DevCon.WriteLn("GoemonTlbMissDebug: Entry %d is valid. Key %x. From V:0x%8.8x to V:0x%8.8x (P:0x%8.8x)", i, tlb[i].key, tlb[i].low_add, tlb[i].high_add, tlb[i].physical_add);
+		else if (tlb[i].low_add != tlb[i].high_add)
+			DevCon.WriteLn("GoemonTlbMissDebug: Entry %d is invalid. Key %x. From V:0x%8.8x to V:0x%8.8x (P:0x%8.8x)", i, tlb[i].key, tlb[i].low_add, tlb[i].high_add, tlb[i].physical_add);
 	}
 }
 
@@ -355,10 +357,37 @@ void __fastcall GoemonPreloadTlb()
 			u32 vaddr = tlb[i].low_add;
 			u32 paddr = tlb[i].physical_add;
 
-			if ((u32)vtlbdata.vmap[vaddr>>VTLB_PAGE_BITS] == 0x80000000u) {
-				DevCon.WriteLn("Preload TLB[%d]: From V:0x%8.8x to P:0x%8.8x (%d pages)", i, vaddr, paddr, size >> VTLB_PAGE_BITS);
+			if ((uptr)vtlbdata.vmap[vaddr>>VTLB_PAGE_BITS] == POINTER_SIGN_BIT) {
+				DevCon.WriteLn("GoemonPreloadTlb: Entry %d. Key %x. From V:0x%8.8x to P:0x%8.8x (%d pages)", i, tlb[i].key, vaddr, paddr, size >> VTLB_PAGE_BITS);
 				vtlb_VMap(           vaddr , paddr, size);
 				vtlb_VMap(0x20000000|vaddr , paddr, size);
+			}
+		}
+	}
+}
+
+void __fastcall GoemonUnloadTlb(u32 key)
+{
+	// 0x3d5580 is the address of the TLB cache table
+	GoemonTlb* tlb = (GoemonTlb*)&eeMem->Main[0x3d5580];
+	for (u32 i = 0; i < 150; i++) {
+		if (tlb[i].key == key) {
+			if (tlb[i].valid == 0x1) {
+				u32 size  = tlb[i].high_add - tlb[i].low_add;
+				u32 vaddr = tlb[i].low_add;
+				DevCon.WriteLn("GoemonUnloadTlb: Entry %d. Key %x. From V:0x%8.8x to V:0x%8.8x (%d pages)", i, tlb[i].key, vaddr, vaddr+size, size >> VTLB_PAGE_BITS);
+
+				vtlb_VMapUnmap(           vaddr , size);
+				vtlb_VMapUnmap(0x20000000|vaddr , size);
+
+				// Unmap the tlb in game cache table
+				// Note: Game copy FEFEFEFE for others data
+				tlb[i].valid    = 0;
+				tlb[i].key      = 0xFEFEFEFE;
+				tlb[i].low_add  = 0xFEFEFEFE;
+				tlb[i].high_add = 0xFEFEFEFE;
+			} else {
+				DevCon.Error("GoemonUnloadTlb: Entry %d is not valid. Key %x", i, tlb[i].key);
 			}
 		}
 	}
@@ -376,11 +405,14 @@ static __ri void vtlb_Miss(u32 addr,u32 mode)
 			cpuTlbMissW(addr, cpuRegs.branch);
 		else
 			cpuTlbMissR(addr, cpuRegs.branch);
+
+		// Exception handled. Current instruction need to be stopped
+		throw Exception::CancelInstruction();
 	}
 
 	// The exception terminate the program on linux which is very annoying
 	// Just disable it for the moment
-#ifdef __LINUX__
+#ifdef __linux__
 	if (0)
 #else
 	if( IsDevBuild )
@@ -401,7 +433,7 @@ static __ri void vtlb_BusError(u32 addr,u32 mode)
 {
 	// The exception terminate the program on linux which is very annoying
 	// Just disable it for the moment
-#ifdef __LINUX__
+#ifdef __linux__
 	if (0)
 #else
 	if( IsDevBuild )
@@ -573,14 +605,14 @@ void vtlb_MapBlock(void* base, u32 start, u32 size, u32 blocksize)
 	verify(0==(blocksize&VTLB_PAGE_MASK) && blocksize>0);
 	verify(0==(size%blocksize));
 
-	s32 baseint = (s32)base;
+	sptr baseint = (sptr)base;
 	u32 end = start + (size - VTLB_PAGE_SIZE);
 	verify((end>>VTLB_PAGE_BITS) < ArraySize(vtlbdata.pmap));
 
 	while (start <= end)
 	{
 		u32 loopsz = blocksize;
-		s32 ptr = baseint;
+		sptr ptr = baseint;
 
 		while (loopsz > 0)
 		{
@@ -636,13 +668,13 @@ void vtlb_VMap(u32 vaddr,u32 paddr,u32 size)
 
 	while (size > 0)
 	{
-		s32 pme;
+		sptr pme;
 		if (paddr >= VTLB_PMAP_SZ)
 		{
 			pme = UnmappedPhyHandler0;
-			if (paddr & 0x80000000)
+			if (paddr & POINTER_SIGN_BIT)
 				pme = UnmappedPhyHandler1;
-			pme |= 0x80000000;
+			pme |= POINTER_SIGN_BIT;
 			pme |= paddr;// top bit is set anyway ...
 		}
 		else
@@ -668,7 +700,7 @@ void vtlb_VMapBuffer(u32 vaddr,void* buffer,u32 size)
 	verify(0==(vaddr&VTLB_PAGE_MASK));
 	verify(0==(size&VTLB_PAGE_MASK) && size>0);
 
-	u32 bu8 = (u32)buffer;
+	uptr bu8 = (uptr)buffer;
 	while (size > 0)
 	{
 		vtlbdata.vmap[vaddr>>VTLB_PAGE_BITS] = bu8-vaddr;
@@ -764,7 +796,7 @@ void vtlb_Core_Alloc()
 {
 	if (!vtlbdata.vmap)
 	{
-		vtlbdata.vmap = (s32*)_aligned_malloc( VTLB_VMAP_ITEMS * sizeof(*vtlbdata.vmap), 16 );
+		vtlbdata.vmap = (sptr*)_aligned_malloc( VTLB_VMAP_ITEMS * sizeof(*vtlbdata.vmap), 16 );
 		if (!vtlbdata.vmap)
 			throw Exception::OutOfMemory( L"VTLB Virtual Address Translation LUT" )
 				.SetDiagMsg(pxsFmt("(%u megs)", VTLB_VMAP_ITEMS * sizeof(*vtlbdata.vmap) / _1mb)

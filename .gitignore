@@ -13,20 +13,36 @@
 *.bsc
 *.mo
 
+*.trace
+*.asm
+*.dump
+
 _ReSharper.*
+pcsx2.snapshot_*
 postBuild.inc.cmd
 postBuild.cmd
 svnrev.h
 
+build
+
+.DS_Store
+Thumbs.db
+
+Debug.txt
+install_log.txt
+
 Debug
 Release
 Devel
+
+oprofile_data/
 
 /BuildLog.htm
 /UpgradeLog.XML
 /UpgradeLog2.XML
 /UpgradeLog3.XML
 
+/bin/pcsx2*
 /bin/bios
 /bin/dumps
 /bin/help
@@ -40,7 +56,7 @@ Devel
 /ipch
 /nsis/output/
 
-/3rdparty/SoundTouch/Win32
+/3rdparty/soundtouch/Win32
 /3rdparty/bzip2/Win32
 /3rdparty/libjpeg/Win32
 /3rdparty/portaudio/portaudio-2.0.pc

@@ -70,15 +70,15 @@ void pxLogConsole::DoLog( wxLogLevel level, const wxChar *szString, time_t t )
 			// fallthrough!
 
 		case wxLOG_Message:
-			Console.WriteLn( L"[wx] %s", szString );
+			Console.WriteLn( L"[wx] %ls", szString );
 		break;
 
 		case wxLOG_Error:
-			Console.Error( L"[wx] %s", szString );
+			Console.Error( L"[wx] %ls", szString );
 		break;
 
 		case wxLOG_Warning:
-			Console.Warning( L"[wx] %s", szString );
+			Console.Warning( L"[wx] %ls", szString );
 		break;
 	}
 }
@@ -288,6 +288,7 @@ enum MenuIDs_t
 	MenuId_LogSource_EnableAll = 0x30,
 	MenuId_LogSource_DisableAll,
 	MenuId_LogSource_Devel,
+	MenuId_LogSource_SetDefault,
 	MenuId_LogSource_CDVD_Info,
 
 	MenuId_LogSource_Start = 0x100
@@ -460,6 +461,7 @@ ConsoleLogFrame::ConsoleLogFrame( MainEmuFrame *parent, const wxString& title, A
 	menuSources.AppendSeparator();
 	menuSources.Append( MenuId_LogSource_EnableAll,		_("Enable all"),	_("Enables all log source filters.") );
 	menuSources.Append( MenuId_LogSource_DisableAll,	_("Disable all"),	_("Disables all log source filters.") );
+	menuSources.Append( MenuId_LogSource_SetDefault,	_("Restore Default"), _("Restore default source filters.") );
 
 	pMenuBar->Append(&menuLog,		_("&Log"));
 	pMenuBar->Append(&menuSources,	_("&Sources"));
@@ -484,6 +486,7 @@ ConsoleLogFrame::ConsoleLogFrame( MainEmuFrame *parent, const wxString& title, A
 	Connect( MenuId_LogSource_CDVD_Info,	wxEVT_COMMAND_MENU_SELECTED,	wxCommandEventHandler( ConsoleLogFrame::OnToggleCDVDInfo ) );
 	Connect( MenuId_LogSource_EnableAll,	wxEVT_COMMAND_MENU_SELECTED,	wxCommandEventHandler( ConsoleLogFrame::OnEnableAllLogging ) );
 	Connect( MenuId_LogSource_DisableAll,	wxEVT_COMMAND_MENU_SELECTED,	wxCommandEventHandler( ConsoleLogFrame::OnDisableAllLogging ) );
+	Connect( MenuId_LogSource_SetDefault,	wxEVT_COMMAND_MENU_SELECTED,	wxCommandEventHandler( ConsoleLogFrame::OnSetDefaultLogging ) );
 
 	Connect( wxEVT_CLOSE_WINDOW,	wxCloseEventHandler			(ConsoleLogFrame::OnCloseWindow) );
 	Connect( wxEVT_MOVE,			wxMoveEventHandler			(ConsoleLogFrame::OnMoveAround) );
@@ -543,6 +546,19 @@ void ConsoleLogFrame::OnDisableAllLogging(wxCommandEvent& evt)
 	evt.Skip();
 }
 
+void ConsoleLogFrame::OnSetDefaultLogging(wxCommandEvent& evt)
+{
+	uint srcnt = ArraySize(ConLogSources);
+	for (uint i = 0; i<srcnt; ++i)
+	{
+		if (ConsoleLogSource* log = ConLogSources[i])
+			log->Enabled = ConLogDefaults[i];
+	}
+
+	OnLoggingChanged();
+	evt.Skip();
+}
+
 void ConsoleLogFrame::OnLoggingChanged()
 {
 	if (!GetMenuBar()) return;
@@ -584,7 +600,7 @@ bool ConsoleLogFrame::Write( ConsoleColors color, const wxString& text )
 
 	int endpos = m_CurQueuePos + text.Length();
 	m_QueueBuffer.MakeRoomFor( endpos + 1 );		// and the null!!
-	memcpy_fast( &m_QueueBuffer[m_CurQueuePos], text.c_str(), sizeof(wxChar) * text.Length() );
+	memcpy( &m_QueueBuffer[m_CurQueuePos], text.wc_str(), sizeof(wxChar) * text.Length() );
 	m_CurQueuePos = endpos;
 
 	// this NULL may be overwritten if the next message sent doesn't perform a color change.
@@ -1019,11 +1035,11 @@ void Pcsx2App::ProgramLog_PostEvent( wxEvent& evt )
 
 static void __concall ConsoleToFile_Newline()
 {
-#ifdef __LINUX__
+#ifdef __linux__
 	if ((g_Conf) && (g_Conf->EmuOptions.ConsoleToStdio)) ConsoleWriter_Stdout.Newline();
 #endif
 
-#ifdef __LINUX__
+#ifdef __linux__
 	fputc( '\n', emuLog );
 #else
 	fputs( "\r\n", emuLog );
@@ -1032,7 +1048,7 @@ static void __concall ConsoleToFile_Newline()
 
 static void __concall ConsoleToFile_DoWrite( const wxString& fmt )
 {
-#ifdef __LINUX__
+#ifdef __linux__
 	if ((g_Conf) && (g_Conf->EmuOptions.ConsoleToStdio)) ConsoleWriter_Stdout.WriteRaw(fmt);
 #endif
 

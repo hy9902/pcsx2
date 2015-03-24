@@ -47,12 +47,18 @@ struct romdir
 #	pragma pack()
 #endif
 
-C_ASSERT( sizeof(romdir) == DIRENTRY_SIZE );
+static_assert( sizeof(romdir) == DIRENTRY_SIZE, "romdir struct not packed to 16 bytes" );
 
 u32 BiosVersion;
 u32 BiosChecksum;
 wxString BiosDescription;
+const BiosDebugInformation* CurrentBiosInformation;
 
+const BiosDebugInformation biosVersions[] = {
+	// USA     v02.00(14/06/2004)  Console
+	{ 0x00000200, 0xD778DB8D, 0x8001a640 },
+
+};
 
 // --------------------------------------------------------------------------------------
 //  Exception::BiosLoadFailed  (implementations)
@@ -129,7 +135,7 @@ static void LoadBiosVersion( pxInputStream& fp, u32& version, wxString& descript
 			version = strtol(vermaj, (char**)NULL, 0) << 8;
 			version|= strtol(vermin, (char**)NULL, 0);
 
-			Console.WriteLn(L"Bios Found: %s", result.c_str());
+			Console.WriteLn(L"Bios Found: %ls", result.c_str());
 
 			description = result.c_str();
 			zoneStr = fromUTF8(zone);
@@ -188,7 +194,7 @@ static void LoadExtraRom( const wxChar* ext, u8 (&dest)[_size] )
 
 	// Try first a basic extension concatenation (normally results in something like name.bin.rom1)
 	const wxString Bios( g_Conf->FullpathToBios() );
-	Bios1.Printf( L"%s.%s", Bios.c_str(), ext);
+	Bios1.Printf( L"%s.%s", WX_STR(Bios), ext);
 
 	try
 	{
@@ -216,7 +222,7 @@ static void LoadExtraRom( const wxChar* ext, u8 (&dest)[_size] )
 		// still work fine.
 
 		Console.Warning(L"BIOS Warning: %s could not be read (permission denied?)", ext);
-		Console.Indent().WriteLn(L"Details: %s", ex.FormatDiagnosticMessage().c_str());
+		Console.Indent().WriteLn(L"Details: %s", WX_STR(ex.FormatDiagnosticMessage()));
 		Console.Indent().WriteLn(L"File size: %llu", filesize);
 	}
 }
@@ -263,7 +269,7 @@ void LoadBIOS()
 		LoadBiosVersion( memfp, BiosVersion, BiosDescription, biosZone );
 		
 		Console.SetTitle( pxsFmt( L"Running BIOS (%s v%u.%u)",
-			biosZone.c_str(), BiosVersion >> 8, BiosVersion & 0xff
+			WX_STR(biosZone), BiosVersion >> 8, BiosVersion & 0xff
 		));
 
 		//injectIRX("host.irx");	//not fully tested; still buggy
@@ -271,6 +277,16 @@ void LoadBIOS()
 		LoadExtraRom( L"rom1", eeMem->ROM1 );
 		LoadExtraRom( L"rom2", eeMem->ROM2 );
 		LoadExtraRom( L"erom", eeMem->EROM );
+
+		CurrentBiosInformation = NULL;
+		for (size_t i = 0; i < sizeof(biosVersions)/sizeof(biosVersions[0]); i++)
+		{
+			if (biosVersions[i].biosChecksum == BiosChecksum && biosVersions[i].biosVersion == BiosVersion)
+			{
+				CurrentBiosInformation = &biosVersions[i];
+				break;
+			}
+		}
 	}
 	catch (Exception::BadStream& ex)
 	{

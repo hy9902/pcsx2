@@ -43,7 +43,7 @@ T* SafeArray<T>::_virtual_realloc( int newsize )
 		realloc( m_ptr, newsize * sizeof(T) )
 	);
 	
-	if( IsDebugBuild )
+	if( IsDebugBuild && (retval != NULL))
 	{
 		// Zero everything out to 0xbaadf00d, so that its obviously uncleared
 		// to a debuggee
@@ -95,7 +95,7 @@ void SafeArray<T>::Dispose()
 template< typename T >
 T* SafeArray<T>::_getPtr( uint i ) const
 {
-	IndexBoundsAssumeDev( Name.c_str(), i, m_size );
+	IndexBoundsAssumeDev( WX_STR(Name), i, m_size );
 	return &m_ptr[i];
 }
 
@@ -118,7 +118,7 @@ template< typename T >
 SafeArray<T>* SafeArray<T>::Clone() const
 {
 	SafeArray<T>* retval = new SafeArray<T>( m_size );
-	memcpy_fast( retval->GetPtr(), m_ptr, sizeof(T) * m_size );
+	memcpy( retval->GetPtr(), m_ptr, sizeof(T) * m_size );
 	return retval;
 }
 
@@ -160,7 +160,7 @@ template< typename T, uint Alignment >
 SafeAlignedArray<T,Alignment>* SafeAlignedArray<T,Alignment>::Clone() const
 {
 	SafeAlignedArray<T,Alignment>* retval = new SafeAlignedArray<T,Alignment>( this->m_size );
-	memcpy_fast( retval->GetPtr(), this->m_ptr, sizeof(T) * this->m_size );
+	memcpy( retval->GetPtr(), this->m_ptr, sizeof(T) * this->m_size );
 	return retval;
 }
 
@@ -213,7 +213,7 @@ SafeList<T>::SafeList( int initialSize, const wxChar* name )
 template< typename T >
 T* SafeList<T>::_getPtr( uint i ) const
 {
-	IndexBoundsAssumeDev( Name.c_str(), i, m_length );
+	IndexBoundsAssumeDev( WX_STR(Name), i, m_length );
 	return &m_ptr[i];
 }
 
@@ -272,14 +272,14 @@ void SafeList<T>::Remove( int index )
 
 	int copylen = m_length - index;
 	if( copylen > 0 )
-		memcpy_fast( &m_ptr[index], &m_ptr[index+1], copylen );
+		memcpy( &m_ptr[index], &m_ptr[index+1], copylen );
 }
 
 template< typename T >
 SafeList<T>* SafeList<T>::Clone() const
 {
 	SafeList<T>* retval = new SafeList<T>( m_length );
-	memcpy_fast( retval->m_ptr, m_ptr, sizeof(T) * m_length );
+	memcpy( retval->m_ptr, m_ptr, sizeof(T) * m_length );
 	return retval;
 }
 

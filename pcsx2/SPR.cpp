@@ -28,10 +28,6 @@ static bool spr0lastqwc = false;
 static bool spr1lastqwc = false;
 static u32 mfifotransferred = 0;
 
-void sprInit()
-{
-}
-
 static void TestClearVUs(u32 madr, u32 qwc, bool isWrite)
 {
 	if (madr >= 0x11000000 && (madr < 0x11010000))
@@ -101,7 +97,7 @@ int  _SPR0chain()
 			//Taking an arbitary small value for games which like to check the QWC/MADR instead of STR, so get most of
 			//the cycle delay out of the way before the end.
 			partialqwc = spr0ch.qwc;
-			memcpy_qwc(pMem, &psSu128(spr0ch.sadr), partialqwc);
+			memcpy(pMem, &psSu128(spr0ch.sadr), partialqwc*16);
 
 			// clear VU mem also!
 			TestClearVUs(spr0ch.madr, partialqwc, true);
@@ -119,8 +115,7 @@ int  _SPR0chain()
 
 __fi void SPR0chain()
 {
-	int cycles = 0;
-	cycles =  _SPR0chain() * BIAS;
+	int cycles = _SPR0chain() * BIAS;
 	CPU_INT(DMAC_FROM_SPR, cycles);
 }
 
@@ -156,7 +151,7 @@ void _SPR0interleave()
 			case MFD_RESERVED:
 				// clear VU mem also!
 				TestClearVUs(spr0ch.madr, spr0ch.qwc, true);
-				memcpy_qwc(pMem, &psSu128(spr0ch.sadr), spr0ch.qwc);
+				memcpy(pMem, &psSu128(spr0ch.sadr), spr0ch.qwc*16);
 				break;
  		}
 		spr0ch.sadr += spr0ch.qwc * 16;
@@ -180,7 +175,7 @@ static __fi void _dmaSPR0()
 		{
 			if (dmacRegs.ctrl.STS == STS_fromSPR)   // STS == fromSPR
 			{
-				Console.WriteLn("SPR stall control Normal not implemented");
+				DevCon.Warning("SPR stall control Normal not implemented");
 			}
 			SPR0chain();
 			spr0finished = true;
@@ -327,7 +322,7 @@ __fi static void SPR1transfer(const void* data, int qwc)
 		TestClearVUs(spr1ch.madr, spr1ch.qwc, false);
 	}
 
-	memcpy_qwc(&psSu128(spr1ch.sadr), data, qwc);
+	memcpy(&psSu128(spr1ch.sadr), data, qwc*16);
 	spr1ch.sadr += qwc * 16;
 }
 
@@ -386,7 +381,7 @@ void _SPR1interleave()
 		spr1ch.qwc = std::min(tqwc, qwc);
 		qwc -= spr1ch.qwc;
 		pMem = SPRdmaGetAddr(spr1ch.madr, false);
-		memcpy_qwc(&psSu128(spr1ch.sadr), pMem, spr1ch.qwc);
+		memcpy(&psSu128(spr1ch.sadr), pMem, spr1ch.qwc*16);
 		spr1ch.sadr += spr1ch.qwc * 16;
 		spr1ch.madr += (sqwc + spr1ch.qwc) * 16;
 	}

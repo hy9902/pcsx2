@@ -1,5 +1,5 @@
 /*
- *	Copyright (C) 2011-2013 Gregory hainaut
+ *	Copyright (C) 2011-2014 Gregory hainaut
  *	Copyright (C) 2007-2009 Gabest
  *
  *  This Program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "GSDeviceOGL.h"
 #include "GLState.h"
+#include <fstream>
 
 #include "res/glsl_source.h"
 
@@ -30,7 +31,7 @@
 //#define ONLY_LINES
 
 static uint32 g_draw_count = 0;
-static uint32 g_frame_count = 1;		
+static uint32 g_frame_count = 1;
 #ifdef ENABLE_OGL_DEBUG_MEM_BW
 uint32 g_texture_upload_byte = 0;
 uint32 g_vertex_upload_byte = 0;
@@ -39,19 +40,21 @@ uint32 g_vertex_upload_byte = 0;
 static const uint32 g_merge_cb_index      = 10;
 static const uint32 g_interlace_cb_index  = 11;
 static const uint32 g_shadeboost_cb_index = 12;
-static const uint32 g_fxaa_cb_index       = 13;
+static const uint32 g_fx_cb_index         = 14;
 
 GSDeviceOGL::GSDeviceOGL()
 	: m_free_window(false)
 	  , m_window(NULL)
 	  , m_fbo(0)
 	  , m_fbo_read(0)
-	  , m_vb_sr(NULL)
+	  , m_va(NULL)
 	  , m_shader(NULL)
 {
 	memset(&m_merge_obj, 0, sizeof(m_merge_obj));
 	memset(&m_interlace, 0, sizeof(m_interlace));
 	memset(&m_convert, 0, sizeof(m_convert));
+	memset(&m_fxaa, 0, sizeof(m_fxaa));
+	memset(&m_shaderfx, 0, sizeof(m_shaderfx));
 	memset(&m_date, 0, sizeof(m_date));
 	memset(&m_state, 0, sizeof(m_state));
 	GLState::Clear();
@@ -70,7 +73,7 @@ GSDeviceOGL::~GSDeviceOGL()
 		return;
 
 	// Clean vertex buffer state
-	delete (m_vb_sr);
+	delete (m_va);
 
 	// Clean m_merge_obj
 	for (size_t i = 0; i < countof(m_merge_obj.ps); i++)
@@ -94,6 +97,10 @@ GSDeviceOGL::~GSDeviceOGL()
 	delete m_fxaa.cb;
 	m_shader->Delete(m_fxaa.ps);
 
+	// Clean m_shaderfx
+	delete m_shaderfx.cb;
+	m_shader->Delete(m_shaderfx.ps);
+
 	// Clean m_date
 	delete m_date.dss;
 	delete m_date.bs;
@@ -111,7 +118,6 @@ GSDeviceOGL::~GSDeviceOGL()
 	delete m_vs_cb;
 	delete m_ps_cb;
 	gl_DeleteSamplers(1, &m_palette_ss);
-	delete m_vb;
 	m_shader->Delete(m_apitrace);
 
 	for (uint32 key = 0; key < VSSelector::size(); key++) m_shader->Delete(m_vs[key]);
@@ -161,7 +167,7 @@ GSTexture* GSDeviceOGL::FetchSurface(int type, int w, int h, bool msaa, int form
 bool GSDeviceOGL::Create(GSWnd* wnd)
 {
 	if (m_window == NULL) {
-		if (!GLLoader::check_gl_version(3, 0)) return false;
+		if (!GLLoader::check_gl_version(3, 3)) return false;
 
 		if (!GLLoader::check_gl_supported_extension()) return false;
 	}
@@ -169,9 +175,19 @@ bool GSDeviceOGL::Create(GSWnd* wnd)
 	m_window = wnd;
 
 	// ****************************************************************
+	// Debug helper
+	// ****************************************************************
+#ifndef ENABLE_GLES
+#ifdef ENABLE_OGL_DEBUG
+	gl_DebugMessageCallback((GLDEBUGPROC)DebugOutputToFile, NULL);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
+#endif
+#endif
+
+	// ****************************************************************
 	// Various object
 	// ****************************************************************
-	m_shader = new GSShaderOGL(!!theApp.GetConfig("debug_ogl_shader", 1));
+	m_shader = new GSShaderOGL(!!theApp.GetConfig("debug_glsl_shader", 0));
 
 	gl_GenFramebuffers(1, &m_fbo);
 	gl_GenFramebuffers(1, &m_fbo_read);
@@ -179,12 +195,19 @@ bool GSDeviceOGL::Create(GSWnd* wnd)
 	// ****************************************************************
 	// Vertex buffer state
 	// ****************************************************************
-	GSInputLayoutOGL il_convert[2] =
+	ASSERT(sizeof(GSVertexPT1) == sizeof(GSVertex));
+	GSInputLayoutOGL il_convert[] =
 	{
-		{0, 2, GL_FLOAT, GL_FALSE, sizeof(GSVertexPxyT1), (const GLvoid*)offsetof(struct GSVertexPxyT1, p) },
-		{1, 2, GL_FLOAT, GL_FALSE, sizeof(GSVertexPxyT1), (const GLvoid*)offsetof(struct GSVertexPxyT1, t) },
+		{2 , GL_FLOAT          , GL_FALSE , sizeof(GSVertexPT1) , (const GLvoid*)(0) }  ,
+		{2 , GL_FLOAT          , GL_FALSE , sizeof(GSVertexPT1) , (const GLvoid*)(16) } ,
+		{4 , GL_UNSIGNED_BYTE  , GL_TRUE  , sizeof(GSVertex)    , (const GLvoid*)(8) }  ,
+		{1 , GL_FLOAT          , GL_FALSE , sizeof(GSVertex)    , (const GLvoid*)(12) } ,
+		{2 , GL_UNSIGNED_SHORT , GL_FALSE , sizeof(GSVertex)    , (const GLvoid*)(16) } ,
+		{1 , GL_UNSIGNED_INT   , GL_FALSE , sizeof(GSVertex)    , (const GLvoid*)(20) } ,
+		{2 , GL_UNSIGNED_SHORT , GL_FALSE , sizeof(GSVertex)    , (const GLvoid*)(24) } ,
+		{4 , GL_UNSIGNED_BYTE  , GL_TRUE  , sizeof(GSVertex)    , (const GLvoid*)(28) } ,
 	};
-	m_vb_sr = new GSVertexBufferStateOGL(sizeof(GSVertexPxyT1), il_convert, countof(il_convert));
+	m_va = new GSVertexBufferStateOGL(sizeof(GSVertexPT1), il_convert, countof(il_convert));
 
 	// ****************************************************************
 	// Texture unit state
@@ -281,18 +304,6 @@ bool GSDeviceOGL::Create(GSWnd* wnd)
 #endif
 
 	// ****************************************************************
-	// fxaa
-	// ****************************************************************
-	std::string fxaa_macro = "#define FXAA_GLSL_130 1\n";
-	if (GLLoader::found_GL_ARB_gpu_shader5) {
-		// This extension become core on openGL4
-		fxaa_macro += "#extension GL_ARB_gpu_shader5 : enable\n";
-		fxaa_macro += "#define FXAA_GATHER4_ALPHA 1\n";
-	}
-	m_fxaa.cb = new GSUniformBufferOGL(g_fxaa_cb_index, sizeof(FXAAConstantBuffer));
-	m_fxaa.ps = m_shader->Compile("fxaa.fx", "ps_main", GL_FRAGMENT_SHADER, old_fxaa_fx, fxaa_macro);
-
-	// ****************************************************************
 	// DATE
 	// ****************************************************************
 
@@ -306,6 +317,23 @@ bool GSDeviceOGL::Create(GSWnd* wnd)
 //	// Only keep stencil data
 //	m_date.bs->SetMask(false, false, false, false);
 //#endif
+
+	// ****************************************************************
+	// Use DX coordinate convention
+	// ****************************************************************
+
+
+	// VS gl_position.z => [-1,-1]
+	// FS depth => [0, 1]
+	// because of -1 we loose lot of precision for small GS value
+	// This extension allow FS depth to range from -1 to 1. So
+	// gl_position.z could range from [0, 1]
+#ifndef ENABLE_GLES
+	if (GLLoader::found_GL_ARB_clip_control) {
+		// Change depth convention
+		gl_ClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
+	}
+#endif
 
 	// ****************************************************************
 	// HW renderer shader
@@ -405,14 +433,14 @@ void GSDeviceOGL::AfterDraw()
 void GSDeviceOGL::DrawPrimitive()
 {
 	BeforeDraw();
-	m_state.vb->DrawPrimitive();
+	m_va->DrawPrimitive();
 	AfterDraw();
 }
 
 void GSDeviceOGL::DrawIndexedPrimitive()
 {
 	BeforeDraw();
-	m_state.vb->DrawIndexedPrimitive();
+	m_va->DrawIndexedPrimitive();
 	AfterDraw();
 }
 
@@ -421,7 +449,7 @@ void GSDeviceOGL::DrawIndexedPrimitive(int offset, int count)
 	ASSERT(offset + count <= (int)m_index.count);
 
 	BeforeDraw();
-	m_state.vb->DrawIndexedPrimitive(offset, count);
+	m_va->DrawIndexedPrimitive(offset, count);
 	AfterDraw();
 }
 
@@ -448,7 +476,6 @@ void GSDeviceOGL::ClearRenderTarget(GSTexture* t, const GSVector4& c)
 			gl_ClearBufferfv(GL_COLOR, 0, c.v);
 		} else {
 			OMSetFBO(m_fbo);
-			OMSetWriteBuffer();
 			OMAttachRt(static_cast<GSTextureOGL*>(t)->GetID());
 
 			gl_ClearBufferfv(GL_COLOR, 0, c.v);
@@ -473,7 +500,6 @@ void GSDeviceOGL::ClearRenderTarget_ui(GSTexture* t, uint32 c)
 		glDisable(GL_SCISSOR_TEST);
 
 		OMSetFBO(m_fbo);
-		OMSetWriteBuffer();
 		OMAttachRt(static_cast<GSTextureOGL*>(t)->GetID());
 
 		gl_ClearBufferuiv(GL_COLOR, 0, col);
@@ -485,24 +511,14 @@ void GSDeviceOGL::ClearRenderTarget_ui(GSTexture* t, uint32 c)
 void GSDeviceOGL::ClearDepth(GSTexture* t, float c)
 {
 	// TODO is it possible with GL44 ClearTexture? no the API is garbage!
-	// Anyway, stencil can be cleared to 0 (it will be only used for date)
+	// It can't be used here because it will clear both depth and stencil
 	if (0 && GLLoader::found_GL_ARB_clear_texture) {
 #ifndef ENABLE_GLES
-		static_cast<GSTextureOGL*>(t)->EnableUnit();
-		// Yes a very nice API to mix float and integer
-		struct clear {
-			float depth;
-			GLuint stencil;
-		} clear;
-
-		clear.depth = c;
-		clear.stencil = 0;
-
-		gl_ClearTexImage(static_cast<GSTextureOGL*>(t)->GetID(), 0, GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, &clear);
+		ASSERT(c == 0.0f);
+		gl_ClearTexImage(static_cast<GSTextureOGL*>(t)->GetID(), GL_TEX_LEVEL_0, GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, NULL);
 #endif
 	} else {
 		OMSetFBO(m_fbo);
-		OMSetWriteBuffer();
 		OMAttachDs(static_cast<GSTextureOGL*>(t)->GetID());
 
 		glDisable(GL_SCISSOR_TEST);
@@ -520,14 +536,14 @@ void GSDeviceOGL::ClearDepth(GSTexture* t, float c)
 void GSDeviceOGL::ClearStencil(GSTexture* t, uint8 c)
 {
 	// TODO is it possible with GL44 ClearTexture? no the API is garbage!
-	if (GLLoader::found_GL_ARB_clear_texture) {
+	// It can't be used here because it will clear both depth and stencil
+	if (0 && GLLoader::found_GL_ARB_clear_texture) {
 #ifndef ENABLE_GLES
-		static_cast<GSTextureOGL*>(t)->EnableUnit();
-		gl_ClearTexImage(static_cast<GSTextureOGL*>(t)->GetID(), 0, GL_DEPTH_STENCIL, GL_BYTE, &c);
+		ASSERT(c == 0);
+		gl_ClearTexImage(static_cast<GSTextureOGL*>(t)->GetID(), GL_TEX_LEVEL_0, GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, NULL);
 #endif
 	} else {
 		OMSetFBO(m_fbo);
-		OMSetWriteBuffer();
 		OMAttachDs(static_cast<GSTextureOGL*>(t)->GetID());
 		GLint color = c;
 
@@ -572,8 +588,11 @@ GLuint GSDeviceOGL::CreateSampler(bool bilinear, bool tau, bool tav)
 	// FIXME: seems there is 2 possibility in opengl
 	// DX: sd.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	// gl_SamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+#if 0
+	// Message:Program undefined behavior warning: Sampler object 5 has depth compare enabled. It is being used with non-depth texture 7, by a program that samples it with a regular sampler. This is undefined behavior.
 	gl_SamplerParameteri(sampler, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 	gl_SamplerParameteri(sampler, GL_TEXTURE_COMPARE_FUNC, GL_NEVER);
+#endif
 	// FIXME: need ogl extension sd.MaxAnisotropy = 16;
 
 	return sampler;
@@ -825,15 +844,14 @@ void GSDeviceOGL::StretchRect(GSTexture* st, const GSVector4& sr, GSTexture* dt,
 		flip_sr.w = sr.y;
 	}
 
-	GSVertexPxyT1 vertices[] =
+	GSVertexPT1 vertices[] =
 	{
-		{GSVector2(left  , top   ) , GSVector2(flip_sr.x , flip_sr.y)} ,
-		{GSVector2(right , top   ) , GSVector2(flip_sr.z , flip_sr.y)} ,
-		{GSVector2(left  , bottom) , GSVector2(flip_sr.x , flip_sr.w)} ,
-		{GSVector2(right , bottom) , GSVector2(flip_sr.z , flip_sr.w)} ,
+		{GSVector4(left  , top   , 0.0f, 0.0f) , GSVector2(flip_sr.x , flip_sr.y)} ,
+		{GSVector4(right , top   , 0.0f, 0.0f) , GSVector2(flip_sr.z , flip_sr.y)} ,
+		{GSVector4(left  , bottom, 0.0f, 0.0f) , GSVector2(flip_sr.x , flip_sr.w)} ,
+		{GSVector4(right , bottom, 0.0f, 0.0f) , GSVector2(flip_sr.z , flip_sr.w)} ,
 	};
 
-	IASetVertexState(m_vb_sr);
 	IASetVertexBuffer(vertices, 4);
 	IASetPrimitiveTopology(GL_TRIANGLE_STRIP);
 
@@ -897,20 +915,62 @@ void GSDeviceOGL::DoInterlace(GSTexture* st, GSTexture* dt, int shader, bool lin
 
 void GSDeviceOGL::DoFXAA(GSTexture* st, GSTexture* dt)
 {
+	// Lazy compile
+	if (!m_fxaa.ps) {
+		std::string fxaa_macro = "#define FXAA_GLSL_130 1\n";
+		if (GLLoader::found_GL_ARB_gpu_shader5) { // GL4.0 extension
+			// Hardcoded in the new shader
+			//fxaa_macro += "#define FXAA_GATHER4_ALPHA 1\n";
+			fxaa_macro += "#extension GL_ARB_gpu_shader5 : enable\n";
+		} else {
+			fprintf(stderr, "FXAA requires the GL_ARB_gpu_shader5 extension. Please either disable FXAA or upgrade your GPU/driver.\n");
+			return;
+		}
+		m_fxaa.ps = m_shader->Compile("fxaa.fx", "ps_main", GL_FRAGMENT_SHADER, fxaa_fx, fxaa_macro);
+	}
+
 	GSVector2i s = dt->GetSize();
 
 	GSVector4 sr(0, 0, 1, 1);
 	GSVector4 dr(0, 0, s.x, s.y);
 
-	FXAAConstantBuffer cb;
+	StretchRect(st, sr, dt, dr, m_fxaa.ps, true);
+}
 
-	// FIXME optimize: remove rcpFrameOpt. And reduce rcpFrame to vec2
+void GSDeviceOGL::DoExternalFX(GSTexture* st, GSTexture* dt)
+{
+	// Lazy compile
+	if (!m_shaderfx.ps) {
+		std::ifstream fconfig(theApp.GetConfig("shaderfx_conf", "dummy.ini"));
+		std::stringstream config;
+		if (fconfig.good())
+			config << fconfig.rdbuf();
+
+		std::ifstream fshader(theApp.GetConfig("shaderfx_glsl", "dummy.glsl"));
+		std::stringstream shader;
+		if (!fshader.good())
+			return;
+		shader << fshader.rdbuf();
+
+
+		m_shaderfx.cb = new GSUniformBufferOGL(g_fx_cb_index, sizeof(ExternalFXConstantBuffer));
+		m_shaderfx.ps = m_shader->Compile("Extra", "ps_main", GL_FRAGMENT_SHADER, shader.str().c_str(), config.str());
+	}
+
+	GSVector2i s = dt->GetSize();
+
+	GSVector4 sr(0, 0, 1, 1);
+	GSVector4 dr(0, 0, s.x, s.y);
+
+	ExternalFXConstantBuffer cb;
+
+	cb.xyFrame = GSVector2(s.x, s.y);
 	cb.rcpFrame = GSVector4(1.0f / s.x, 1.0f / s.y, 0.0f, 0.0f);
 	cb.rcpFrameOpt = GSVector4::zero();
 
-	m_fxaa.cb->upload(&cb);
+	m_shaderfx.cb->upload(&cb);
 
-	StretchRect(st, sr, dt, dr, m_fxaa.ps, true);
+	StretchRect(st, sr, dt, dr, m_shaderfx.ps, true);
 }
 
 void GSDeviceOGL::DoShadeBoost(GSTexture* st, GSTexture* dt)
@@ -930,7 +990,7 @@ void GSDeviceOGL::DoShadeBoost(GSTexture* st, GSTexture* dt)
 	StretchRect(st, sr, dt, dr, m_shadeboost.ps, true);
 }
 
-void GSDeviceOGL::SetupDATE(GSTexture* rt, GSTexture* ds, const GSVertexPxyT1* vertices, bool datm)
+void GSDeviceOGL::SetupDATE(GSTexture* rt, GSTexture* ds, const GSVertexPT1* vertices, bool datm)
 {
 #ifdef ENABLE_OGL_STENCIL_DEBUG
 	const GSVector2i& size = rt->GetSize();
@@ -960,7 +1020,6 @@ void GSDeviceOGL::SetupDATE(GSTexture* rt, GSTexture* ds, const GSVertexPxyT1* v
 
 	// ia
 
-	IASetVertexState(m_vb_sr);
 	IASetVertexBuffer(vertices, 4);
 	IASetPrimitiveTopology(GL_TRIANGLE_STRIP);
 
@@ -977,9 +1036,14 @@ void GSDeviceOGL::SetupDATE(GSTexture* rt, GSTexture* ds, const GSVertexPxyT1* v
 
 	//
 
+#ifdef ENABLE_OGL_STENCIL_DEBUG
 	DrawPrimitive();
-
-	//
+#else
+	// normally ok without it if GL_ARB_framebuffer_no_attachments is supported (minus driver bug)
+	OMSetWriteBuffer(GL_NONE);
+	DrawPrimitive();
+	OMSetWriteBuffer();
+#endif
 
 	EndScene();
 
@@ -991,42 +1055,32 @@ void GSDeviceOGL::SetupDATE(GSTexture* rt, GSTexture* ds, const GSVertexPxyT1* v
 
 void GSDeviceOGL::EndScene()
 {
-	m_state.vb->EndScene();
-}
-
-void GSDeviceOGL::IASetVertexState(GSVertexBufferStateOGL* vb)
-{
-	if (vb == NULL) vb = m_vb;
-
-	if (m_state.vb != vb) {
-		m_state.vb = vb;
-		vb->bind();
-	}
+	m_va->EndScene();
 }
 
 void GSDeviceOGL::IASetVertexBuffer(const void* vertices, size_t count)
 {
-	m_state.vb->UploadVB(vertices, count);
+	m_va->UploadVB(vertices, count);
 }
 
 bool GSDeviceOGL::IAMapVertexBuffer(void** vertex, size_t stride, size_t count)
 {
-	return m_state.vb->MapVB(vertex, count);
+	return m_va->MapVB(vertex, count);
 }
 
 void GSDeviceOGL::IAUnmapVertexBuffer()
 {
-	m_state.vb->UnmapVB();
+	m_va->UnmapVB();
 }
 
 void GSDeviceOGL::IASetIndexBuffer(const void* index, size_t count)
 {
-	m_state.vb->UploadIB(index, count);
+	m_va->UploadIB(index, count);
 }
 
 void GSDeviceOGL::IASetPrimitiveTopology(GLenum topology)
 {
-	m_state.vb->SetTopology(topology);
+	m_va->SetTopology(topology);
 }
 
 void GSDeviceOGL::PSSetShaderResource(GLuint sr)
@@ -1034,17 +1088,11 @@ void GSDeviceOGL::PSSetShaderResource(GLuint sr)
 	if (GLState::tex_unit[0] != sr) {
 		GLState::tex_unit[0] = sr;
 
-		if (GLLoader::found_GL_ARB_multi_bind) {
-#ifndef ENABLE_GLES
-			gl_BindTextures(0, 1, &sr);
-#endif
-		} else {
-			gl_ActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, sr);
+		gl_ActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, sr);
 
-			// Get back to the expected active texture unit
-			gl_ActiveTexture(GL_TEXTURE0 + 3);
-		}
+		// Get back to the expected active texture unit
+		gl_ActiveTexture(GL_TEXTURE0 + 3);
 	}
 }
 
@@ -1054,20 +1102,14 @@ void GSDeviceOGL::PSSetShaderResources(GLuint tex[2])
 		GLState::tex_unit[0] = tex[0];
 		GLState::tex_unit[1] = tex[1];
 
-		if (GLLoader::found_GL_ARB_multi_bind) {
-#ifndef ENABLE_GLES
-			gl_BindTextures(0, 2, tex);
-#endif
-		} else {
-			gl_ActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, tex[0]);
+		gl_ActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, tex[0]);
 
-			gl_ActiveTexture(GL_TEXTURE0 + 1);
-			glBindTexture(GL_TEXTURE_2D, tex[1]);
+		gl_ActiveTexture(GL_TEXTURE0 + 1);
+		glBindTexture(GL_TEXTURE_2D, tex[1]);
 
-			// Get back to the expected active texture unit
-			gl_ActiveTexture(GL_TEXTURE0 + 3);
-		}
+		// Get back to the expected active texture unit
+		gl_ActiveTexture(GL_TEXTURE0 + 3);
 	}
 }
 
@@ -1105,13 +1147,8 @@ void GSDeviceOGL::OMSetFBO(GLuint fbo)
 
 void GSDeviceOGL::OMSetWriteBuffer(GLenum buffer)
 {
-	// Note if fbo is 0, standard GL_BACK will be used instead
-	if (GLState::fbo && GLState::draw != buffer) {
-		GLState::draw = buffer;
-
-		GLenum target[1] = {buffer};
-		gl_DrawBuffers(1, target);
-	}
+	GLenum target[1] = {buffer};
+	gl_DrawBuffers(1, target);
 }
 
 void GSDeviceOGL::OMSetDepthStencilState(GSDepthStencilOGL* dss, uint8 sref)
@@ -1140,25 +1177,24 @@ void GSDeviceOGL::OMSetBlendState(GSBlendStateOGL* bs, float bf)
 void GSDeviceOGL::OMSetRenderTargets(GSTexture* rt, GSTexture* ds, const GSVector4i* scissor)
 {
 	if (rt == NULL || !static_cast<GSTextureOGL*>(rt)->IsBackbuffer()) {
+		OMSetFBO(m_fbo);
 		if (rt) {
-			OMSetFBO(m_fbo);
-			OMSetWriteBuffer();
 			OMAttachRt(static_cast<GSTextureOGL*>(rt)->GetID());
 		} else {
 			// Note: NULL rt is only used in DATE so far.
-			OMSetFBO(m_fbo);
-			OMSetWriteBuffer(GL_NONE);
+			OMAttachRt(0);
 		}
 
 		// Note: it must be done after OMSetFBO
 		if (ds)
 			OMAttachDs(static_cast<GSTextureOGL*>(ds)->GetID());
+		else
+			OMAttachDs(0);
 
 	} else {
 		// Render in the backbuffer
 		OMSetFBO(0);
 	}
-
 
 
 	GSVector2i size = rt ? rt->GetSize() : ds->GetSize();
@@ -1196,8 +1232,7 @@ void GSDeviceOGL::CheckDebugLog()
              unsigned int pos = 0;
              for(unsigned int i=0; i<retVal; i++)
              {
-                    DebugOutputToFile(sources[i], types[i], ids[i], severities[i],
- &messageLog[pos]);
+                    DebugOutputToFile(sources[i], types[i], ids[i], severities[i], lengths[i], &messageLog[pos], NULL);
                     pos += lengths[i];
               }
        }
@@ -1206,47 +1241,49 @@ void GSDeviceOGL::CheckDebugLog()
 #endif
 }
 
-void GSDeviceOGL::DebugOutputToFile(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, const char* message)
+// Note: used as a callback of DebugMessageCallback. Don't change the signature
+void GSDeviceOGL::DebugOutputToFile(GLenum gl_source, GLenum gl_type, GLuint id, GLenum gl_severity, GLsizei gl_length, const GLchar *gl_message, const void* userParam)
 {
 #ifndef ENABLE_GLES
-	char debType[20], debSev[5];
+	std::string message(gl_message, gl_length);
+	std::string type, severity, source;
 	static int sev_counter = 0;
-
-	if(type == GL_DEBUG_TYPE_ERROR_ARB)
-		strcpy(debType, "Error");
-	else if(type == GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB)
-		strcpy(debType, "Deprecated behavior");
-	else if(type == GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB)
-		strcpy(debType, "Undefined behavior");
-	else if(type == GL_DEBUG_TYPE_PORTABILITY_ARB)
-		strcpy(debType, "Portability");
-	else if(type == GL_DEBUG_TYPE_PERFORMANCE_ARB)
-		strcpy(debType, "Performance");
-	else if(type == GL_DEBUG_TYPE_OTHER_ARB)
-		strcpy(debType, "Other");
-	else
-		strcpy(debType, "UNKNOWN");
-
-	if(severity == GL_DEBUG_SEVERITY_HIGH_ARB) {
-		strcpy(debSev, "High");
-		sev_counter++;
+	switch(gl_type) {
+		case GL_DEBUG_TYPE_ERROR_ARB               : type = "Error"; break;
+		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB : type = "Deprecated bhv"; break;
+		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB  : type = "Undefined bhv"; break;
+		case GL_DEBUG_TYPE_PORTABILITY_ARB         : type = "Portability"; break;
+		case GL_DEBUG_TYPE_PERFORMANCE_ARB         : type = "Perf"; break;
+		case GL_DEBUG_TYPE_OTHER_ARB               : type = "Others"; break;
+		default                                    : type = "TTT"; break;
 	}
-	else if(severity == GL_DEBUG_SEVERITY_MEDIUM_ARB)
-		strcpy(debSev, "Med");
-	else if(severity == GL_DEBUG_SEVERITY_LOW_ARB)
-		strcpy(debSev, "Low");
+	switch(gl_severity) {
+		case GL_DEBUG_SEVERITY_HIGH_ARB   : severity = "High"; sev_counter++; break;
+		case GL_DEBUG_SEVERITY_MEDIUM_ARB : severity = "Mid"; break;
+		case GL_DEBUG_SEVERITY_LOW_ARB    : severity = "Low"; break;
+		default                           : severity = "Info"; break;
+	}
+	switch(gl_source) {
+		case GL_DEBUG_SOURCE_API_ARB             : source = "API"; break;
+		case GL_DEBUG_SOURCE_WINDOW_SYSTEM_ARB   : source = "WINDOW"; break;
+		case GL_DEBUG_SOURCE_SHADER_COMPILER_ARB : source = "COMPILER"; break;
+		case GL_DEBUG_SOURCE_THIRD_PARTY_ARB     : source = "3rdparty"; break;
+		case GL_DEBUG_SOURCE_APPLICATION_ARB     : source = "Application"; break;
+		case GL_DEBUG_SOURCE_OTHER_ARB           : source = "Others"; break;
+		default                                  : source = "???"; break;
+	}
 
 	#ifdef LOUD_DEBUGGING
-	fprintf(stderr,"Type:%s\tID:%d\tSeverity:%s\tMessage:%s\n", debType, g_draw_count, debSev,message);
+	fprintf(stderr,"Type:%s\tID:%d\tSeverity:%s\tMessage:%s\n", type.c_str(), g_draw_count, severity.c_str(), message.c_str());
 	#endif
 
 	FILE* f = fopen("Debug.txt","a");
 	if(f)
 	{
-		fprintf(f,"Type:%s\tID:%d\tSeverity:%s\tMessage:%s\n", debType, g_draw_count, debSev,message);
+		fprintf(f,"Type:%s\tID:%d\tSeverity:%s\tMessage:%s\n", type.c_str(), g_draw_count, severity.c_str(), message.c_str());
 		fclose(f);
 	}
-	ASSERT(sev_counter < 3);
+	ASSERT(sev_counter < 5);
 #endif
 }
 
@@ -1284,7 +1321,7 @@ void GSDeviceOGL::DebugOutputToFile(unsigned int source, unsigned int type, unsi
 #define D3DBLEND_SRCALPHA		GL_SRC1_ALPHA
 #define D3DBLEND_INVSRCALPHA	GL_ONE_MINUS_SRC1_ALPHA
 #endif
-                        
+
 const GSDeviceOGL::D3D9Blend GSDeviceOGL::m_blendMapD3D9[3*3*3*3] =
 {
 	{0, D3DBLENDOP_ADD, D3DBLEND_ONE, D3DBLEND_ZERO},						// 0000: (Cs - Cs)*As + Cs ==> Cs

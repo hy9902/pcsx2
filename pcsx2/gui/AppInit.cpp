@@ -31,45 +31,24 @@
 
 using namespace pxSizerFlags;
 
-static void CpuCheckSSE2()
-{
-	if( x86caps.hasStreamingSIMD2Extensions ) return;
-
-	// Only check once per process session:
-	static bool checked = false;
-	if( checked ) return;
-	checked = true;
-
-	wxDialogWithHelpers exconf( NULL, _("PCSX2 - SSE2 Recommended") );
-
-	exconf += exconf.Heading( pxE( L"Warning: Your computer does not support SSE2, which is required by many PCSX2 recompilers and plugins. Your options will be limited and emulation will be *very* slow." )
-	);
-
-	pxIssueConfirmation( exconf, MsgButtons().OK(), L"Error.Startup.NoSSE2" );
-
-	// Auto-disable anything that needs SSE2:
-
-	g_Conf->EmuOptions.Cpu.Recompiler.EnableEE	= false;
-	g_Conf->EmuOptions.Cpu.Recompiler.EnableVU0	= false;
-	g_Conf->EmuOptions.Cpu.Recompiler.EnableVU1	= false;
-}
-
 void Pcsx2App::DetectCpuAndUserMode()
 {
 	AffinityAssert_AllowFrom_MainUI();
 	
+#ifdef _M_X86
 	x86caps.Identify();
 	x86caps.CountCores();
 	x86caps.SIMD_EstablishMXCSRmask();
 
-	if( !x86caps.hasMultimediaExtensions || !x86caps.hasStreamingSIMDExtensions )
+	if(!x86caps.hasStreamingSIMD2Extensions )
 	{
-		// Note: Due to optimizations to GIFpath parsers, memcpy, and possibly other things, we need
-		// a bare minimum of SSE supported by the CPU.
+		// This code will probably never run if the binary was correctly compiled for SSE2
+		// SSE2 is required for any decent speed and is supported by more than decade old x86 CPUs
 		throw Exception::HardwareDeficiency()
-			.SetDiagMsg(L"Critical Failure: SSE Extensions not available.")
-			.SetUserMsg(_("SSE extensions are not available.  PCSX2 requires a cpu that supports the SSE instruction set."));
+			.SetDiagMsg(L"Critical Failure: SSE2 Extensions not available.")
+			.SetUserMsg(_("SSE2 extensions are not available.  PCSX2 requires a cpu that supports the SSE2 instruction set."));
 	}
+#endif
 
 	EstablishAppUserMode();
 
@@ -87,22 +66,12 @@ void Pcsx2App::OpenMainFrame()
 
 	MainEmuFrame* mainFrame = new MainEmuFrame( NULL, pxGetAppName() );
 	m_id_MainFrame = mainFrame->GetId();
-	
-#ifndef PCSX2_DEVBUILD
-	if (g_Conf->EmuOptions.Debugger.EnableDebugger)
-#endif
-	{
-		DisassemblyDialog* disassembly = new DisassemblyDialog( mainFrame );
-		m_id_Disassembler = disassembly->GetId();
 
-		if (g_Conf->EmuOptions.Debugger.ShowDebuggerOnStart)
-			disassembly->Show();
-	}
-#ifndef PCSX2_DEVBUILD
-	else {
-		m_id_Disassembler = 0;
-	}
-#endif
+	DisassemblyDialog* disassembly = new DisassemblyDialog( mainFrame );
+	m_id_Disassembler = disassembly->GetId();
+
+	if (g_Conf->EmuOptions.Debugger.ShowDebuggerOnStart)
+		disassembly->Show();
 
 	PostIdleAppMethod( &Pcsx2App::OpenProgramLog );
 
@@ -148,7 +117,6 @@ void Pcsx2App::AllocateCoreStuffs()
 {
 	if( AppRpc_TryInvokeAsync( &Pcsx2App::AllocateCoreStuffs ) ) return;
 
-	CpuCheckSSE2();
 	SysLogMachineCaps();
 	AppApplySettings();
 
@@ -199,16 +167,25 @@ void Pcsx2App::AllocateCoreStuffs()
 			{
 				scrollableTextArea->AppendText( L"* microVU0\n\t" + ex->FormatDisplayMessage() + L"\n\n" );
 				recOps.UseMicroVU0	= false;
+#ifndef DISABLE_SVU
 				recOps.EnableVU0	= recOps.EnableVU0 && m_CpuProviders->IsRecAvailable_SuperVU0();
+#else
+				recOps.EnableVU1	= false;
+#endif
 			}
 
 			if( BaseException* ex = m_CpuProviders->GetException_MicroVU1() )
 			{
 				scrollableTextArea->AppendText( L"* microVU1\n\t" + ex->FormatDisplayMessage() + L"\n\n" );
 				recOps.UseMicroVU1	= false;
+#ifndef DISABLE_SVU
 				recOps.EnableVU1	= recOps.EnableVU1 && m_CpuProviders->IsRecAvailable_SuperVU1();
+#else
+				recOps.EnableVU1	= false;
+#endif
 			}
 
+#ifndef DISABLE_SVU
 			if( BaseException* ex = m_CpuProviders->GetException_SuperVU0() )
 			{
 				scrollableTextArea->AppendText( L"* SuperVU0\n\t" + ex->FormatDisplayMessage() + L"\n\n" );
@@ -222,9 +199,9 @@ void Pcsx2App::AllocateCoreStuffs()
 				recOps.UseMicroVU1	= m_CpuProviders->IsRecAvailable_MicroVU1();
 				recOps.EnableVU1	= recOps.EnableVU1 && recOps.UseMicroVU1;
 			}
+#endif
 
-			exconf += exconf.Heading( pxE( L"Note: Recompilers are not necessary for PCSX2 to run, however they typically improve emulation speed substantially. You may have to manually re-enable the recompilers listed above, if you resolve the errors." )
-			);
+			exconf += exconf.Heading(pxE( L"Note: Recompilers are not necessary for PCSX2 to run, however they typically improve emulation speed substantially. You may have to manually re-enable the recompilers listed above, if you resolve the errors." ));
 
 			pxIssueConfirmation( exconf, MsgButtons().OK() );
 		}
@@ -254,8 +231,10 @@ void Pcsx2App::OnInitCmdLine( wxCmdLineParser& parser )
 	parser.AddSwitch( wxEmptyString,L"windowed",	_("use windowed GS mode") );
 
 	parser.AddSwitch( wxEmptyString,L"nogui",		_("disables display of the gui while running games") );
+	parser.AddSwitch( wxEmptyString,L"noguiprompt",	_("when nogui - prompt before exiting on suspend") );
+
 	parser.AddOption( wxEmptyString,L"elf",			_("executes an ELF image"), wxCMD_LINE_VAL_STRING );
-	parser.AddSwitch( wxEmptyString,L"nodisc",		_("boots an empty dvd tray; use to enter the PS2 system menu") );
+	parser.AddSwitch( wxEmptyString,L"nodisc",		_("boots an empty DVD tray; use to enter the PS2 system menu") );
 	parser.AddSwitch( wxEmptyString,L"usecd",		_("boots from the CDVD plugin (overrides IsoFile parameter)") );
 
 	parser.AddSwitch( wxEmptyString,L"nohacks",		_("disables all speedhacks") );
@@ -269,7 +248,7 @@ void Pcsx2App::OnInitCmdLine( wxCmdLineParser& parser )
 
 	const PluginInfo* pi = tbl_PluginInfo; do {
 		parser.AddOption( wxEmptyString, pi->GetShortname().Lower(),
-			pxsFmt( _("specify the file to use as the %s plugin"), pi->GetShortname().c_str() )
+			pxsFmt( _("specify the file to use as the %s plugin"), WX_STR(pi->GetShortname()) )
 		);
 	} while( ++pi, pi->shortname != NULL );
 
@@ -351,6 +330,7 @@ bool Pcsx2App::OnCmdLineParsed( wxCmdLineParser& parser )
 	//wxApp::OnCmdLineParsed( parser );
 
 	m_UseGUI	= !parser.Found(L"nogui");
+	m_NoGuiExitPrompt = parser.Found(L"noguiprompt"); // by default no prompt for exit with nogui.
 
 	if( !ParseOverrides(parser) ) return false;
 
@@ -746,12 +726,12 @@ void Pcsx2App::CleanUp()
 
 __fi wxString AddAppName( const wxChar* fmt )
 {
-	return pxsFmt( fmt, pxGetAppName().c_str() );
+	return pxsFmt( fmt, WX_STR(pxGetAppName()) );
 }
 
 __fi wxString AddAppName( const char* fmt )
 {
-	return pxsFmt( fromUTF8(fmt), pxGetAppName().c_str() );
+	return pxsFmt( fromUTF8(fmt), WX_STR(pxGetAppName()) );
 }
 
 // ------------------------------------------------------------------------------------------

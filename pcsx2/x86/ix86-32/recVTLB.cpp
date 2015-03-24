@@ -265,7 +265,7 @@ static u8* GetIndirectDispatcherPtr( int mode, int operandsize, int sign = 0 )
 //
 static void DynGen_IndirectDispatch( int mode, int bits, bool sign = false )
 {
-	int szidx;
+	int szidx = 0;
 	switch( bits )
 	{
 		case 8:		szidx=0;	break;
@@ -339,7 +339,7 @@ void vtlb_dynarec_init()
 //                            Dynarec Load Implementations
 void vtlb_DynGenRead64(u32 bits)
 {
-	jASSUME( bits == 64 || bits == 128 );
+	pxAssume( bits == 64 || bits == 128 );
 
 	uptr* writeback = DynGen_PrepRegs();
 
@@ -355,7 +355,7 @@ void vtlb_DynGenRead64(u32 bits)
 //   Returns read value in eax.
 void vtlb_DynGenRead32(u32 bits, bool sign)
 {
-	jASSUME( bits <= 32 );
+	pxAssume( bits <= 32 );
 
 	uptr* writeback = DynGen_PrepRegs();
 

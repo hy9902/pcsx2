@@ -672,10 +672,8 @@ extern SndOutModule* DSoundOut;
 extern SndOutModule* XAudio2Out;
 #endif
 extern SndOutModule* PortaudioOut;
-#if defined(SPU2X_SDL) || defined(SPU2X_SDL2)
+#ifdef __linux__
 extern SndOutModule * const SDLOut;
-#endif
-#ifdef __LINUX__
 extern SndOutModule* AlsaOut;
 #endif
 

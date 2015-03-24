@@ -18,6 +18,9 @@
 #include "Assertions.h"
 #include "ScopedPtr.h"
 
+// Because wxTrap isn't available on Linux builds of wxWidgets (non-Debug, typically)
+void pxTrap();
+
 // --------------------------------------------------------------------------------------
 //  DESTRUCTOR_CATCHALL - safe destructor helper
 // --------------------------------------------------------------------------------------
@@ -116,7 +119,7 @@ namespace Exception
 
 		virtual u32 GetPc() const=0;
 		virtual bool IsDelaySlot() const=0;
-		virtual wxString Message() const { return m_message; }
+		virtual wxString& Message() { return m_message; }
 
 		virtual void Rethrow() const=0;
 		virtual Ps2Generic* Clone() const=0;

@@ -11,19 +11,8 @@ set(Output Utilities)
 
 # set common flags
 set(CommonFlags 
-	-pthread
-    -fvisibility=hidden
-	-fno-dse
-	-fno-guess-branch-probability
 	-fno-strict-aliasing
-	-fno-tree-dse
-	-pipe
-	-Wunused-variable)
-
-# set warning flags
-set(DebugFlags
-	-g
-	-W)
+    )
 
 # set optimization flags
 set(OptimizationFlags
@@ -66,25 +55,42 @@ set(OptimizationFlags
 	-ftree-vrp
 	-funit-at-a-time)
 
+#Clang doesn't support a few common flags that GCC does.
+if(NOT USE_CLANG)
+	set(UtilitiesFinalFlags
+		${UtilitiesFinalFlags}
+		${CommonFlags} -fno-guess-branch-probability -fno-dse -fno-tree-dse
+	)
+endif(NOT USE_CLANG) 
+
 # Debug - Build
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
 	
 	# add defines
-	add_definitions(${CommonFlags} ${DebugFlags} -DPCSX2_DEBUG -DPCSX2_DEVBUILD)
+	set(UtilitiesFinalFlags
+		${UtilitiesFinalFlags}
+		${CommonFlags} -DPCSX2_DEBUG -DPCSX2_DEVBUILD
+	)
 endif(CMAKE_BUILD_TYPE STREQUAL Debug)
 
 # Devel - Build
 if(CMAKE_BUILD_TYPE STREQUAL Devel)
 	
 	# add defines
-	add_definitions(${CommonFlags} ${OptimizationFlags} -DPCSX2_DEVBUILD)
+	set(UtilitiesFinalFlags
+		${UtilitiesFinalFlags}
+		${CommonFlags} ${OptimizationFlags} -DPCSX2_DEVBUILD
+	)
 endif(CMAKE_BUILD_TYPE STREQUAL Devel)
 
 # Release - Build
 if(CMAKE_BUILD_TYPE STREQUAL Release)
 	
 	# add defines
-	add_definitions(${CommonFlags} ${OptimizationFlags})
+	set(UtilitiesFinalFlags
+		${UtilitiesFinalFlags}
+		${CommonFlags} ${OptimizationFlags}
+	)
 endif(CMAKE_BUILD_TYPE STREQUAL Release)
 
 # variable with all sources of this library
@@ -122,13 +128,7 @@ set(UtilitiesSources
 	wxAppWithHelpers.cpp
 	wxGuiTools.cpp
 	wxHelpers.cpp
-	x86/MemcpyVibes.cpp
-#	x86/MemcpyFast.cpp
 	)
-
-# collect .S files
-set(UtilitiesSSources
-	x86/MemcpyFast.S)
 
 # variable with all headers of this library
 set(UtilitiesHeaders
@@ -165,22 +165,15 @@ set(UtilitiesHeaders
 	../../include/Utilities/wxGuiTools.h
 	PrecompiledHeader.h)
 
-include_directories(.)
+set(UtilitiesFinalSources
+	${UtilitiesSources}
+	${UtilitiesHeaders}
+)
 
-# change language of .S-files to c++
-set_source_files_properties(${UtilitiesSSources} PROPERTIES LANGUAGE CXX)
+set(UtilitiesFinalLibs
+    ${LIBC_LIBRARIES} # Gold (new linux linker) does not get automatically dependency of dependency
+	${wxWidgets_LIBRARIES}
+)
 
-# add library
-add_library(${Output} STATIC ${UtilitiesSources} ${UtilitiesHeaders} ${UtilitiesSSources})
-
-# link target with wx
-target_link_libraries(${Output} ${wxWidgets_LIBRARIES})
-
-# Gold (new linux linker) does not get automatically dependency of dependency so you must add
-# them manually.
-target_link_libraries(${Output} ${LIBC_LIBRARIES})
-
-# User flags options
-if(NOT USER_CMAKE_LD_FLAGS STREQUAL "")
-    target_link_libraries(${Output} "${USER_CMAKE_LD_FLAGS}")
-endif(NOT USER_CMAKE_LD_FLAGS STREQUAL "")
+add_pcsx2_lib(${Output} "${UtilitiesFinalSources}" "${UtilitiesFinalLibs}" "${UtilitiesFinalFlags}")
+add_pcsx2_lib(${Output}_NO_TLS "${UtilitiesFinalSources}" "${UtilitiesFinalLibs}" "${UtilitiesFinalFlags} -DPCSX2_THREAD_LOCAL=0")

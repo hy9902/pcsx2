@@ -44,9 +44,19 @@
 #include <comutil.h>
 #include "../../common/include/comptr.h"
 
+
 #define D3DCOLORWRITEENABLE_RGBA (D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE | D3DCOLORWRITEENABLE_ALPHA)
 #define D3D11_SHADER_MACRO D3D10_SHADER_MACRO
 #define ID3D11Blob ID3D10Blob
+
+#endif
+
+
+#ifdef ENABLE_OPENCL
+
+#define CL_USE_DEPRECATED_OPENCL_1_1_APIS
+#define __CL_ENABLE_EXCEPTIONS
+#include <CL/cl.hpp>
 
 #endif
 
@@ -89,23 +99,7 @@ typedef uint32 uptr;
 
 using namespace std;
 
-#ifdef _MSC_VER
-
-#if _MSC_VER >= 1500
-	#include <memory>
-#if _MSC_VER < 1600
-	using namespace std::tr1;
-#else
-	using namespace std;
-#endif
-#endif
-#endif
-
-#ifdef __GNUC__
-
-	#include <memory>
-
-#endif
+#include <memory>
 
 #ifdef _WINDOWS
 
@@ -126,11 +120,7 @@ using namespace std;
 	template<> class hash_compare<uint32>
 	{
 	public:
-		#if _MSC_VER >= 1500 && _MSC_VER < 1600
-		enum {bucket_size = 4, min_buckets = 8};
-		#else
 		enum {bucket_size = 1};
-		#endif
 
 		size_t operator()(uint32 key) const
 		{
@@ -153,11 +143,7 @@ using namespace std;
 	template<> class hash_compare<uint64>
 	{
 	public:
-		#if _MSC_VER >= 1500 && _MSC_VER < 1600
-		enum {bucket_size = 4, min_buckets = 8};
-		#else
 		enum {bucket_size = 1};
-		#endif
 
 		size_t operator()(uint64 key) const
 		{
@@ -228,7 +214,7 @@ using namespace std;
         #include "assert.h"
         #define __forceinline __inline__ __attribute__((always_inline,unused))
         // #define __forceinline __inline__ __attribute__((__always_inline__,__gnu_inline__))
-        #define __assume(c) ((void)0)
+        #define __assume(c) do { if (!(c)) __builtin_unreachable(); } while(0)
 
     #endif
 
@@ -253,11 +239,11 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 
         #define RESTRICT restrict
 
-    #elif _MSC_VER >= 1400
+    #elif defined(_MSC_VER)
 
         #define RESTRICT __restrict
 
-	#elif defined(__GNUC__)
+    #elif defined(__GNUC__)
 
         #define RESTRICT __restrict__
 
@@ -287,6 +273,24 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 #endif
 
 // sse
+#ifdef __GNUC__
+// Convert gcc see define into GSdx (windows) define
+#if defined(__AVX2__)
+	#define _M_SSE 0x501
+#elif defined(__AVX__)
+	#define _M_SSE 0x500
+#elif defined(__SSE4_2__)
+	#define _M_SSE 0x402
+#elif defined(__SSE4_1__)
+	#define _M_SSE 0x401
+#elif defined(__SSSE3__)
+	#define _M_SSE 0x301
+#elif defined(__SSE2__)
+	#define _M_SSE 0x200
+#elif defined(__SSE__)
+	#define _M_SSE 0x100
+#endif
+#endif
 
 #if !defined(_M_SSE) && (!defined(_WINDOWS) || defined(_M_AMD64) || defined(_M_IX86_FP) && _M_IX86_FP >= 2)
 
@@ -304,17 +308,6 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 	#endif
 
 	#define MXCSR (_MM_DENORMALS_ARE_ZERO | _MM_MASK_MASK | _MM_ROUND_NEAREST | _MM_FLUSH_ZERO_ON)
-
-	#if defined(_MSC_VER) && _MSC_VER < 1500
-
-	__forceinline __m128i _mm_castps_si128(__m128 a) {return *(__m128i*)&a;}
-	__forceinline __m128 _mm_castsi128_ps(__m128i a) {return *(__m128*)&a;}
-	__forceinline __m128i _mm_castpd_si128(__m128d a) {return *(__m128i*)&a;}
-	__forceinline __m128d _mm_castsi128_pd(__m128i a) {return *(__m128d*)&a;}
-	__forceinline __m128d _mm_castps_pd(__m128 a) {return *(__m128d*)&a;}
-	__forceinline __m128 _mm_castpd_ps(__m128d a) {return *(__m128*)&a;}
-
-	#endif
 
 	#define _MM_TRANSPOSE4_SI128(row0, row1, row2, row3) \
 	{ \
@@ -358,10 +351,10 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 
 #if !defined(_MSC_VER)
 
-	#if defined(__USE_ISOC11)
+	#if defined(__USE_ISOC11) && !defined(ASAN_WORKAROUND) // not supported yet on gcc 4.9
 
 	#define _aligned_malloc(size, a) aligned_alloc(a, size)
-	static void _aligned_free(void* p) { free(p); }
+	static inline void _aligned_free(void* p) { free(p); }
 
 	#elif !defined(HAVE_ALIGNED_MALLOC)
 
@@ -371,11 +364,10 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 	#endif
 
 	// http://svn.reactos.org/svn/reactos/trunk/reactos/include/crt/mingw32/intrin_x86.h?view=markup
-	// - the other intrin_x86.h of pcsx2 is not up to date, its _interlockedbittestandreset simply does not work.
 
 	__forceinline unsigned char _BitScanForward(unsigned long* const Index, const unsigned long Mask)
 	{
-		__asm__("bsfl %[Mask], %[Index]" : [Index] "=r" (*Index) : [Mask] "mr" (Mask));
+		__asm__("bsfl %k[Mask], %k[Index]" : [Index] "=r" (*Index) : [Mask] "mr" (Mask));
 		
 		return Mask ? 1 : 0;
 	}
@@ -384,7 +376,7 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 	{
 		unsigned char retval;
 		
-		__asm__("lock; btrl %[b], %[a]; setb %b[retval]" : [retval] "=q" (retval), [a] "+m" (*a) : [b] "Ir" (b) : "memory");
+		__asm__("lock; btrl %k[b], %[a]; setb %b[retval]" : [retval] "=q" (retval), [a] "+m" (*a) : [b] "Ir" (b) : "memory");
 		
 		return retval;
 	}
@@ -393,7 +385,7 @@ struct aligned_free_second {template<class T> void operator()(T& p) {_aligned_fr
 	{
 		unsigned char retval;
 		
-		__asm__("lock; btsl %[b], %[a]; setc %b[retval]" : [retval] "=q" (retval), [a] "+m" (*a) : [b] "Ir" (b) : "memory");
+		__asm__("lock; btsl %k[b], %[a]; setc %b[retval]" : [retval] "=q" (retval), [a] "+m" (*a) : [b] "Ir" (b) : "memory");
 		
 		return retval;
 	}
@@ -490,4 +482,13 @@ extern void vmfree(void* ptr, size_t size);
 
 	#endif
 
+#endif
+
+// Helper path to dump texture
+#ifdef _WINDOWS
+const std::string root_sw("c:\\temp1\\_");
+const std::string root_hw("c:\\temp2\\_");
+#else
+const std::string root_sw("/tmp/GS_SW_dump/");
+const std::string root_hw("/tmp/GS_HW_dump/");
 #endif

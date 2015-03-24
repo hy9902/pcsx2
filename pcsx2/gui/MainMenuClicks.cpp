@@ -70,6 +70,11 @@ void MainEmuFrame::Menu_Language_Click(wxCommandEvent &event)
 	InterfaceConfigDialog(this).ShowModal();
 }
 
+void MainEmuFrame::Menu_ChangeLang(wxCommandEvent &event) // Always in English
+{
+	AppOpenDialog<InterfaceLanguageDialog>(this);
+}
+
 static void WipeSettings()
 {
 	wxGetApp().CleanupRestartable();
@@ -105,7 +110,7 @@ void MainEmuFrame::Menu_ResetAllSettings_Click(wxCommandEvent &event)
 		ScopedCoreThreadPopup suspender;
 		if( !Msgbox::OkCancel( pxsFmt(
 			pxE( L"This command clears %s settings and allows you to re-run the First-Time Wizard.  You will need to manually restart %s after this operation.\n\nWARNING!!  Click OK to delete *ALL* settings for %s and force-close the app, losing any current emulation progress.  Are you absolutely sure?\n\n(note: settings for plugins are unaffected)"
-			), pxGetAppName().c_str(), pxGetAppName().c_str(), pxGetAppName().c_str() ),
+			), WX_STR(pxGetAppName()), WX_STR(pxGetAppName()), WX_STR(pxGetAppName()) ),
 			_("Reset all settings?") ) )
 		{
 			suspender.AllowResume();
@@ -228,12 +233,12 @@ static wxString JoinFiletypes( const wxChar** src )
 		if( !dest.IsEmpty() )
 			dest += L";";
 
-		dest += pxsFmt(L"*.%s", *src);
+		dest += pxsFmt(L"*.%ls", *src);
 
 		if (wxFileName::IsCaseSensitive())
 		{
 			// omgosh!  the filesystem is CaSE SeNSiTiVE!!
-			dest += pxsFmt(L";*.%s", *src).ToUpper();
+			dest += pxsFmt(L";*.%ls", *src).ToUpper();
 		}
 
 		++src;
@@ -255,10 +260,10 @@ bool MainEmuFrame::_DoSelectIsoBrowser( wxString& result )
 	
 	wxArrayString isoFilterTypes;
 
-	isoFilterTypes.Add(pxsFmt(_("All Supported (%s)"), (isoSupportedLabel + L" .dump" + L" .gz").c_str()));
+	isoFilterTypes.Add(pxsFmt(_("All Supported (%s)"), WX_STR((isoSupportedLabel + L" .dump" + L" .gz"))));
 	isoFilterTypes.Add(isoSupportedList + L";*.dump" + L";*.gz");
 
-	isoFilterTypes.Add(pxsFmt(_("Disc Images (%s)"), isoSupportedLabel.c_str() ));
+	isoFilterTypes.Add(pxsFmt(_("Disc Images (%s)"), WX_STR(isoSupportedLabel) ));
 	isoFilterTypes.Add(isoSupportedList);
 
 	isoFilterTypes.Add(pxsFmt(_("Blockdumps (%s)"), L".dump" ));
@@ -270,7 +275,7 @@ bool MainEmuFrame::_DoSelectIsoBrowser( wxString& result )
 	isoFilterTypes.Add(_("All Files (*.*)"));
 	isoFilterTypes.Add(L"*.*");
 	
-	wxFileDialog ctrl( this, _("Select CDVD source iso..."), g_Conf->Folders.RunIso.ToString(), wxEmptyString,
+	wxFileDialog ctrl( this, _("Select disc image, gzip compressed disc image, or block-dump..."), g_Conf->Folders.RunIso.ToString(), wxEmptyString,
 		JoinString(isoFilterTypes, L"|"), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
 	if( ctrl.ShowModal() != wxID_CANCEL )
@@ -580,19 +585,6 @@ void MainEmuFrame::Menu_ShowConsole(wxCommandEvent &event)
 	wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, g_Conf->ProgLogBox.Visible ? wxID_OPEN : wxID_CLOSE );
 	wxGetApp().ProgramLog_PostEvent( evt );
 }
-
-void MainEmuFrame::Menu_ChangeLang(wxCommandEvent &event) // Always in English
-{
-	Msgbox::Alert ( L"Please restart PCSX2.\n"
-					L"\n"
-					L"First-Time-Wizard will then appear, where you can change the language.\n"
-					L"\n"
-					L"(You can keep other settings by choosing 'Import' when prompted)"
-					 );
-
-	wxGetApp().ForceFirstTimeWizardOnNextRun();
-}
-
 
 void MainEmuFrame::Menu_ShowConsole_Stdio(wxCommandEvent &event)
 {

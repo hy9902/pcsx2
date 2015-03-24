@@ -20,9 +20,15 @@
 #include "R5900OpcodeTables.h"
 #include "iR5900.h"
 #include "iFPU.h"
+
+#ifndef DISABLE_SVU
 #include "sVU_Micro.h"
+#endif
 
 using namespace x86Emitter;
+
+const __aligned16 u32 g_minvals[4]	= {0xff7fffff, 0xff7fffff, 0xff7fffff, 0xff7fffff};
+const __aligned16 u32 g_maxvals[4]	= {0x7f7fffff, 0x7f7fffff, 0x7f7fffff, 0x7f7fffff};
 
 //------------------------------------------------------------------
 namespace R5900 {
@@ -126,7 +132,7 @@ void recCFC1(void)
 	MOV32RtoM( (uptr)&cpuRegs.GPR.r[ _Rt_ ].UL[ 1 ], EDX );
 }
 
-void recCTC1( void )
+void recCTC1()
 {
 	if ( _Fs_ != 31 ) return;
 
@@ -170,7 +176,7 @@ void recCTC1( void )
 // MFC1
 //------------------------------------------------------------------
 
-void recMFC1(void)
+void recMFC1()
 {
 	int regt, regs;
 	if ( ! _Rt_ ) return;
@@ -234,7 +240,7 @@ void recMFC1(void)
 //------------------------------------------------------------------
 // MTC1
 //------------------------------------------------------------------
-void recMTC1(void)
+void recMTC1()
 {
 	if( GPR_IS_CONST1(_Rt_) )
 	{
@@ -670,25 +676,25 @@ static void _setupBranchTest()
 	TEST32ItoR(EAX, FPUflagC);
 }
 
-void recBC1F( void )
+void recBC1F()
 {
 	_setupBranchTest();
 	recDoBranchImm(JNZ32(0));
 }
 
-void recBC1T( void )
+void recBC1T()
 {
 	_setupBranchTest();
 	recDoBranchImm(JZ32(0));
 }
 
-void recBC1FL( void )
+void recBC1FL()
 {
 	_setupBranchTest();
 	recDoBranchImm_Likely(JNZ32(0));
 }
 
-void recBC1TL( void )
+void recBC1TL()
 {
 	_setupBranchTest();
 	recDoBranchImm_Likely(JZ32(0));

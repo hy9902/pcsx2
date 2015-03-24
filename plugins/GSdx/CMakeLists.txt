@@ -3,50 +3,52 @@ if(NOT TOP_CMAKE_WAS_SOURCED)
     message(FATAL_ERROR "
     You did not 'cmake' the good CMakeLists.txt file. Use the one in the top dir.
     It is advice to delete all wrongly generated cmake stuff => CMakeFiles & CMakeCache.txt")
-endif(NOT TOP_CMAKE_WAS_SOURCED)
+endif()
 
 
 # plugin name
 set(Output GSdx-0.1.16)
 
 set(CommonFlags
-    -D_LINUX
     -fno-operator-names # because Xbyak uses and()/xor()/or()/not() function
-    -mpreferred-stack-boundary=2
     -mfpmath=sse
-    #-Wstrict-aliasing # Allow to track strict aliasing issue.
-    -std=c++0x
     -fno-strict-aliasing
     -Wno-unknown-pragmas
     -Wno-parentheses
+    -Wunused-variable # __dummy variable need to be investigated
     )
 
 set(OptimizationFlags
     -O2
-    -DNDEBUG
     )
 
-# Debug - Build
+
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
-    add_definitions(${CommonFlags} -D_DEBUG -g -Wall)
-endif(CMAKE_BUILD_TYPE STREQUAL Debug)
+    set(GSdxFinalFlags ${GSdxFinalFlags} ${CommonFlags} -D_DEBUG)
 
-# Devel - Build
-if(CMAKE_BUILD_TYPE STREQUAL Devel)
-    add_definitions(${CommonFlags} ${OptimizationFlags} -D_DEVEL -g)
-endif(CMAKE_BUILD_TYPE STREQUAL Devel)
+elseif(CMAKE_BUILD_TYPE STREQUAL Devel)
+    set(GSdxFinalFlags ${GSdxFinalFlags} ${CommonFlags} ${OptimizationFlags} -D_DEVEL)
 
-# Release - Build
-if(CMAKE_BUILD_TYPE STREQUAL Release)
-    add_definitions(${CommonFlags} ${OptimizationFlags} -W)
-endif(CMAKE_BUILD_TYPE STREQUAL Release)
+elseif(CMAKE_BUILD_TYPE STREQUAL Release)
+    set(GSdxFinalFlags ${GSdxFinalFlags} ${CommonFlags} ${OptimizationFlags} -W)
+
+endif()
 
 if(XDG_STD)
-    add_definitions(-DXDG_STD)
-endif(XDG_STD)
+    set(GSdxFinalFlags ${GSdxFinalFlags} -DXDG_STD)
+endif()
 
 if(GLES_API AND GLESV2_FOUND)
-    add_definitions(-DENABLE_GLES)
+    set(GSdxFinalFlags ${GSdxFinalFlags} -DENABLE_GLES)
+endif()
+
+#Clang doesn't support a few common flags that GCC does.
+if(NOT USE_CLANG)
+    set(GSdxFinalFlags ${GSdxFinalFlags} -fabi-version=6)
+    if (_M_X86_32 AND NOT USE_ASAN)
+        # Someone need to seriously test the build of GSdx without this option
+        set(GSdxFinalFlags ${GSdxFinalFlags} -mpreferred-stack-boundary=2)
+    endif()
 endif()
 
 set(GSdxSources
@@ -69,12 +71,13 @@ set(GSdxSources
     GSCrc.cpp
     GSDevice.cpp
     GSDeviceOGL.cpp
-	GSDeviceSW.cpp
+    GSDeviceSW.cpp
     GSDeviceNull.cpp
     GSDirtyRect.cpp
     GSDrawScanline.cpp
     GSDrawScanlineCodeGenerator.cpp
     GSDrawScanlineCodeGenerator.x86.avx.cpp
+    GSDrawScanlineCodeGenerator.x86.avx2.cpp
     GSDrawScanlineCodeGenerator.x64.cpp
     GSDrawScanlineCodeGenerator.x86.cpp
     GSDrawScanlineCodeGenerator.x64.avx.cpp
@@ -85,6 +88,7 @@ set(GSdxSources
     GSPerfMon.cpp
     GSRasterizer.cpp
     GSRenderer.cpp
+    GSRendererCL.cpp
     GSRendererHW.cpp
     GSRendererNull.cpp
     GSRendererOGL.cpp
@@ -92,6 +96,7 @@ set(GSdxSources
     GSSetting.cpp
     GSSetupPrimCodeGenerator.cpp
     GSSetupPrimCodeGenerator.x86.avx.cpp
+    GSSetupPrimCodeGenerator.x86.avx2.cpp
     GSSetupPrimCodeGenerator.x64.avx.cpp
     GSSetupPrimCodeGenerator.x86.cpp
     GSSetupPrimCodeGenerator.x64.cpp
@@ -105,7 +110,7 @@ set(GSdxSources
     GSTextureFXOGL.cpp
     GSTextureOGL.cpp
     GSTextureNull.cpp
-	GSTextureSW.cpp
+    GSTextureSW.cpp
     GSThread.cpp
     GSUtil.cpp
     GSVector.cpp
@@ -185,54 +190,47 @@ set(GSdxHeaders
     xbyak/xbyak_util.h
     )
 
-include_directories(.)
+set(GSdxFinalSources
+    ${GSdxSources}
+    ${GSdxHeaders}
+)
+
+set(GSdxFinalLibs
+    ${X11_LIBRARIES}
+)
+
+if(GLES_API AND GLESV2_FOUND)
+    set(GSdxFinalLibs
+        ${GSdxFinalLibs}
+        ${GLESV2_LIBRARIES}
+    )
+else()
+    set(GSdxFinalLibs
+        ${GSdxFinalLibs}
+        ${OPENGL_LIBRARIES}
+    )
+endif()
+
+set(GSdxFinalLibs
+    ${GSdxFinalLibs}
+    ${EGL_LIBRARIES}
+    ${GTK2_LIBRARIES}
+    ${LIBC_LIBRARIES}
+)
 
 # Generate Glsl header file. Protect with REBUILD_SHADER to avoid build-dependency on PERL
 if (REBUILD_SHADER)
     add_custom_command(OUTPUT res/glsl_source.h COMMAND perl ${CMAKE_SOURCE_DIR}/linux_various/glsl2h.pl)
 endif()
 
-add_library(${Output} SHARED ${GSdxSources} ${GSdxHeaders})
-
-target_link_libraries(${Output} ${X11_LIBRARIES})
-
-if(GLES_API AND GLESV2_FOUND)
-    target_link_libraries(${Output} ${GLESV2_LIBRARIES})
-else()
-    target_link_libraries(${Output} ${OPENGL_LIBRARIES})
-endif()
-
-target_link_libraries(${Output} ${EGL_LIBRARIES})
-
-if(Linux)
-	target_link_libraries(${Output} ${GTK2_LIBRARIES})
-endif(Linux)
-
-if(NOT USER_CMAKE_LD_FLAGS STREQUAL "")
-    target_link_libraries(${Output} "${USER_CMAKE_LD_FLAGS}")
-endif(NOT USER_CMAKE_LD_FLAGS STREQUAL "")
-
-if(PACKAGE_MODE)
-    install(TARGETS ${Output} DESTINATION ${PLUGIN_DIR})
-else(PACKAGE_MODE)
-    install(TARGETS ${Output} DESTINATION ${CMAKE_SOURCE_DIR}/bin/plugins)
-endif(PACKAGE_MODE)
+add_pcsx2_plugin(${Output} "${GSdxFinalSources}" "${GSdxFinalLibs}" "${GSdxFinalFlags}")
 
 ################################### Replay Loader
 if(BUILD_REPLAY_LOADERS)
-	set(Replay pcsx2_GSReplayLoader)
-
-	add_executable(${Replay} linux_replay.cpp)
-
-    target_link_libraries(${Replay} ${LIBC_LIBRARIES})
-
-	if(NOT USER_CMAKE_LD_FLAGS STREQUAL "")
-	    target_link_libraries(${Replay} "${USER_CMAKE_LD_FLAGS}")
-	endif(NOT USER_CMAKE_LD_FLAGS STREQUAL "")
-
-	if(PACKAGE_MODE)
-	    install(TARGETS ${Replay} DESTINATION bin)
-	else(PACKAGE_MODE)
-	    install(TARGETS ${Replay} DESTINATION ${CMAKE_SOURCE_DIR}/bin)
-	endif(PACKAGE_MODE)
+    set(Replay pcsx2_GSReplayLoader)
+    set(GSdxReplayLoaderFinalSources
+        ${GSdxFinalSources}
+        linux_replay.cpp
+    )
+    add_pcsx2_executable(${Replay} "${GSdxReplayLoaderFinalSources}" "${GSdxFinalLibs}" "${GSdxFinalFlags}")
 endif(BUILD_REPLAY_LOADERS)

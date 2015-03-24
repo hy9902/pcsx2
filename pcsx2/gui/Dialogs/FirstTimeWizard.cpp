@@ -70,8 +70,15 @@ Panels::FirstTimeIntroPanel::FirstTimeIntroPanel( wxWindow* parent )
 	SetMinWidth( 600 );
 
 	FastFormatUnicode faqFile;
-	faqFile.Write( L"file:///%s/Docs/PCSX2_FAQ.pdf",
-		InstallFolder.ToString().c_str() );
+#ifndef DOC_DIR_COMPILATION
+	faqFile.Write( L"file:///%s/Docs/PCSX2_FAQ.pdf", WX_STR(InstallFolder.ToString()) );
+#else
+	// Each linux distributions have his rules for path so we give them the possibility to
+	// change it with compilation flags. -- Gregory
+#define xDOC_str(s) DOC_str(s)
+#define DOC_str(s) #s
+	faqFile.Write( L"file://%s/PCSX2_FAQ.pdf", WX_STR(wxDirName(xDOC_str(DOC_DIR_COMPILATION)).ToString()) );
+#endif
 
 	wxStaticBoxSizer& langSel	= *new wxStaticBoxSizer( wxVERTICAL, this, _("Language selector") );
 
@@ -193,7 +200,7 @@ void FirstTimeWizard::OnPageChanging( wxWizardEvent& evt )
 {
 	if( evt.GetPage() == NULL ) return;		// safety valve!
 
-	int page = (int)evt.GetPage()->GetClientData();
+	sptr page = (sptr)evt.GetPage()->GetClientData();
 
 	if( evt.GetDirection() )
 	{

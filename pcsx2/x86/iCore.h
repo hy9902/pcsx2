@@ -35,7 +35,6 @@
 #define MODE_NOFRAME	0x40	// when allocating x86regs, don't use ebp reg
 #define MODE_8BITREG	0x80	// when allocating x86regs, use only eax, ecx, edx, and ebx
 
-//#define PROCESS_EE_MMX 0x01 // removed
 #define PROCESS_EE_XMM 0x02
 
 // currently only used in FPU
@@ -51,7 +50,9 @@
 
 // used in VU recs
 #define PROCESS_VU_UPDATEFLAGS 0x10
+#ifndef DISABLE_SVU
 #define PROCESS_VU_SUPER	0x40 // set if using supervu recompilation
+#endif
 #define PROCESS_VU_COP2		0x80 // simple cop2
 
 #define EEREC_S (((info)>>8)&0xf)
@@ -136,17 +137,17 @@ void _flushConstReg(int reg);
 
 #define XMM_CONV_VU(VU) (VU==&VU1)
 
-#define XMMTYPE_TEMP	0 // has to be 0
-#define XMMTYPE_VFREG	1
-#define XMMTYPE_ACC		2
-#define XMMTYPE_FPREG	3
-#define XMMTYPE_FPACC	4
-#define XMMTYPE_GPRREG	5
+#define XMMTYPE_TEMP    0 // has to be 0
+#define XMMTYPE_VFREG   1
+#define XMMTYPE_ACC     2
+#define XMMTYPE_FPREG   3
+#define XMMTYPE_FPACC   4
+#define XMMTYPE_GPRREG  5
 
 // lo and hi regs
-#define XMMGPR_LO	33
-#define XMMGPR_HI	32
-#define XMMFPU_ACC	32
+#define XMMGPR_LO       33
+#define XMMGPR_HI       32
+#define XMMFPU_ACC      32
 
 struct _xmmregs {
 	u8 inuse;
@@ -191,9 +192,6 @@ void _signExtendSFtoM(u32 mem);
 // a negative shift is for sign extension
 int _signExtendXMMtoM(u32 to, x86SSERegType from, int candestroy); // returns true if reg destroyed
 
-static const int MEM_MMXTAG = 0x0800;	// mmreg is mmxreg
-static const int MEM_XMMTAG = 0x8000;	// mmreg is xmmreg
-
 //////////////////////
 // Instruction Info //
 //////////////////////
@@ -220,8 +218,6 @@ struct EEINST
 	// valid if info & EEINSTINFO_COP2
 	int cycle; // cycle of inst (at offset from block)
 	_VURegsNum vuregs;
-
-	u8 numpeeps; // number of peephole optimizations
 };
 
 extern EEINST* g_pCurInstInfo; // info for the cur instruction
@@ -318,9 +314,6 @@ int _signExtendMtoMMX(x86MMXRegType to, u32 mem);
 int _signExtendGPRMMXtoMMX(x86MMXRegType to, u32 gprreg, x86MMXRegType from, u32 gprfromreg);
 int _allocCheckGPRtoMMX(EEINST* pinst, int reg, int mode);
 
-void _recMove128RmOffsettoM(u32 to, u32 offset);
-void _recMove128MtoRmOffset(u32 offset, u32 from);
-
 // returns new index of reg, lower 32 bits already in mmx
 // shift is used when the data is in the top bits of the mmx reg to begin with
 // a negative shift is for sign extension
@@ -372,9 +365,6 @@ extern u16 x86FpuState;
 
 //////////////////////////////////////////////////////////////////////////
 // Utility Functions -- that should probably be part of the Emitter.
-
-// Moves 128 bits of data using EAX/EDX (used by iCOP2 only currently)
-extern void _recMove128MtoM(u32 to, u32 from);
 
 // op = 0, and
 // op = 1, or

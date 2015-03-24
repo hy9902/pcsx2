@@ -86,11 +86,10 @@ typedef signed long long int64;
 #include "GSDump.h"
 
 #include "Utilities/MemcpyFast.h"
-#define memcpy_amd memcpy_fast
 
 extern wxString s_strIniPath; // Air's new (r2361) new constant for ini file path
 
-static std::string format(const char* fmt, ...)
+static inline std::string format(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);

@@ -59,7 +59,14 @@ LangPackEnumeration::LangPackEnumeration( wxLanguage langId )
 LangPackEnumeration::LangPackEnumeration()
 {
 	wxLangId = wxLANGUAGE_DEFAULT;
-	englishName = L" System Default";		// left-side space forces it to sort to the front of the lists
+#if wxMAJOR_VERSION < 3
+	englishName = L"_System Default";		// left-side space forces it to sort to the front of the lists
+#else
+	// It seems wx change its sort algo... It seems non alphanumeric character are removed
+	englishName = L"0) System Default";		// left-side 0) forces it to sort to the front of the lists
+	// This one can work too
+	//englishName = L"A default";
+#endif
 	englishName += _(" (default)");
 	canonicalName = L"default";
 
@@ -79,14 +86,18 @@ static void i18n_DoPackageCheck( wxLanguage wxLangId, LangPackList& langs, bool&
 
 	// note: wx preserves the current locale for us, so creating a new locale and deleting
 	// will not affect program status.
+#if wxMAJOR_VERSION < 3
 	ScopedPtr<wxLocale> locale( new wxLocale( wxLangId, wxLOCALE_CONV_ENCODING ) );
+#else
+	ScopedPtr<wxLocale> locale( new wxLocale( wxLangId, 0 ) );
+#endif
 
 	// Force the msgIdLanguage param to wxLANGUAGE_UNKNOWN to disable wx's automatic english
 	// matching logic, which will bypass the catalog loader for all english-based dialects, and
 	// (wrongly) enumerate a bunch of locales that don't actually exist.
 
 	if ((locale->GetLanguage() == wxLANGUAGE_ENGLISH_US) ||
-		(locale->IsOk() && locale->AddCatalog( L"pcsx2_Main", wxLANGUAGE_UNKNOWN, NULL )) )
+		(locale->IsOk() && locale->AddCatalog( L"pcsx2_Main", wxLANGUAGE_UNKNOWN, wxEmptyString )) )
 	{
 		langs.push_back( LangPackEnumeration( wxLangId ) );
 		valid_stat = true;
@@ -185,33 +196,19 @@ static wxLanguage i18n_FallbackToAnotherLang( wxLanguage wxLangId )
 		case wxLANGUAGE_CHINESE_MACAU        : return wxLANGUAGE_CHINESE_TRADITIONAL;
 		case wxLANGUAGE_CHINESE_SINGAPORE    : return wxLANGUAGE_CHINESE_SIMPLIFIED;
 
-		// case wxLANGUAGE_SAMI_INARI_FINLAND    :
-		// case wxLANGUAGE_SAMI_NORTHERN_FINLAND :
-		// case wxLANGUAGE_SAMI_SKOLT_FINLAND    : return wxLANGUAGE_FINNISH;
-		// - not supported by wxWidgets (2.9.4).
-
-		case wxLANGUAGE_SAMI                 : 
-		// Most of the samis live in Norway.
-		// case wxLANGUAGE_SAMI_LULE_NORWAY     :
-		// case wxLANGUAGE_SAMI_NORTHERN_NORWAY :
-		// case wxLANGUAGE_SAMI_SOUTHERN_NORWAY :
-		// - not supported by wxWidgets (2.9.4).
-		case wxLANGUAGE_DANISH               :
+		// case wxLANGUAGE_SAMI                 : 
+		// case wxLANGUAGE_DANISH               :
 		case wxLANGUAGE_NORWEGIAN_NYNORSK    : return wxLANGUAGE_NORWEGIAN_BOKMAL;
 
-		//  case: wxLANGUAGE_SAMI_LULE_SWEDEN     :
-		//  case: wxLANGUAGE_SAMI_NORTHERN_SWEDEN :
-		//  case: wxLANGUAGE_SAMI_SOUTHERN_SWEDEN :
-		// - not supported by wxWidgets (2.9.4).
 		case wxLANGUAGE_SWEDISH_FINLAND      : return wxLANGUAGE_SWEDISH;
 
-		// case wxLANGUAGE_LUXEMBOURGISH        :
-		// - not supported by wxWidgets (2.9.4).
 		case wxLANGUAGE_AFRIKAANS            :
-		// case wxLANG_FRISIAN                  :
-		// - not supported by wxWidgets (2.9.4).
+		//case wxLANG_FRISIAN                  :
+		// case wxLANGUAGE_LUXEMBOURGISH        :
+		// - not supported by wxWidgets (3.0.0).
 		case wxLANGUAGE_DUTCH_BELGIAN        : return wxLANGUAGE_DUTCH;
 
+		case wxLANGUAGE_GALICIAN             :
 		case wxLANGUAGE_PORTUGUESE           : return wxLANGUAGE_PORTUGUESE_BRAZILIAN;
 
 		// Overkill 9000?
@@ -219,9 +216,9 @@ static wxLanguage i18n_FallbackToAnotherLang( wxLanguage wxLangId )
 		case wxLANGUAGE_GERMAN_BELGIUM       : 
 		case wxLANGUAGE_GERMAN_LIECHTENSTEIN : 
 		case wxLANGUAGE_GERMAN_LUXEMBOURG    : 
-		// Currently wxWidgets (2.9.4) doesn't support Sorbian.
-		//  case wxLANGUAGE_LOWER_SORBIAN :
-		//  case wxLANGUAGE_UPPER_SORBIAN :
+		// case wxLANGUAGE_LOWER_SORBIAN        :
+		// case wxLANGUAGE_UPPER_SORBIAN        :
+		// - Sorbian is not supported by wxWidgets (3.0.0).
 		case wxLANGUAGE_GERMAN_SWISS         : return wxLANGUAGE_GERMAN;
 
 		case wxLANGUAGE_BASQUE:
@@ -245,7 +242,7 @@ static wxLanguage i18n_FallbackToAnotherLang( wxLanguage wxLangId )
 		case wxLANGUAGE_SPANISH_URUGUAY:
 		case wxLANGUAGE_SPANISH_VENEZUELA: return wxLANGUAGE_SPANISH_MODERN;
 
-		case wxLANGUAGE_ITALIAN_SWISS        : return wxLANGUAGE_ITALIAN;
+		case wxLANGUAGE_ITALIAN_SWISS: return wxLANGUAGE_ITALIAN;
 
 		case wxLANGUAGE_CORSICAN:
 		case wxLANGUAGE_FRENCH_BELGIAN:
@@ -253,6 +250,12 @@ static wxLanguage i18n_FallbackToAnotherLang( wxLanguage wxLangId )
 		case wxLANGUAGE_FRENCH_LUXEMBOURG:
 		case wxLANGUAGE_FRENCH_MONACO:
 		case wxLANGUAGE_FRENCH_SWISS: return wxLANGUAGE_FRENCH;
+
+		case wxLANGUAGE_RUSSIAN_UKRAINE: return wxLANGUAGE_RUSSIAN;
+
+		case wxLANGUAGE_JAVANESE: return wxLANGUAGE_INDONESIAN;
+
+		case wxLANGUAGE_MALAY_BRUNEI_DARUSSALAM: return wxLANGUAGE_MALAY_MALAYSIA;
 
 		default                              : break;
 	}
@@ -301,7 +304,7 @@ bool i18n_SetLanguage( wxLanguage wxLangId, const wxString& langCode )
 		{
 			info = wxLocale::FindLanguageInfo(langCode);
 			if (!info)
-				Console.Warning( "Unrecognized language canonical name '%ls'", langCode.c_str() );
+				Console.Warning( "Unrecognized language canonical name '%ls'", WX_STR(langCode) );
 		}
 	}
 
@@ -313,7 +316,7 @@ bool i18n_SetLanguage( wxLanguage wxLangId, const wxString& langCode )
 	if( !locale->IsOk() )
 	{
 		Console.Warning( L"SetLanguage: '%s' [%s] is not supported by the operating system",
-			i18n_GetBetterLanguageName(info).c_str(), locale->GetCanonicalName().c_str()
+			WX_STR(i18n_GetBetterLanguageName(info)), WX_STR(locale->GetCanonicalName())
 		);
 		return false;
 	}
@@ -334,7 +337,7 @@ bool i18n_SetLanguage( wxLanguage wxLangId, const wxString& langCode )
 	}
 	
 	Console.WriteLn( L"Loading language translation databases for '%s' [%s]",
-		i18n_GetBetterLanguageName(info).c_str(), locale->GetCanonicalName().c_str()
+		WX_STR(i18n_GetBetterLanguageName(info)), WX_STR(locale->GetCanonicalName())
 	);
 
 	static const wxChar* dictFiles[] =
@@ -370,7 +373,7 @@ void i18n_SetLanguagePath()
 	// default location for windows
 	wxLocale::AddCatalogLookupPathPrefix( wxGetCwd() );
 	// additional location for linux
-#ifdef __LINUX__
+#ifdef __linux__
 	wxLocale::AddCatalogLookupPathPrefix( PathDefs::GetLangs().ToString() );
 #endif
 

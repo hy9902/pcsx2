@@ -1,14 +1,14 @@
 # Brazilian Portuguese Translation for pcsx2 (Iconized)
-# Copyright (C) 2013 PCSX2_Dev_Team
+# Copyright (C) 2014 PCSX2 Dev Team
 # This file is distributed under the same license as the PCSX2 package.
-# Rafael Ferreira <rafael.f.f1@gmail.com>, 2011, 2012, 2013.
+# Rafael Ferreira <rafael.f.f1@gmail.com>, 2011, 2012, 2013, 2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PCSX2 trunk (r5789)\n"
+"Project-Id-Version: pcsx2 iconized master\n"
 "Report-Msgid-Bugs-To: https://github.com/PCSX2/pcsx2/issues\n"
-"POT-Creation-Date: 2014-04-06 11:47+0200\n"
-"PO-Revision-Date: 2013-12-31 05:02-0300\n"
+"POT-Creation-Date: 2014-12-23 19:50+0100\n"
+"PO-Revision-Date: 2014-12-23 13:39-0300\n"
 "Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -18,9 +18,9 @@ msgstr ""
 "X-Poedit-KeywordsList: pxE;pxEt\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Generator: Poedit 1.7.1\n"
 
-#: common/src/Utilities/Exceptions.cpp:254
+#: common/src/Utilities/Exceptions.cpp:275
 msgid ""
 "There is not enough virtual memory available, or necessary virtual memory "
 "mappings have already been reserved by other processes, services, or DLLs."
@@ -29,7 +29,7 @@ msgstr ""
 "virtual necessários já foram reservados para outros processos, serviços ou "
 "DLLs."
 
-#: pcsx2/CDVD/CDVD.cpp:397
+#: pcsx2/CDVD/CDVD.cpp:398
 msgid ""
 "Playstation game discs are not supported by PCSX2.  If you want to emulate "
 "PSX games then you'll have to download a PSX-specific emulator, such as "
@@ -51,7 +51,7 @@ msgstr ""
 "virtual, como um arquivo de memória swap pequeno ou desabilitado, ou por "
 "outro programa que está ocupando muita memória."
 
-#: pcsx2/System.cpp:350
+#: pcsx2/System.cpp:354
 msgid ""
 "PCSX2 is unable to allocate memory needed for the PS2 virtual machine. Close "
 "out some memory hogging background tasks and try again."
@@ -60,17 +60,7 @@ msgstr ""
 "PS2. Feche algumas tarefas que estejam utilizando muita memória e tente "
 "novamente."
 
-#: pcsx2/gui/AppInit.cpp:45
-msgid ""
-"Warning: Your computer does not support SSE2, which is required by many "
-"PCSX2 recompilers and plugins. Your options will be limited and emulation "
-"will be *very* slow."
-msgstr ""
-"Aviso: Seu computador não suporta SSE2, o qual é necessário por muitos plug-"
-"ins e recompiladores do PCSX2. Suas opções serão limitadas e a emulação será "
-"*bem* lenta."
-
-#: pcsx2/gui/AppInit.cpp:178
+#: pcsx2/gui/AppInit.cpp:146
 msgid ""
 "Warning: Some of the configured PS2 recompilers failed to initialize and "
 "have been disabled:"
@@ -78,7 +68,7 @@ msgstr ""
 "Aviso: Alguns recompiladores de PS2 configurados falharam em inicializar e "
 "foram desativados:"
 
-#: pcsx2/gui/AppInit.cpp:226
+#: pcsx2/gui/AppInit.cpp:194
 msgid ""
 "Note: Recompilers are not necessary for PCSX2 to run, however they typically "
 "improve emulation speed substantially. You may have to manually re-enable "
@@ -89,7 +79,7 @@ msgstr ""
 "você tenha que ativar novamente os recompiladores listados acima, se você "
 "solucionar os erros."
 
-#: pcsx2/gui/AppMain.cpp:585
+#: pcsx2/gui/AppMain.cpp:539
 msgid ""
 "PCSX2 requires a PS2 BIOS in order to run.  For legal reasons, you *must* "
 "obtain a BIOS from an actual PS2 unit that you own (borrowing doesn't "
@@ -99,7 +89,7 @@ msgstr ""
 "*deve* obter uma BIOS de uma unidade PS2 que você possua (pegar emprestado "
 "não conta). Por favor consulte os FAQs e os Guias para mais instruções."
 
-#: pcsx2/gui/AppMain.cpp:665
+#: pcsx2/gui/AppMain.cpp:619
 msgid ""
 "'Ignore' to continue waiting for the thread to respond.\n"
 "'Cancel' to attempt to cancel the thread.\n"
@@ -152,7 +142,7 @@ msgstr ""
 "PCSX2 aqui. Se o local contiver configurações existentes de PCSX2, será dado "
 "a você a opção de importar ou reescrevê-las."
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:89
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:96
 #, c-format
 msgid ""
 "This wizard will help guide you through configuring plugins, memory cards, "
@@ -163,7 +153,7 @@ msgstr ""
 "memórias e BIOS. É recomendado se for a sua primeira instalando %s que veja "
 "o readme e o guia de configuração."
 
-#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:132
+#: pcsx2/gui/Dialogs/FirstTimeWizard.cpp:139
 msgid ""
 "PCSX2 requires a *legal* copy of the PS2 BIOS in order to run games.\n"
 "You cannot use a copy obtained from a friend or the Internet.\n"
@@ -322,7 +312,7 @@ msgstr ""
 "e ativá-lo novamente a qualquer tempo em Configuração:Cartões de Memória, no "
 "menu principal."
 
-#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:138
+#: pcsx2/gui/Panels/BiosSelectorPanel.cpp:142
 msgid ""
 "Please select a valid BIOS.  If you are unable to make a valid selection "
 "then press Cancel to close the Configuration panel."
@@ -351,7 +341,7 @@ msgstr ""
 "Quando marcado, essa pasta vai refletir automaticamente a associação padrão "
 "com a configuração de modo usuário do PCSX2."
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:55
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:54
 msgid ""
 "Zoom = 100: Fit the entire image to the window without any cropping.\n"
 "Above/Below 100: Zoom In/Out\n"
@@ -373,7 +363,7 @@ msgstr ""
 "Teclado: CTRL + Tecla \"+\" do Numpad: Mais Zoom, CTRL + Tecla \"-\" do "
 "Numpad: Menos Zoom, CTRL + Tecla \"*\" do Numpad: Alternar entre 100 e 0."
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:58
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:57
 msgid ""
 "Vsync eliminates screen tearing but typically has a big performance hit. It "
 "usually only applies to fullscreen mode, and may not work with all GS "
@@ -383,23 +373,7 @@ msgstr ""
 "performance. Isso normalmente se aplica ao modo tela cheia, e pode não "
 "funcionar com todos plug-ins GS."
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:61
-msgid ""
-"Enables Vsync when the framerate is exactly at full speed. Should it fall "
-"below that, Vsync gets disabled to avoid further performance penalties. "
-"Note: This currently only works well with GSdx as GS plugin and with it "
-"configured to use DX10/11 hardware rendering. Any other plugin or rendering "
-"mode will either ignore it or produce a black frame that blinks whenever the "
-"mode switches. It also requires Vsync to be enabled."
-msgstr ""
-"Habilita Vsync quando o framerate está exatamente na velocidade máxima. "
-"Abaixo disso, VSync é desabilitado para evitar problemas de performance. "
-"Nota: Só funciona bem com GSdx como plug-in de GS, estando esse configurado "
-"para usar renderização de hardware DX10/11. Qualquer outro plug-in ou modo "
-"de renderização vai ignorar a opção ou vai produzir uma janela preta que "
-"pisca quando alterado o modo. Essa opção requer que Vsync esteja habilitado."
-
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:64
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:60
 msgid ""
 "Check this to force the mouse cursor invisible inside the GS window; useful "
 "if using the mouse as a primary control device for gaming.  By default the "
@@ -409,7 +383,7 @@ msgstr ""
 "útil se usando o mouse como dispositivo de controle primário para jogar. Por "
 "padrão o mouse se auto-oculta após 2 segundos de inatividade."
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:67
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:63
 msgid ""
 "Enables automatic mode switch to fullscreen when starting or resuming "
 "emulation. You can still toggle fullscreen display at any time using alt-"
@@ -419,7 +393,7 @@ msgstr ""
 "emulação. Você pode ativar/desativar tela cheia a qualquer tempo com Alt"
 "+Enter."
 
-#: pcsx2/gui/Panels/GSWindowPanel.cpp:74
+#: pcsx2/gui/Panels/GSWindowPanel.cpp:70
 msgid ""
 "Completely closes the often large and bulky GS window when pressing ESC or "
 "pausing the emulator."
@@ -427,7 +401,7 @@ msgstr ""
 "Fecha completamente a janela do GS, normalmente grande e volumosa, quando "
 "pressionado ESC ou suspendido o emulador."
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:67
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:69
 msgid ""
 "Known to affect following games:\n"
 " * Digital Devil Saga (Fixes FMV and crashes)\n"
@@ -439,7 +413,7 @@ msgstr ""
 " * SSX (Conserta gráficos ruins e travamentos)\n"
 " * Resident Evil: Dead Aim (Causa texturas confusas)"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:76
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:78
 msgid ""
 "Known to affect following games:\n"
 " * Bleach Blade Battler\n"
@@ -451,7 +425,7 @@ msgstr ""
 " * Growlanser II e III\n"
 " * Wizardry"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:81
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:83
 msgid ""
 "Known to affect following games:\n"
 " * Mana Khemia 1 (Going \"off campus\")\n"
@@ -459,7 +433,7 @@ msgstr ""
 "Sabe-se que afeta os seguintes jogos:\n"
 " * Mana Khemia 1 (\"off campus\")\n"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:86
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:88
 msgid ""
 "Known to affect following games:\n"
 " * Test Drive Unlimited\n"
@@ -469,24 +443,30 @@ msgstr ""
 "* Test Drive Unlimited\n"
 "* Transformers"
 
-#: pcsx2/gui/Panels/GameFixesPanel.cpp:110
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:116
+msgid ""
+"It's better to enable 'Automatic game fixes' at the main menu instead, and "
+"leave this page empty. ('Automatic' means: selectively use specific tested "
+"fixes for specific games)"
+msgstr ""
+"É melhor habilitar 'Correções de Jogos Automáticas' no menu principal, e "
+"deixar esta página vazia. ('Automáticas' significa: uso seletivo testado "
+"especificamente para jogos específicos)"
+
+#: pcsx2/gui/Panels/GameFixesPanel.cpp:120
 msgid ""
 "Gamefixes can work around wrong emulation in some titles. \n"
-"They may also cause compatibility or performance issues. \n"
+"They may also cause compatibility or performance issues.\n"
 "\n"
-"It's better to enable 'Automatic game fixes' at the main menu instead, and "
-"leave this page empty. \n"
-"('Automatic' means: selectively use specific tested fixes for specific games)"
+"The safest way is to make sure that all game fixes are completely disabled."
 msgstr ""
-"Correções de Jogos podem contornar problemas de emulação de alguns jogos, \n"
-"Podem também causar problemas de compatibilidade ou performance. \n"
+"Correções de Jogos podem contornar problemas de emulação de alguns jogos. \n"
+"Podem também causar problemas de compatibilidade ou performance.\n"
 "\n"
-"É melhor habilitar 'Correções de Jogos Automáticas' no menu principal, e "
-"deixar esta página vazia. \n"
-"('Automáticas' significa: uso seletivo testado especificamente para jogos "
-"específicos)"
+"O mais seguro é garantir que todas as correções de jogos estejam "
+"desabilitadas."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:735
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:745
 #, c-format
 msgid ""
 "You are about to delete the formatted memory card '%s'. All data on this "
@@ -495,14 +475,14 @@ msgstr ""
 "Você irá excluir o cartão de memória formatado '%s'. Todos dados nesse "
 "cartão serão perdidos! Você tem certeza bem positiva e absoluta?"
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:771
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:781
 msgid ""
 "Failed: Duplicate is only allowed to an empty PS2-Port or to the file system."
 msgstr ""
 "Falhou: Duplicação só é permitida para uma Porta-PS2 vazia ou para o sistema "
 "de arquivos."
 
-#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:813
+#: pcsx2/gui/Panels/MemoryCardListPanel.cpp:823
 #, c-format
 msgid "Failed: Destination memory card '%s' is in use."
 msgstr "Falhou: O cartão de memória destinatário '%s' está em uso."
@@ -574,7 +554,7 @@ msgstr ""
 "\n"
 "Você tem certeza que deseja aplicar as alterações agora?"
 
-#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:452
+#: pcsx2/gui/Panels/PluginSelectorPanel.cpp:453
 #, c-format
 msgid ""
 "All plugins must have valid selections for %s to run.  If you are unable to "
@@ -768,7 +748,7 @@ msgstr ""
 "Aviso: Essa opção pode ser ativada durante o jogo, mas normalmente não pode "
 "ser desativada durante o jogo (o vídeo normalmente ficará estragado)"
 
-#: pcsx2/vtlb.cpp:731
+#: pcsx2/vtlb.cpp:832
 msgid ""
 "Your system is too low on virtual resources for PCSX2 to run. This can be "
 "caused by having a small or disabled swapfile, or by other programs that are "
@@ -778,7 +758,7 @@ msgstr ""
 "estar sendo causado por ter um arquivo swap pequeno ou desabilitado, ou por "
 "haver outros programas utilizando muito dos recursos."
 
-#: pcsx2/x86/sVU_zerorec.cpp:364
+#: pcsx2/x86/sVU_zerorec.cpp:363
 msgid ""
 "Out of Memory (sorta): The SuperVU recompiler was unable to reserve the "
 "specific memory ranges required, and will not be available for use.  This is "
@@ -790,29 +770,41 @@ msgstr ""
 "usado. Esse erro não é crítico, uma vez que o recompilador sVU está "
 "obsoleto, e, ao invés dele, você deveria usar o microVU. :)"
 
+#~ msgid ""
+#~ "Warning: Your computer does not support SSE2, which is required by many "
+#~ "PCSX2 recompilers and plugins. Your options will be limited and emulation "
+#~ "will be *very* slow."
+#~ msgstr ""
+#~ "Aviso: Seu computador não suporta SSE2, o qual é necessário por muitos "
+#~ "plug-ins e recompiladores do PCSX2. Suas opções serão limitadas e a "
+#~ "emulação será *bem* lenta."
+
+#~ msgid ""
+#~ "Enables Vsync when the framerate is exactly at full speed. Should it fall "
+#~ "below that, Vsync gets disabled to avoid further performance penalties. "
+#~ "Note: This currently only works well with GSdx as GS plugin and with it "
+#~ "configured to use DX10/11 hardware rendering. Any other plugin or "
+#~ "rendering mode will either ignore it or produce a black frame that blinks "
+#~ "whenever the mode switches. It also requires Vsync to be enabled."
+#~ msgstr ""
+#~ "Habilita Vsync quando o framerate está exatamente na velocidade máxima. "
+#~ "Abaixo disso, VSync é desabilitado para evitar problemas de performance. "
+#~ "Nota: Só funciona bem com GSdx como plug-in de GS, estando esse "
+#~ "configurado para usar renderização de hardware DX10/11. Qualquer outro "
+#~ "plug-in ou modo de renderização vai ignorar a opção ou vai produzir uma "
+#~ "janela preta que pisca quando alterado o modo. Essa opção requer que "
+#~ "Vsync esteja habilitado."
+
 #~ msgid "!ContextTip:Speedhacks:vuBlockHack"
 #~ msgstr ""
 #~ "Presume que num futuro bem distante os blocos não vão precisar dos dados "
 #~ "de instâncias de sinalizadores antigos. Isso pode ser bem seguro. Não se "
 #~ "sabe se isso quebra algum jogo..."
 
-#~ msgid ""
-#~ "The MTGS thread has become unresponsive while waiting for the GS plugin "
-#~ "to open."
+#~ msgid "16 and 32 MB cards have roughly the same compatibility factor."
 #~ msgstr ""
-#~ "A thread MTGS não está respondendo enquanto espera o plug-in GS abrir."
-
-#~ msgid "Internal Memorycard Plugin failed to initialize."
-#~ msgstr "Plug-in de  Cartão de Memória interno falhou em inicializar."
-
-#~ msgid "Safest"
-#~ msgstr "Mais seguro"
-
-#~ msgid "Safe (faster)"
-#~ msgstr "Seguro (+ rápido)"
-
-#~ msgid "Balanced"
-#~ msgstr "Balanceado"
+#~ "Cartões de 16 e 32 MB têm aproximadamente o mesmo fator de "
+#~ "compatibilidade."
 
 #~ msgid "Aggressive"
 #~ msgstr "Agressivo"
@@ -820,24 +812,15 @@ msgstr ""
 #~ msgid "Aggressive plus"
 #~ msgstr "Agressivo plus"
 
-#~ msgid "Mostly Harmful"
-#~ msgstr "Prejudicial"
-
-#~ msgid "Fits a lot of log in a microcosmically small area."
+#~ msgid ""
+#~ "Always use this option if you want the safest and surest memory card "
+#~ "behavior."
 #~ msgstr ""
-#~ "Armazena um muito conteúdo de log em uma área microscopicamente pequena."
+#~ "Sempre use essa opção caso você queira o mais seguro e certo dos "
+#~ "comportamentos de cartão de memória."
 
-#~ msgid "It's what I use (the programmer guy)."
-#~ msgstr "É o que eu uso (o programador)."
-
-#~ msgid "Its nice and readable."
-#~ msgstr "É bom e legível."
-
-#~ msgid "In case you have a really high res display."
-#~ msgstr "Para o caso de você ter um monitor de realmente alta resolução."
-
-#~ msgid "Default soft-tone color scheme."
-#~ msgstr "Esquema padrão de cores em tons suaves."
+#~ msgid "Balanced"
+#~ msgstr "Balanceado"
 
 #~ msgid ""
 #~ "Classic black color scheme for people who enjoy having text seared into "
@@ -847,27 +830,76 @@ msgstr ""
 #~ "cauterizado nos seus nervos ópticos."
 
 #~ msgid ""
-#~ "When checked the log window will be visible over other foreground windows."
+#~ "Completely disables all GS plugin activity; ideal for benchmarking EEcore "
+#~ "components."
 #~ msgstr ""
-#~ "Quando marcado, a janela de registro estará visível sobre outras janelas "
-#~ "de primeiro plano."
+#~ "Desabilita completamente toda atividade do plug-in de GS; ideal para "
+#~ "avaliar a performance dos componentes centrais do EE."
+
+#~ msgid "Default soft-tone color scheme."
+#~ msgstr "Esquema padrão de cores em tons suaves."
+
+#~ msgid ""
+#~ "Error while parsing either NTSC or PAL framerate settings.  Settings must "
+#~ "be valid floating point numerics."
+#~ msgstr ""
+#~ "Erro enquanto analisava as configurações de taxas de frame de NTSC ou "
+#~ "PAL. As cofigurações devem ser pontos flutuantes numéricos válidos."
+
+#~ msgid "Fits a lot of log in a microcosmically small area."
+#~ msgstr ""
+#~ "Armazena um muito conteúdo de log em uma área microscopicamente pequena."
+
+#~ msgid ""
+#~ "For troubleshooting potential bugs in the MTGS only, as it is potentially "
+#~ "very slow."
+#~ msgstr ""
+#~ "Para solucionar problemas de bugs em potencial no MTGS somente, uma vez "
+#~ "que esse é potencialmente muito lento."
+
+#~ msgid "In case you have a really high res display."
+#~ msgstr "Para o caso de você ter um monitor de realmente alta resolução."
+
+#~ msgid "Includes idle event processing and some other uncommon event usages."
+#~ msgstr ""
+#~ "Inclui eventos ociosos de processamento e alguns outros usos de eventos "
+#~ "incomuns."
+
+#~ msgid "Internal Memorycard Plugin failed to initialize."
+#~ msgstr "Plug-in de  Cartão de Memória interno falhou em inicializar."
+
+#~ msgid "It's what I use (the programmer guy)."
+#~ msgstr "É o que eu uso (o programador)."
+
+#~ msgid "Its nice and readable."
+#~ msgstr "É bom e legível."
 
 #~ msgid "Logs events as they are passed to the PS2 virtual machine."
 #~ msgstr ""
 #~ "Registra eventos assim que eles são passados para a máquina virtual do "
 #~ "PS2."
 
-#~ msgid ""
-#~ "Always use this option if you want the safest and surest memory card "
-#~ "behavior."
-#~ msgstr ""
-#~ "Sempre use essa opção caso você queira o mais seguro e certo dos "
-#~ "comportamentos de cartão de memória."
+#~ msgid "Mostly Harmful"
+#~ msgstr "Prejudicial"
 
-#~ msgid "16 and 32 MB cards have roughly the same compatibility factor."
+#~ msgid "No reason given."
+#~ msgstr "Nenhuma razão dada."
+
+#~ msgid "Safe (faster)"
+#~ msgstr "Seguro (+ rápido)"
+
+#~ msgid "Safest"
+#~ msgstr "Mais seguro"
+
+#~ msgid ""
+#~ "The MTGS thread has become unresponsive while waiting for the GS plugin "
+#~ "to open."
 #~ msgstr ""
-#~ "Cartões de 16 e 32 MB têm aproximadamente o mesmo fator de "
-#~ "compatibilidade."
+#~ "A thread MTGS não está respondendo enquanto espera o plug-in GS abrir."
+
+#~ msgid "Threading activity: start, detach, sync, deletion, etc."
+#~ msgstr ""
+#~ "Manipulação de threads: iniciar, desanexar, sincronizar, exclusão, etc."
 
 #~ msgid ""
 #~ "Use at your own risk.  Erratic memory card behavior is possible (though "
@@ -877,34 +909,7 @@ msgstr ""
 #~ "irregular do cartão memória (apesar de ser improvável)."
 
 #~ msgid ""
-#~ "Error while parsing either NTSC or PAL framerate settings.  Settings must "
-#~ "be valid floating point numerics."
+#~ "When checked the log window will be visible over other foreground windows."
 #~ msgstr ""
-#~ "Erro enquanto analisava as configurações de taxas de frame de NTSC ou "
-#~ "PAL. As cofigurações devem ser pontos flutuantes numéricos válidos."
-
-#~ msgid ""
-#~ "For troubleshooting potential bugs in the MTGS only, as it is potentially "
-#~ "very slow."
-#~ msgstr ""
-#~ "Para solucionar problemas de bugs em potencial no MTGS somente, uma vez "
-#~ "que esse é potencialmente muito lento."
-
-#~ msgid ""
-#~ "Completely disables all GS plugin activity; ideal for benchmarking EEcore "
-#~ "components."
-#~ msgstr ""
-#~ "Desabilita completamente toda atividade do plug-in de GS; ideal para "
-#~ "avaliar a performance dos componentes centrais do EE."
-
-#~ msgid "Threading activity: start, detach, sync, deletion, etc."
-#~ msgstr ""
-#~ "Manipulação de threads: iniciar, desanexar, sincronizar, exclusão, etc."
-
-#~ msgid "Includes idle event processing and some other uncommon event usages."
-#~ msgstr ""
-#~ "Inclui eventos ociosos de processamento e alguns outros usos de eventos "
-#~ "incomuns."
-
-#~ msgid "No reason given."
-#~ msgstr "Nenhuma razão dada."
+#~ "Quando marcado, a janela de registro estará visível sobre outras janelas "
+#~ "de primeiro plano."

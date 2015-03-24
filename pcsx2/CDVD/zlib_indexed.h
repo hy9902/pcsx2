@@ -101,7 +101,7 @@ Comments) 1950 to 1952 in the files http://tools.ietf.org/html/rfc1950
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __LINUX__
+#ifdef __linux__
 #include <zlib.h>
 #else
 #include <zlib/zlib.h>
@@ -335,6 +335,10 @@ typedef struct zstate {
     z_stream strm;
     int isValid;
 } Zstate;
+
+PX_off_t getInOffset(zstate *state) {
+	return state->in_offset;
+}
 
 /* Use the index to read len bytes from offset into buf, return bytes read or
    negative for error (Z_DATA_ERROR or Z_MEM_ERROR).  If data is requested past

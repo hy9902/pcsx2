@@ -34,6 +34,9 @@
 #include "Patch.h"
 #include "GameDatabase.h"
 
+#include "../DebugTools/Breakpoints.h"
+#include "R5900OpcodeTables.h"
+
 using namespace R5900;	// for R5900 disasm tools
 
 s32 EEsCycle;		// used to sync the IOP to the EE
@@ -182,39 +185,19 @@ __ri void cpuException(u32 code, u32 bd)
 
 void cpuTlbMiss(u32 addr, u32 bd, u32 excode)
 {
-	Console.Error("cpuTlbMiss pc:%x, cycl:%x, addr: %x, status=%x, code=%x",
-		cpuRegs.pc, cpuRegs.cycle, addr, cpuRegs.CP0.n.Status.val, excode);
-
-#if 0
-	if (bd) Console.Warning("branch delay!!");
-
-	pxFail( "TLB Miss handler is uninished code." ); // temporary
-#endif
+	// Avoid too much spamming on the interpreter
+	if (Cpu != &intCpu || IsDebugBuild) {
+		Console.Error("cpuTlbMiss pc:%x, cycl:%x, addr: %x, status=%x, code=%x",
+				cpuRegs.pc, cpuRegs.cycle, addr, cpuRegs.CP0.n.Status.val, excode);
+	}
 
 	cpuRegs.CP0.n.BadVAddr = addr;
 	cpuRegs.CP0.n.Context &= 0xFF80000F;
 	cpuRegs.CP0.n.Context |= (addr >> 9) & 0x007FFFF0;
 	cpuRegs.CP0.n.EntryHi = (addr & 0xFFFFE000) | (cpuRegs.CP0.n.EntryHi & 0x1FFF);
 
-	// Don't reinvent the wheel ;)
 	cpuRegs.pc -= 4;
 	cpuException(excode, bd);
-#if 0
-	cpuRegs.CP0.n.Cause = excode;
-	if (!(cpuRegs.CP0.n.Status.val & 0x2)) { // EXL bit
-		cpuRegs.CP0.n.EPC = cpuRegs.pc - 4;
-	}
-
-	if (!cpuRegs.CP0.n.Status.b.IE) {
-		cpuRegs.pc = 0x80000000;
-	} else {
-		cpuRegs.pc = 0x80000180;
-	}
-
-	cpuRegs.CP0.n.Status.b.EXL = 1;
-	cpuUpdateOperationMode();
-//	Log=1; varLog|= 0x40000000;
-#endif
 }
 
 void cpuTlbMissR(u32 addr, u32 bd) {
@@ -261,7 +244,7 @@ __fi void cpuSetEvent()
 
 __fi void cpuClearInt( uint i )
 {
-	jASSUME( i < 32 );
+	pxAssume( i < 32 );
 	cpuRegs.interrupt &= ~(1 << i);
 }
 
@@ -607,4 +590,45 @@ void __fastcall eeloadReplaceOSDSYS()
 		memWrite32(osdsys_p, safemem);
 	}
 	// else... uh...?
+}
+
+inline bool isBranchOrJump(u32 addr)
+{
+	u32 op = memRead32(addr);
+	const OPCODE& opcode = GetInstruction(op);
+
+	return (opcode.flags & IS_BRANCH) != 0;
+}
+
+// The next two functions return 0 if no breakpoint is needed,
+// 1 if it's needed on the current pc, 2 if it's needed in the delay slot
+
+int isBreakpointNeeded(u32 addr)
+{
+	if (CBreakPoints::IsAddressBreakPoint(addr))
+		return 1;
+
+	// there may be a breakpoint in the delay slot
+	if (isBranchOrJump(addr) && CBreakPoints::IsAddressBreakPoint(addr+4))
+		return 2;
+
+	return 0;
+}
+
+int isMemcheckNeeded(u32 pc)
+{
+	if (CBreakPoints::GetNumMemchecks() == 0)
+		return 0;
+	
+	u32 addr = pc;
+	if (isBranchOrJump(addr))
+		addr += 4;
+
+	u32 op = memRead32(addr);
+	const OPCODE& opcode = GetInstruction(op);
+
+	if (opcode.flags & IS_MEMORY)
+		return addr == pc ? 1 : 2;
+
+	return 0;
 }

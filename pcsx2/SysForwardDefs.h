@@ -17,10 +17,11 @@
 
 static const int PCSX2_VersionHi	= 1;
 static const int PCSX2_VersionMid	= 3;
-static const int PCSX2_VersionLo	= 0;
+static const int PCSX2_VersionLo	= 1;
 static const bool PCSX2_isReleaseVersion = 0;
 
 class SysCoreThread;
+
 class CpuInitializerSet;
 
 struct Game_Data;

@@ -255,13 +255,10 @@ class GSDeviceOGL : public GSDevice
 			GSVector4i* a = (GSVector4i*)this;
 			GSVector4i* b = (GSVector4i*)cb;
 
-			GSVector4i b0 = b[0];
-			GSVector4i b1 = b[1];
-
-			if(!((a[0] == b0) & (a[1] == b1)).alltrue())
+			if(!((a[0] == b[0]) & (a[1] == b[1])).alltrue())
 			{
-				a[0] = b0;
-				a[1] = b1;
+				a[0] = b[0];
+				a[1] = b[1];
 
 				return true;
 			}
@@ -297,12 +294,12 @@ class GSDeviceOGL : public GSDevice
 	__aligned(struct, 32) PSConstantBuffer
 	{
 		GSVector4 FogColor_AREF;
-		GSVector4 HalfTexel;
 		GSVector4 WH;
-		GSVector4 MinMax;
 		GSVector4 MinF_TA;
 		GSVector4i MskFix;
 
+		GSVector4 HalfTexel;
+		GSVector4 MinMax;
 		GSVector4 TC_OffsetHack;
 
 		PSConstantBuffer()
@@ -320,22 +317,15 @@ class GSDeviceOGL : public GSDevice
 			GSVector4i* a = (GSVector4i*)this;
 			GSVector4i* b = (GSVector4i*)cb;
 
-			GSVector4i b0 = b[0];
-			GSVector4i b1 = b[1];
-			GSVector4i b2 = b[2];
-			GSVector4i b3 = b[3];
-			GSVector4i b4 = b[4];
-			GSVector4i b5 = b[5];
-
 			// if WH matches both HalfTexel and TC_OffsetHack do too
-			if(!((a[0] == b0) & (a[2] == b2) & (a[3] == b3) & (a[4] == b4) & (a[5] == b5)).alltrue())
+			// MinMax depends on WH and MskFix so no need to check it too
+			if(!((a[0] == b[0]) & (a[1] == b[1]) & (a[2] == b[2]) & (a[3] == b[3])).alltrue())
 			{
-				a[0] = b0;
-				a[1] = b1;
-				a[2] = b2;
-				a[3] = b3;
-				a[4] = b4;
-				a[5] = b5;
+				// Note previous check uses SSE already, a plain copy will be faster than any memcpy
+				a[0] = b[0];
+				a[1] = b[1];
+				a[2] = b[2];
+				a[3] = b[3];
 
 				return true;
 			}
@@ -477,8 +467,7 @@ class GSDeviceOGL : public GSDevice
 	GLuint m_fbo;				// frame buffer container
 	GLuint m_fbo_read;			// frame buffer container only for reading
 
-	GSVertexBufferStateOGL* m_vb;	  // vb_state for HW renderer
-	GSVertexBufferStateOGL* m_vb_sr; // vb_state for StretchRect
+	GSVertexBufferStateOGL* m_va;// state of the vertex buffer/array
 
 	struct {
 		GLuint ps[2];				 // program object
@@ -506,6 +495,11 @@ class GSDeviceOGL : public GSDevice
 	} m_fxaa;
 
 	struct {
+		GLuint ps;
+		GSUniformBufferOGL* cb;
+	} m_shaderfx;
+
+	struct {
 		GSDepthStencilOGL* dss;
 		GSBlendStateOGL* bs;
 		GSTexture* t;
@@ -517,7 +511,6 @@ class GSDeviceOGL : public GSDevice
 	} m_shadeboost;
 
 	struct {
-		GSVertexBufferStateOGL* vb;
 		GSDepthStencilOGL* dss;
 		GSBlendStateOGL* bs;
 		float bf; // blend factor
@@ -547,6 +540,7 @@ class GSDeviceOGL : public GSDevice
 	void DoInterlace(GSTexture* st, GSTexture* dt, int shader, bool linear, float yoffset = 0);
 	void DoFXAA(GSTexture* st, GSTexture* dt);
 	void DoShadeBoost(GSTexture* st, GSTexture* dt);
+	void DoExternalFX(GSTexture* st, GSTexture* dt);
 
 	void OMAttachRt(GLuint rt);
 	void OMAttachDs(GLuint ds);
@@ -559,7 +553,7 @@ class GSDeviceOGL : public GSDevice
 	virtual ~GSDeviceOGL();
 
 	static void CheckDebugLog();
-	static void DebugOutputToFile(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, const char* message);
+	static void DebugOutputToFile(GLenum gl_source, GLenum gl_type, GLuint id, GLenum gl_severity, GLsizei gl_length, const GLchar *gl_message, const void* userParam);
 
 	bool HasStencil() { return true; }
 	bool HasDepth32() { return true; }
@@ -599,7 +593,7 @@ class GSDeviceOGL : public GSDevice
 	void StretchRect(GSTexture* st, const GSVector4& sr, GSTexture* dt, const GSVector4& dr, GLuint ps, bool linear = true);
 	void StretchRect(GSTexture* st, const GSVector4& sr, GSTexture* dt, const GSVector4& dr, GLuint ps, GSBlendStateOGL* bs, bool linear = true);
 
-	void SetupDATE(GSTexture* rt, GSTexture* ds, const GSVertexPxyT1* vertices, bool datm);
+	void SetupDATE(GSTexture* rt, GSTexture* ds, const GSVertexPT1* vertices, bool datm);
 
 	void EndScene();
 
@@ -608,7 +602,6 @@ class GSDeviceOGL : public GSDevice
 	bool IAMapVertexBuffer(void** vertex, size_t stride, size_t count);
 	void IAUnmapVertexBuffer();
 	void IASetIndexBuffer(const void* index, size_t count);
-	void IASetVertexState(GSVertexBufferStateOGL* vb = NULL);
 
 	void PSSetShaderResource(GLuint sr);
 	void PSSetShaderResources(GLuint tex[2]);

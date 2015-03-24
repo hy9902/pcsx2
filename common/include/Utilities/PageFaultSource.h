@@ -52,12 +52,12 @@ public:
 		OnPageFaultEvent( evtinfo, handled );
 	}
 
-	virtual void DispatchEvent( const PageFaultInfo& )
+	virtual void DispatchEvent( const PageFaultInfo& evtinfo )
 	{
 		pxFailRel( "Don't call me, damnit.  Use DispatchException instead." );
 	}
 
-	virtual void OnPageFaultEvent( const PageFaultInfo& , bool&  ) {}
+	virtual void OnPageFaultEvent( const PageFaultInfo& evtinfo, bool& handled ) {}
 };
 
 // --------------------------------------------------------------------------------------
@@ -332,7 +332,7 @@ protected:
 	uint _calcBlockBitArrayLength() const;
 };
 
-#ifdef __LINUX__
+#ifdef __linux__
 
 #	define PCSX2_PAGEFAULT_PROTECT
 #	define PCSX2_PAGEFAULT_EXCEPT
